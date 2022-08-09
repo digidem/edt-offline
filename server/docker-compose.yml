@@ -44,7 +44,7 @@ services:
     image: filebrowser/filebrowser
     restart: always
     volumes:
-      - ${DIR}/media:/srv
+      - ${DIR}:/srv
     environment:
       VIRTUAL_HOST: ${DOMAIN_FILEBROWSER}
       LETSENCRYPT_HOST: ${DOMAIN_FILEBROWSER}
@@ -101,8 +101,7 @@ services:
       PGID: ${PGID}
       TZ: America/Brasil
     volumes:
-      - ${DIR}/syncthing/config:/config
-      - ${DIR}:/data
+      - ${DIR}:/config
     ports:
       - 22000:22000/tcp
       - 22000:22000/udp
