@@ -1,0 +1,165 @@
+version: '2.1'
+
+volumes:
+  media:
+  kiwix-media:
+  minio-data:
+  ssb-data:
+  # Terrastories
+  postgres_data:
+  mbtiles:
+  bundler:
+  # archivebox:
+services:
+  # wifi:
+  #   build: ../services/wifi-repeater
+  #   restart: always
+  #   network_mode: host
+  #   privileged: true
+  #   labels:
+  #     io.balena.features.dbus: '1'
+  #     io.balena.features.firmware: '1'
+  # captive-portal:
+  #   build: ../services/captive-portal
+  #   restart: always
+  #   network_mode: host
+  #   privileged: true
+  #   labels:
+  #     io.balena.features.dbus: '1'
+  #   depends_on:
+  #     - wifi
+  # https://hub.docker.com/repository/docker/communityfirst/ssb-go-pub
+  ssb:
+    image: communityfirst/ssb-go-pub:latest
+    network_mode: host
+    environment:
+      ROOM: "net:room.coolab.org:8008~shs:foHx1HuvaN++iCrQS+Zi916V6iNYEOtj9ZOAo+a0E+Q="
+      PUB: "net:pub.freesocial.co:8008~shs:ofYKOy2p9wsaxV73GqgOyh6C6nRGFM5FyciQyxwBd6A="
+    volumes:
+      - 'ssb-data:/root/.ssb-go'
+    restart: unless-stopped
+  # # https://hub.docker.com/r/minio/minio/
+  minio:
+    image: minio/minio
+    restart: always
+    dns:
+      - 8.8.8.8
+    ports:
+      - 9000:9000
+      - 9001:9001
+    volumes:
+      - 'minio-data:/data'
+    environment:
+      MINIO_ROOT_USER: ${ADMIN_LOGIN}
+      MINIO_ROOT_PASSWORD: ${ADMIN_PASSWORD}
+      # MINIO_BROWSER_REDIRECT_URL: https://[CI_CD_DOMAIN]
+      # MINIO_SERVER_URL: https://[CI_CD_DOMAIN]:34256 
+    command: server --address ":9000" --console-address ":9001" /data
+  
+  # https://hub.docker.com/r/kiwix/kiwix-serve
+  kiwix:
+    image: kiwix/kiwix-serve
+    volumes:
+      - 'kiwix-media:/data'
+    ports:
+      - 83:8080
+  filebrowser:
+    image: filebrowser/filebrowser
+    restart: unless-stopped
+    volumes:
+      - kiwix-media:/srv/kiwix
+      - media:/srv/media
+    ports:
+      - 81:80
+    environment:
+      PGID: 1000
+      PUID: 1000
+    command: -- c
+  # https://hub.docker.com/r/linuxserver/syncthing/
+  syncthing:
+    build: ../services/syncthing
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: America/Brasil
+      SOURCE_ID: V3V47J7-RYYHTSK-6F7HJY4-YJMPSWZ-QH4ER7F-C7LWKSU-RTBOPO7-53EKKQV
+      SOURCE_NAME: "EDT Server"
+      KIWIX_REPOSITORY: zugr6-cq5yf
+      KIWIX_REPOSITORY_NAME: "Zims em Português"
+    volumes:
+      - kiwix-media:/config/kiwix
+      - media:/config/media
+    ports:
+      - 82:8384
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+    restart: unless-stopped
+  # Terrastories
+  # tileserver:
+  #   restart: always
+  #   image: klokantech/tileserver-gl
+  #   ports:
+  #     - '8080:80'
+  #   volumes:
+  #     - 'mbtiles:/data'
+  #     # - type: bind
+  #     #   source: ./tileserver/data
+  #     #   target: /data
+  # db:
+  #   image: postgres:11
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     POSTGRES_PASSWORD: ${DB_USER_PASSWORD}
+  #   volumes:
+  #     - "postgres_data:/var/lib/postgresql/data"
+  # web:
+  #   image: terrastories-server
+  #   command: bundle exec rails server --binding 0.0.0.0
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - db
+  #   volumes:
+  #     - bundler:/usr/local/bundle
+  #     - ./rails:/api
+  #     - ./data/media:/media
+  #     - ./data/import/media:/api/import/media
+
+  # web-test:
+  #   <<: *x-web-common
+  #   environment:
+  #     RAILS_ENV: test
+  #   command: scripts/test-server
+  #   ports:
+  #     - 3001:3000
+  #   depends_on:
+  #     - db
+  #   volumes:
+  #     - bundler:/usr/local/bundle
+  #     - ./rails:/api
+
+  # selenium:
+  #   # Debug version enables VNC ability
+  #   image: selenium/standalone-chrome-debug:3.0.1-germanium
+  #   # Bind selenium port & VNC port
+  #   ports: ['4444:4444', '5900:5900']
+  #   logging:
+  #     # Disable noisy logs.
+  #     driver: none
+  #   # bump this number up if pages are crashing
+  #   shm_size: '256mb'
+
+  # e2e:
+  #   image: terrastories-e2e
+  #   volumes:
+  #     - ./e2e:/opt/terrastories_e2e:cached
+  #   environment:
+  #     TEST_APP_HOST: web-test
+  #     TEST_APP_PORT: 3000
+  #     SELENIUM_HOST: selenium
+  #     SELENIUM_PORT: 4444
+  #   depends_on:
+  #     - web-test
+  #     - selenium

@@ -1,0 +1,20 @@
+{
+  "name": "balenarepeater",
+  "version": "0.1.0",
+  "description": "A WiFi/Ethernet network repeater",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc --project tsconfig.json"
+  },
+  "author": "Tomás Migone <tomas@balena.io>",
+  "license": "MIT",
+  "dependencies": {
+    "blinking": "0.0.3",
+    "bluebird": "^3.7.2",
+    "dbus-native": "^0.4.0",
+    "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "^13.9.0"
+  }
+}
