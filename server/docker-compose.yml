@@ -101,7 +101,8 @@ services:
       PGID: ${PGID}
       TZ: America/Brasil
     volumes:
-      - ${DIR}:/config
+      - ${DIR}/syncthing:/config
+      - ${DIR}:/data
     ports:
       - 22000:22000/tcp
       - 22000:22000/udp
