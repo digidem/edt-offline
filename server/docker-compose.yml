@@ -107,5 +107,24 @@ services:
       - 22000:22000/tcp
       - 22000:22000/udp
       - 21027:21027/udp
+  # https://hub.docker.com/r/openzim/zimit-ui
+  # zimit:
+  #   image: openzim/zimit-ui
+  #   restart: always
+  #   environment:
+  #     VIRTUAL_HOST: ${DOMAIN_ZIMIT}
+  #     LETSENCRYPT_HOST: ${DOMAIN_ZIMIT}
+  #     LETSENCRYPT_EMAIL: ${EMAIL}
+  #   volumes:
+  #     - ${DIR}/zimit/data:/data
+  # mongodb:
+  #   image: mongo:latest
+  #   restart: always
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+  #     - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+  #   volumes:
+  #     - ${DIR}/zimit/db:/data/db
+  #     - ${DIR}/zimit/db-config:/data/configdb
   # TODO: Terrastories, Portal
   # V2: Open Balena, Zimit, Zimit Youtube
