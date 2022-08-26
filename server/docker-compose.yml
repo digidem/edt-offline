@@ -2,7 +2,7 @@ version: '3'
 services:
   # https://hub.docker.com/r/nginxproxy/nginx-proxy
   proxy:
-    image: nginxproxy/nginx-proxy:latest
+    build: ../services/nginx-proxy
     restart: always
     container_name: proxy
     labels:
@@ -14,8 +14,8 @@ services:
       - ${DIR}/app-data/proxy/certs:/etc/nginx/certs:ro
       - ${DIR}/app-data/proxy/vhostd:/etc/nginx/vhost.d
       - ${DIR}/app-data/proxy/html:/usr/share/nginx/html
+      - ${DIR}/app-data/proxy/nginx-conf/client_max_body_size.conf:/etc/nginx/conf.d/max_body.conf
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      # - ./nginx-conf/client_max_body_size.conf:/etc/nginx/conf.d/max_body.conf
   # https://hub.docker.com/r/nginxproxy/acme-companion
   ssl:
     image: nginxproxy/acme-companion:latest
