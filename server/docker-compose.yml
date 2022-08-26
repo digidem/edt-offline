@@ -11,7 +11,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ${DIR}/app-data/app-data/proxy/certs:/etc/nginx/certs:ro
+      - ${DIR}/app-data/proxy/certs:/etc/nginx/certs:ro
       - ${DIR}/app-data/proxy/vhostd:/etc/nginx/vhost.d
       - ${DIR}/app-data/proxy/html:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
