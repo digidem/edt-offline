@@ -11,9 +11,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ${DIR}/proxy/certs:/etc/nginx/certs:ro
-      - ${DIR}/proxy/vhostd:/etc/nginx/vhost.d
-      - ${DIR}/proxy/html:/usr/share/nginx/html
+      - ${DIR}/app-data/app-data/proxy/certs:/etc/nginx/certs:ro
+      - ${DIR}/app-data/proxy/vhostd:/etc/nginx/vhost.d
+      - ${DIR}/app-data/proxy/html:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
       # - ./nginx-conf/client_max_body_size.conf:/etc/nginx/conf.d/max_body.conf
   # https://hub.docker.com/r/nginxproxy/acme-companion
@@ -25,17 +25,17 @@ services:
       NGINX_PROXY_CONTAINER: proxy
       DEFAULT_EMAIL: ${EMAIL}
     volumes:
-      - ${DIR}/proxy/certs:/etc/nginx/certs
-      - ${DIR}/proxy/vhostd:/etc/nginx/vhost.d
-      - ${DIR}/proxy/html:/usr/share/nginx/html
-      - ${DIR}/proxy/acme:/etc/acme.sh
+      - ${DIR}/app-data/proxy/certs:/etc/nginx/certs
+      - ${DIR}/app-data/proxy/vhostd:/etc/nginx/vhost.d
+      - ${DIR}/app-data/proxy/html:/usr/share/nginx/html
+      - ${DIR}/app-data/proxy/acme:/etc/acme.sh
       - /var/run/docker.sock:/var/run/docker.sock:ro
   # https://hub.docker.com/_/httpd
   fdroid-repo:
     image: httpd:latest
     restart: always
     volumes:
-      -  ${DIR}/repo:/usr/local/apache2/htdocs/
+      -  ${DIR}/content/fdroid-repository:/usr/local/apache2/htdocs/
     environment:
       VIRTUAL_HOST: ${DOMAIN_FDROID}
       LETSENCRYPT_HOST: ${DOMAIN_FDROID}
@@ -59,7 +59,7 @@ services:
     ports:
       - "0.0.0.0:8008:8008" # This is the port SSB clients connect to
     volumes:
-      - ${DIR}/ssb-room:/ssb-go-room
+      - ${DIR}/app-data/ssb-room:/ssb-go-room
     environment:
       VIRTUAL_HOST: ${DOMAIN_ROOM}
       LETSENCRYPT_HOST: ${DOMAIN_ROOM}
@@ -77,7 +77,7 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - ${DIR}/minio/:/data
+      - ${DIR}/content/:/data
     environment:
       VIRTUAL_HOST: ${DOMAIN_MINIO}
       LETSENCRYPT_HOST: ${DOMAIN_MINIO}
@@ -101,8 +101,8 @@ services:
       PGID: ${PGID}
       TZ: America/Brasil
     volumes:
-      - ${DIR}/syncthing:/config
-      - ${DIR}:/data
+      - ${DIR}/app-data/syncthing:/config
+      - ${DIR}/content:/config/Sync
     ports:
       - 22000:22000/tcp
       - 22000:22000/udp
