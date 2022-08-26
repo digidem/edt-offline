@@ -14,7 +14,7 @@ services:
       - ${DIR}/app-data/proxy/certs:/etc/nginx/certs:ro
       - ${DIR}/app-data/proxy/vhostd:/etc/nginx/vhost.d
       - ${DIR}/app-data/proxy/html:/usr/share/nginx/html
-      - ${DIR}/app-data/proxy/nginx-conf/client_max_body_size.conf:/etc/nginx/conf.d/max_body.conf
+      - ${DIR}/app-data/proxy/nginx-conf:/etc/nginx/conf.d
       - /var/run/docker.sock:/tmp/docker.sock:ro
   # https://hub.docker.com/r/nginxproxy/acme-companion
   ssl:
