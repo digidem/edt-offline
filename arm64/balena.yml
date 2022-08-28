@@ -77,15 +77,12 @@ data:
     - INTERFACE: 'eth0'
     - SET_HOSTNAME: edt
     - TZ: 'America/Sao_Paulo'
-    - LOCAL_DOMAIN: 'edt.com'
-    - LOCAL_IP: 192.168.1.13
     - SYNC_SOURCE_ID: NJXQYKR-QKAB5H6-HPVA3J6-3RFWNEV-DNRODEM-DLUKMVO-MHVRVB5-CE6ONAN
     - SYNC_SOURCE_NAME: Tecendo Redes
     - SYNC_KIWIX_REPOSITORY_ID: gzbu3-uenc4
     - SYNC_KIWIX_REPOSITORY_NAME: Povos Indígenas no Brasil
   defaultDeviceType: "raspberrypi3-64"
   supportedDeviceTypes:
-    - "raspberry-pi2"
     - "raspberrypi3"
     - "raspberrypi3-64"
     - "raspberrypi4-64"

@@ -4,9 +4,9 @@ We'll need Internet connection for downloading latest software and content. But 
 
 *Needed hardware:*
 
-- Computer: Raspberry 4 with minimum 2Gb
-- Storage: class 10 micro sd with min 64Gb or SSD connected thru usb
-- (if using SSD && acess-point) Wifi Dongle: a Wifi dongle compatible with our device
+- **Machine**: can be any computer, even a single-board computer (has to be 64bits)
+- **Storage**: class 10 micro sd with min 64Gb or SSD connected thru usb
+- **Wifi Dongle**: if the computer doesn't have wifi or you're using SSD && access-point with a Raspberry Pi, a Wifi dongle compatible with your device is needed
 
 **Self setup**
 
@@ -20,7 +20,7 @@ We'll need Internet connection for downloading latest software and content. But 
 2. Provide requested information: community name and location; available connectivity; number of intented users; intended uses (monitoring, mapping, storytelling, etc.);
 3. Team will provide a pre-configured image
 
-**Setting up device**
+**Setting up a device using **
 
 1. Download project image
 2. Burn image to micro sd or usb SSD

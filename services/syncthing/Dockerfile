@@ -2,8 +2,3 @@ FROM lscr.io/linuxserver/syncthing
 
 COPY default-config.xml /config/config.xml
 COPY cont-init.d/ /etc/cont-init.d/
-
-ENV SYNC_SOURCE_ID SPDREAV-NUK6EXS-QLJXMMS-2JFNYUS-H3BWAEF-D336Y4E-SAWIZM3-XEEWZAY
-ENV SYNC_SOURCE_NAME Mapeo
-ENV SYNC_KIWIX_REPOSITORY_ID pchl2-xbbvk
-ENV SYNC_KIWIX_REPOSITORY_NAME Mapeo

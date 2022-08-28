@@ -57,7 +57,7 @@ services:
     image: ksinica/go-ssb-room
     restart: always
     ports:
-      - "0.0.0.0:8008:8008" # This is the port SSB clients connect to
+      - "0.0.0.0:8007:8008" # This is the port SSB clients connect to
     volumes:
       - ${DIR}/app-data/ssb-room:/ssb-go-room
     environment:
@@ -68,6 +68,16 @@ services:
       SSB_ROOM_MODE: ${ROOM_MODE}
       SSB_ROOM_ADMIN_KEY: ${ROOM_ADMIN}
       SSB_ROOM_DOMAIN: ${DOMAIN_ROOM}
+  # https://hub.docker.com/repository/docker/communityfirst/ssb-go-pub
+  ssb-pub:
+    image: communityfirst/ssb-go-pub:latest
+    ports:
+      - "0.0.0.0:8008:8008" # This is the port SSB clients connect to
+    environment:
+      ROOM: ${SSB_ROOM}
+    volumes:
+      - 'ssb-data:/root/.ssb-go'
+    restart: unless-stopped
   # https://hub.docker.com/r/minio/minio/
   minio:
     image: minio/minio
