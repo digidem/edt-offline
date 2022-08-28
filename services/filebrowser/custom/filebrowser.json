@@ -1,0 +1,70 @@
+{
+    "settings": {
+        "key": "j5NU1YcfOeShwZrVvXBL+t2gTHQ79047Or+CDad8tEzj/GTooeBrEhV41C/AvcTgALjKeBC5WscxC8o7QETgpQ==",
+        "signup": true,
+        "createUserDir": true,
+        "userHomeBasePath": "./users",
+        "defaults": {
+            "scope": "./users",
+            "locale": "#LOCALE",
+            "viewMode": "list",
+            "singleClick": true,
+            "sorting": {
+                "by": "name",
+                "asc": false
+            },
+            "perm": {
+                "admin": false,
+                "execute": true,
+                "create": true,
+                "rename": true,
+                "modify": true,
+                "delete": true,
+                "share": true,
+                "download": true
+            },
+            "commands": [],
+            "hideDotfiles": true,
+            "dateFormat": false
+        },
+        "authMethod": "json",
+        "branding": {
+            "name": "Earth Defenders Toolkit",
+            "disableExternal": true,
+            "files": "/opt/branding",
+            "theme": "",
+            "color": ""
+        },
+        "commands": {
+            "after_copy": [],
+            "after_delete": [],
+            "after_rename": [],
+            "after_save": [],
+            "after_upload": [],
+            "before_copy": [],
+            "before_delete": [],
+            "before_rename": [],
+            "before_save": [],
+            "before_upload": []
+        },
+        "shell": [],
+        "rules": []
+    },
+    "server": {
+        "root": ".",
+        "baseURL": "",
+        "socket": "",
+        "tlsKey": "",
+        "tlsCert": "",
+        "port": "8080",
+        "address": "127.0.0.1",
+        "log": "stdout",
+        "enableThumbnails": false,
+        "resizePreview": false,
+        "enableExec": false,
+        "typeDetectionByHeader": false
+    },
+    "auther": {
+        "recaptcha": null
+    }
+}

@@ -1,0 +1,186 @@
+version: '2.1'
+
+volumes:
+  fdroid:
+  portal:
+  mapeo:
+  kiwix:
+  minio-data:
+  ssb-data:
+  installers:
+  # Terrastories
+  postgres_data:
+  mbtiles:
+  bundler:
+services:
+  # https://github.com/balena-os/wifi-connect
+  wifi:
+    restart: always
+    build: ../services/wifi-connect
+    volumes:
+      - /var/run/dbus:/var/run/dbus
+    network_mode: "host"
+    privileged: true
+    environment:
+      PORTAL_SSID: ${PORTAL_SSID}
+      INTERNET: ${INTERNET}
+  portal:
+    build: ../services/portal
+    restart: always
+    volumes:
+      - 'portal:/usr/local/apache2/htdocs'
+      - 'installers:/usr/local/apache2/htdocs/installers'
+      - 'fdroid:/usr/local/apache2/htdocs/fdroid'
+    ports:
+      - 8080:80
+    environment:
+      PORTAL_GZ_URL: ${PORTAL_FILE}
+  # https://hub.docker.com/repository/docker/communityfirst/ssb-go-pub
+  ssb:
+    image: communityfirst/ssb-go-pub:latest
+    network_mode: host
+    environment:
+      ROOM: ${SSB_ROOM}
+      PUB: ${SSB_PUB}
+    volumes:
+      - 'ssb-data:/root/.ssb-go'
+    restart: unless-stopped
+  # https://hub.docker.com/r/minio/minio/
+  minio:
+    image: minio/minio
+    restart: always
+    dns:
+      - 8.8.8.8
+    ports:
+      - 9000:9000
+      - 9001:9001
+    volumes:
+      - 'minio-data:/data'
+    environment:
+      MINIO_ROOT_USER: ${ADMIN_LOGIN}
+      MINIO_ROOT_PASSWORD: ${ADMIN_PASSWORD}
+      # MINIO_BROWSER_REDIRECT_URL: https://[CI_CD_DOMAIN]
+      # MINIO_SERVER_URL: https://[CI_CD_DOMAIN]:34256 
+    command: server --address ":9000" --console-address ":9001" /data
+  # https://hub.docker.com/r/kiwix/kiwix-serve
+  kiwix:
+    build: ../services/kiwix
+    volumes:
+      - 'kiwix:/data/zims'
+    ports:
+      - 83:83
+    # environment:
+      # DOWNLOAD: ${ZIM_DOWNLOAD}
+  filebrowser:
+    build: ../services/filebrowser
+    restart: unless-stopped
+    volumes:
+      - kiwix:/srv/kiwix
+      - mapeo:/srv/mapeo
+      - fdroid:/srv/fdroid
+      - installers:/srv/installers
+    ports:
+      - 81:80
+    environment:
+      PGID: 1000
+      PUID: 1000
+      ADMIN_LOGIN: ${ADMIN_LOGIN}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      LOCALE: ${LOCALE}
+    command: -- c
+  # https://hub.docker.com/r/linuxserver/syncthing/
+  syncthing:
+    build: ../services/syncthing
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: America/Brasil
+      SYNC_SOURCE_ID: ${SYNC_SOURCE_ID}
+      SYNC_SOURCE_NAME: ${SYNC_SOURCE_NAME}
+      SYNC_KIWIX_ID: ${SYNC_KIWIX_ID}
+      SYNC_KIWIX_NAME: ${SYNC_KIWIX_NAME}
+      SYNC_FDROID_ID: ${SYNC_FDROID_ID}
+      SYNC_FDROID_NAME: ${SYNC_FDROID_NAME}
+      SYNC_MAPEO_ID: ${SYNC_MAPEO_ID}
+      SYNC_MAPEO_NAME: ${SYNC_MAPEO_NAME}
+      SYNC_INSTALLERS_ID: ${SYNC_INSTALLERS_ID}
+      SYNC_INSTALLERS_NAME: ${SYNC_INSTALLERS_NAME}
+    volumes:
+      - kiwix:/config/kiwix
+      - mapeo:/config/mapeo
+      - fdroid:/config/fdroid
+      - installers:/config/installers
+    ports:
+      - 82:8384
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+    restart: unless-stopped
+  # Terrastories
+  # tileserver:
+  #   restart: always
+  #   image: klokantech/tileserver-gl
+  #   ports:
+  #     - '8080:80'
+  #   volumes:
+  #     - 'mbtiles:/data'
+  #     # - type: bind
+  #     #   source: ./tileserver/data
+  #     #   target: /data
+  # db:
+  #   image: postgres:11
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     POSTGRES_PASSWORD: ${DB_USER_PASSWORD}
+  #   volumes:
+  #     - "postgres_data:/var/lib/postgresql/data"
+  # web:
+  #   image: terrastories-server
+  #   command: bundle exec rails server --binding 0.0.0.0
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - db
+  #   volumes:
+  #     - bundler:/usr/local/bundle
+  #     - ./rails:/api
+  #     - ./data/media:/media
+  #     - ./data/import/media:/api/import/media
+
+  # web-test:
+  #   <<: *x-web-common
+  #   environment:
+  #     RAILS_ENV: test
+  #   command: scripts/test-server
+  #   ports:
+  #     - 3001:3000
+  #   depends_on:
+  #     - db
+  #   volumes:
+  #     - bundler:/usr/local/bundle
+  #     - ./rails:/api
+
+  # selenium:
+  #   # Debug version enables VNC ability
+  #   image: selenium/standalone-chrome-debug:3.0.1-germanium
+  #   # Bind selenium port & VNC port
+  #   ports: ['4444:4444', '5900:5900']
+  #   logging:
+  #     # Disable noisy logs.
+  #     driver: none
+  #   # bump this number up if pages are crashing
+  #   shm_size: '256mb'
+
+  # e2e:
+  #   image: terrastories-e2e
+  #   volumes:
+  #     - ./e2e:/opt/terrastories_e2e:cached
+  #   environment:
+  #     TEST_APP_HOST: web-test
+  #     TEST_APP_PORT: 3000
+  #     SELENIUM_HOST: selenium
+  #     SELENIUM_PORT: 4444
+  #   depends_on:
+  #     - web-test
+  #     - selenium
