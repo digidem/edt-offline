@@ -24,6 +24,7 @@ services:
     environment:
       PORTAL_SSID: ${PORTAL_SSID}
       INTERNET: ${INTERNET}
+  # https://hub.docker.com/_/httpd
   portal:
     build: ../services/portal
     restart: always
@@ -69,8 +70,7 @@ services:
       - 'kiwix:/data/zims'
     ports:
       - 83:83
-    # environment:
-      # DOWNLOAD: ${ZIM_DOWNLOAD}
+  # https://hub.docker.com/r/filebrowser/filebrowser
   filebrowser:
     build: ../services/filebrowser
     restart: unless-stopped

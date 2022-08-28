@@ -74,14 +74,28 @@ data:
   applicationConfigVariables:
     - BALENA_HOST_CONFIG_gpu_mem: 64
   applicationEnvironmentVariables:
-    - INTERFACE: 'eth0'
-    - SET_HOSTNAME: edt
-    - TZ: 'America/Sao_Paulo'
-    - SYNC_SOURCE_ID: NJXQYKR-QKAB5H6-HPVA3J6-3RFWNEV-DNRODEM-DLUKMVO-MHVRVB5-CE6ONAN
-    - SYNC_SOURCE_NAME: Tecendo Redes
-    - SYNC_KIWIX_REPOSITORY_ID: gzbu3-uenc4
-    - SYNC_KIWIX_REPOSITORY_NAME: Povos Indígenas no Brasil
-  defaultDeviceType: "raspberrypi3-64"
+    PORTAL_SSID: "Earth_Defenders_Toolkit"
+    PORTAL_FILE: https://github.com/digidem/edt-offline/releases/download/v0.0.1-beta.1/portal.tar.gz
+    INTERNET: true
+    # SSB
+    SSB_ROOM: "net:ssb.earthdefenderstoolkit.com:8007~shs:59xbTc9KssSmTf+BSMoq66iioQf5Wq5zFhgHQzdOsP8="
+    SSB_PUB: "net:pub.freesocial.co:8008~shs:ofYKOy2p9wsaxV73GqgOyh6C6nRGFM5FyciQyxwBd6A="
+    # Minio & Filebrowser
+    ADMIN_LOGIN: admin
+    ADMIN_PASSWORD: admin123
+    LOCALE: "pt-br"
+    # Syncthing
+    SYNC_SOURCE_ID: 7MAA2AW-FBC5CFE-F32BALW-LKLZEBE-VSPN6XG-4PYESBH-NAZ42Y5-RQYULAL
+    SYNC_SOURCE_NAME: EDT-Cloud
+    SYNC_KIWIX_ID: ceeqg-tbhpt
+    SYNC_KIWIX_NAME: ZIM-edt-pt
+    SYNC_FDROID_ID: zwozu-ajxlu
+    SYNC_FDROID_NAME: FDROID-edt
+    SYNC_MAPEO_ID: atzye-79v6o
+    SYNC_MAPEO_NAME: Mapeo
+    SYNC_INSTALLERS_ID: gmyij-7gktt
+    SYNC_INSTALLERS_NAME: INSTALLERS-edt
+  defaultDeviceType: "raspberrypi4-64"
   supportedDeviceTypes:
     - "raspberrypi3"
     - "raspberrypi3-64"

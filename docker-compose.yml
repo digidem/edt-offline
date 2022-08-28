@@ -1,0 +1,95 @@
+version: '2.1'
+
+volumes:
+  fdroid:
+  portal:
+  mapeo:
+  kiwix:
+  minio-data:
+  ssb-data:
+  installers:
+  # Terrastories
+  postgres_data:
+  mbtiles:
+  bundler:
+services:
+  # https://github.com/balena-os/wifi-connect
+  wifi:
+    restart: always
+    build: services/wifi-connect
+    network_mode: "host"
+    labels:
+        io.balena.features.dbus: '1'
+    cap_add:
+        - NET_ADMIN
+    environment:
+        DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
+  # https://hub.docker.com/_/httpd
+  portal:
+    build: services/portal
+    restart: always
+    volumes:
+      - 'portal:/usr/local/apache2/htdocs'
+      - 'installers:/usr/local/apache2/htdocs/installers'
+      - 'fdroid:/usr/local/apache2/htdocs/fdroid'
+    ports:
+      - 8080:80
+  # https://hub.docker.com/repository/docker/communityfirst/ssb-go-pub
+  ssb:
+    image: communityfirst/ssb-go-pub:latest
+    network_mode: host
+    volumes:
+      - 'ssb-data:/root/.ssb-go'
+    restart: unless-stopped
+  # https://hub.docker.com/r/minio/minio/
+  minio:
+    image: minio/minio
+    restart: always
+    dns:
+      - 8.8.8.8
+    ports:
+      - 9000:9000
+      - 9001:9001
+    volumes:
+      - 'minio-data:/data'
+    command: server --address ":9000" --console-address ":9001" /data
+  # https://hub.docker.com/r/kiwix/kiwix-serve
+  kiwix:
+    build: services/kiwix
+    volumes:
+      - 'kiwix:/data/zims'
+    ports:
+      - 83:83
+  # https://hub.docker.com/r/filebrowser/filebrowser
+  filebrowser:
+    build: services/filebrowser
+    restart: unless-stopped
+    volumes:
+      - kiwix:/srv/kiwix
+      - mapeo:/srv/mapeo
+      - fdroid:/srv/fdroid
+      - installers:/srv/installers
+    ports:
+      - 81:80
+    environment:
+      PGID: 1000
+      PUID: 1000
+    command: -- c
+  # https://hub.docker.com/r/linuxserver/syncthing/
+  syncthing:
+    build: services/syncthing
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: America/Brasil
+    volumes:
+      - kiwix:/config/kiwix
+      - mapeo:/config/mapeo
+      - fdroid:/config/fdroid
+      - installers:/config/installers
+    ports:
+      - 82:8384
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+    restart: unless-stopped

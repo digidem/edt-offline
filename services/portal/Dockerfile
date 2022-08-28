@@ -1,7 +1,7 @@
 FROM httpd
 
 RUN apt update && apt install -y curl && apt clean -y
-RUN curl -Ls "https://github.com/digidem/edt-offline/releases/download/v0.0.1-dweb/portal.tar.gz" \
+RUN curl -Ls "https://github.com/digidem/edt-offline/releases/download/v0.0.1-beta.1/portal.tar.gz" \
   | tar -xvz -C /usr/local/apache2/
 
 RUN rm -rf /usr/local/apache2/htdocs
