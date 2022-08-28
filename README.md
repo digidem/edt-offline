@@ -1,6 +1,7 @@
-# Earth Defenders Toolkit Offline
-
 ![logo](docs/imgs/EDT-offline-dark-logo.png)
+
+[![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/digidem/edt-offline)
+
 
 **EDT Offline** is a low-energy device that creates an access point with the Earth Defender's Toolkit platform running, even without the Internet. It provides applications, documentation, use cases, curated websites, and application bridges.
 
