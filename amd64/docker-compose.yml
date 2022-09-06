@@ -12,7 +12,40 @@ volumes:
   postgres_data:
   mbtiles:
   bundler:
+  proxy:
+  certs:
+  db:
 services:
+  proxy:
+    build: ../services/proxy
+    network_mode: host
+    volumes:
+      - proxy:/data
+      - certs:/etc/letsencrypt
+    depends_on:
+      - db
+  # https://hub.docker.com/_/mariadb/
+  db:
+    build: ../services/mariadb
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysecretpassword
+      MYSQL_DATABASE: "npm"
+      MYSQL_USER: "npm"
+      MYSQL_PASSWORD: "npm"
+    ports:
+      - '3306:3306'
+  # https://hub.docker.com/_/mariadb/
+  sqldump:
+    build: ../services/mariadb
+    command: "/sqldump.sh"
+    environment:
+      MYSQL_DATABASE: "npm"
+    volumes:
+      - db:/var/lib/mysql
+    depends_on:
+      - db
   # https://github.com/balena-os/wifi-connect
   wifi:
     restart: always
@@ -80,7 +113,7 @@ services:
       - fdroid:/srv/fdroid
       - installers:/srv/installers
     ports:
-      - 81:80
+      - 84:80
     environment:
       PGID: 1000
       PUID: 1000

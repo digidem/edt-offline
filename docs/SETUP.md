@@ -14,6 +14,11 @@ We'll need Internet connection for downloading latest software and content. But 
 2. Create free Balena account
 3. Set community environmental variables (wifi acess point name, wifi password, device name on network, community name, language, content repository address, pataka invite code, mapeo-config link, map-tiles links)
 
+|Name|Example|Purpose|
+|---|---|---|
+|`MYSQL_ROOT_PASSWORD`|`mysecretpassword`|password that will be set for the MariaDB root account|
+
+
 **Supported setup**
 
 1. Signup for [EDT forum](https://forum.earthdefenderstoolkit.com/) or join Telegram Group or join Whatsapp group

@@ -8,6 +8,9 @@ volumes:
   minio-data:
   ssb-data:
   installers:
+  proxy:
+  certs:
+  db:
   # Terrastories
   postgres_data:
   mbtiles:
@@ -32,6 +35,36 @@ services:
         - NET_ADMIN
     environment:
         DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
+  # https://hub.docker.com/r/jc21/nginx-proxy-manager/
+  proxy:
+    build: services/proxy
+    network_mode: host
+    volumes:
+      - proxy:/data
+      - certs:/etc/letsencrypt
+    depends_on:
+      - db
+  # https://hub.docker.com/_/mariadb/
+  db:
+    build: services/mariadb
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: "npm"
+      MYSQL_USER: "npm"
+      MYSQL_PASSWORD: "npm"
+    ports:
+      - '3306:3306'
+  # https://hub.docker.com/_/mariadb/
+  sqldump:
+    build: services/mariadb
+    command: "/sqldump.sh"
+    environment:
+      MYSQL_DATABASE: "npm"
+    volumes:
+      - db:/var/lib/mysql
+    depends_on:
+      - db
   # https://hub.docker.com/_/httpd
   portal:
     build: services/portal
