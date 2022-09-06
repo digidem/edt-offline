@@ -13,6 +13,14 @@ volumes:
   mbtiles:
   bundler:
 services:
+  # https://github.com/balenablocks/hostname
+  hostname:
+    image: balenablocks/hostname:latest
+    restart: 'no'
+    labels:
+      io.balena.features.supervisor-api: 1
+    environment:
+      SET_HOSTNAME: edt
   # https://github.com/balena-os/wifi-connect
   wifi:
     restart: always
