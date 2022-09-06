@@ -8,6 +8,8 @@ volumes:
   minio-data:
   ssb-data:
   installers:
+  certs:
+  nginx-conf:
   # Terrastories
   postgres_data:
   mbtiles:
@@ -32,6 +34,20 @@ services:
         - NET_ADMIN
     environment:
         DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
+  # https://hub.docker.com/r/nginxproxy/nginx-proxy
+  proxy:
+    build: ../services/nginx-proxy
+    restart: always
+    environment:
+      DOCKER_HOST: /tmp/docker.sock
+    volumes:
+      - certs:/etc/nginx/certs
+      - nginx-conf:/etc/nginx
+    labels:
+      io.balena.features.balena-socket: '1'
+    ports:
+      - "80:80"
+      - "443:443"
   # https://hub.docker.com/_/httpd
   portal:
     build: services/portal
