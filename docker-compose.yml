@@ -8,6 +8,7 @@ volumes:
   minio-data:
   ssb-data:
   installers:
+  mapeo-bridge:
   # Terrastories
   postgres_data:
   mbtiles:
@@ -42,6 +43,13 @@ services:
       - 'fdroid:/usr/local/apache2/htdocs/fdroid'
     ports:
       - 8080:80
+  # https://hub.docker.com/repository/docker/communityfirst/mapeo-bridge
+  mapeo-bridge:
+    image: communityfirst/mapeo-bridge
+    network_mode: host
+    volumes:
+      - 'mapeo-bridge:/usr/src/output'
+    restart: unless-stopped
   # https://hub.docker.com/repository/docker/communityfirst/ssb-go-pub
   ssb:
     image: communityfirst/ssb-go-pub:latest
