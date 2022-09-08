@@ -4,7 +4,7 @@
 # sometimes. In this case, following checks will fail and wifi-connect
 # will be launched even if the device will be able to connect to a WiFi network.
 # If this is your case, you can wait for a while and then check for the connection.
-sleep 5
+sleep 9
 
 # Choose a condition for running WiFi Connect according to your use case:
 
@@ -18,13 +18,16 @@ sleep 5
 # wget --spider http://google.com 2>&1
 
 # 4. Is there an active WiFi connection?
-
-length=$(expr length "$PORTAL_SSID")
-lenInternet=$(expr length "$INTERNET")
-
-
-if [ $length -gt 0 ] && ['$INTERNET' == 'false']; then
+# iwgetid -r
+INTERNET_MODE="${INTERNET:=0}"
+# IF variable INTERNET_MODE is '1' or 1 or 'true'; DO default wifi-connect app
+if [ "$INTERNET_MODE" == 's' ] || [ "$INTERNET_MODE" == 'yes' ] || [ "$INTERNET_MODE" == 'y' ] || [ "$INTERNET_MODE" == '1' ] || [ "$INTERNET_MODE" == 1 ] || [ "$INTERNET_MODE" == 'true' ]; then
+    printf 'Starting WiFi Connect\n'
+    ./wifi-connect --portal-ssid $PORTAL_SSID
+# ELSE start captive-portal pointing to EDT portal
 # Add page that redirects to other address
+# TODO: change url to $HOSTNAME.local variable
+else
 cat <<'END_HTML' >/usr/src/redirect/index.html
 <!DOCTYPE HTML>
 <html lang="en-US">
@@ -43,13 +46,9 @@ cat <<'END_HTML' >/usr/src/redirect/index.html
 </html>
 END_HTML
     # wifi-connect arguments: https://github.com/balena-os/wifi-connect/blob/master/docs/command-line-arguments.md
-    printf 'Starting WiFi Captive-Portal\n'
+    # TODO: conflict between proxy and captive-portal on port 80
+    printf 'Starting Earth Defenders Toolkit Hotspot and Captive-Portal\n'
     ./wifi-connect --portal-ssid $PORTAL_SSID --ui-directory redirect
-elif [ "$INTERNET" == 'true' ]; then
-    printf 'Starting WiFi Connect\n'
-    ./wifi-connect
-else
-    printf 'Skipping WiFi Connect\n'
 fi
 
 # Start your application here.
