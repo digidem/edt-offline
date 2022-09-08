@@ -1,0 +1,37 @@
+# Full list of options available at:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+
+name: Balena Deploy
+
+on:
+  # On push of a tag
+  push:
+    tags:
+      - "*"
+
+jobs:
+  balena-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: balena CLI Action
+        uses: balena-community/community-cli-action@1.0.0
+        with:
+          balena_token: ${{secrets.BALENA_TOKEN}}
+          balena_cli_commands: >
+            push digital_democracy/edt-offline;
+            os download raspberrypi4-64 --version v2.99.27 -o ./rpi-4.img;
+            preload rpi-4.img --fleet digital_democracy/edt-offline --commit latest;
+            os configure rpi-4.img --config-network=ethernet --fleet digital_democracy/edt-offline
+          balena_cli_version: 13.7.1
+
+      - name: Publish release
+        uses: "marvinpinto/action-automatic-releases@v1.2.1"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          automatic_release_tag: "latest"
+          files: |
+            rpi-4.img
