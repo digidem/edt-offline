@@ -8,6 +8,7 @@ ARG VERSION="4.4.6"
 RUN curl -Ls "https://github.com/balena-io/wifi-connect/releases/download/v$VERSION/wifi-connect-v$VERSION-linux-%%BALENA_ARCH%%.tar.gz" \
   | tar -xvz -C  /usr/src/app/
 
+RUN mkdir /usr/src/redirect
 COPY start.sh .
 
 CMD ["bash", "start.sh"]
