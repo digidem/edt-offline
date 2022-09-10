@@ -44,6 +44,10 @@ services:
     volumes:
       - 'mapeo-bridge:/usr/src/output'
     restart: unless-stopped
+    environment:
+      MAPEO_PROJECT_KEY: ${MAPEO_PROJECT_KEY}
+      MAPEO_STORAGE_PATH: ${MAPEO_STORAGE_PATH}
+      MAPEO_TERRASTORIES_TYPE: ${MAPEO_TERRASTORIES_TYPE}
   # https://hub.docker.com/repository/docker/communityfirst/ssb-go-pub
   ssb:
     image: communityfirst/ssb-go-pub:latest
