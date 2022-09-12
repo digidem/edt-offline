@@ -19,15 +19,8 @@ sleep 9
 
 # 4. Is there an active WiFi connection?
 # iwgetid -r
-INTERNET_MODE="${INTERNET:=0}"
-# IF variable INTERNET_MODE is '1' or 1 or 'true'; DO default wifi-connect app
-if [ "$INTERNET_MODE" == 's' ] || [ "$INTERNET_MODE" == 'yes' ] || [ "$INTERNET_MODE" == 'y' ] || [ "$INTERNET_MODE" == '1' ] || [ "$INTERNET_MODE" == 1 ] || [ "$INTERNET_MODE" == 'true' ]; then
-    printf 'Starting WiFi Connect\n'
-    ./wifi-connect --portal-ssid $PORTAL_SSID
-# ELSE start captive-portal pointing to EDT portal
-# Add page that redirects to other address
+SSID="${SSID:='Earth_Defenders_Toolkit'}"
 # TODO: change url to $HOSTNAME.local variable
-else
 cat <<'END_HTML' >/usr/src/redirect/index.html
 <!DOCTYPE HTML>
 <html lang="en-US">
@@ -45,11 +38,10 @@ cat <<'END_HTML' >/usr/src/redirect/index.html
     </body>
 </html>
 END_HTML
-    # wifi-connect arguments: https://github.com/balena-os/wifi-connect/blob/master/docs/command-line-arguments.md
-    # TODO: conflict between proxy and captive-portal on port 80
-    printf 'Starting Earth Defenders Toolkit Hotspot and Captive-Portal\n'
-    ./wifi-connect --portal-ssid $PORTAL_SSID --ui-directory redirect
-fi
+# wifi-connect arguments: https://github.com/balena-os/wifi-connect/blob/master/docs/command-line-arguments.md
+# TODO: conflict between proxy and captive-portal on port 80
+printf 'Starting Earth Defenders Toolkit Hotspot and Captive-Portal\n'
+./wifi-connect --portal-ssid "$SSID" --ui-directory redirect
 
 # Start your application here.
 sleep infinity

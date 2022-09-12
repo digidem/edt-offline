@@ -1,6 +1,7 @@
 FROM httpd
 
 RUN apt update && apt install -y curl && apt clean -y
+# TODO: Change to download latest release
 ARG VERSION="0.0.1-beta.2"
 RUN curl -Ls "https://github.com/digidem/edt-offline/releases/download/v$VERSION/portal.tar.gz" \
   | tar -xvz -C /usr/local/apache2/
