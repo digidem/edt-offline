@@ -1,6 +1,6 @@
 name: "Earth Defender's Toolkit Offline"
 type: "sw.application"
-version: 0.0.1
+version: 0.0.4
 description: "A low-energy device that creates an access-point serving applications, bridging them and exposing curated content offline.
 Software stack and content are automatically updated while online, and can be updated offline."
 post-provisioning: >-
@@ -74,7 +74,7 @@ data:
   applicationConfigVariables:
     - BALENA_HOST_CONFIG_gpu_mem: 64
   applicationEnvironmentVariables:
-    PORTAL_SSID: "Earth_Defenders_Toolkit"
+    PORTAL_SSID: Earth_Defenders_Toolkit
     PORTAL_FILE: https://github.com/digidem/edt-offline/releases/download/v0.0.1-beta.1/portal.tar.gz
     # MAPEO BRIDGE
     MAPEO_PROJECT_KEY: af43cbdb6827d3ddc5b39b20df174bf5c3e44d9bbcdccfe034af090440cebf69
