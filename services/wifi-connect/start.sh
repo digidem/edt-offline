@@ -19,9 +19,9 @@ sleep 9
 
 # 4. Is there an active WiFi connection?
 # iwgetid -r
-SSID="${SSID:='Earth_Defenders_Toolkit'}"
+SSID="${SSID:=Earth_Defenders_Toolkit}"
 # TODO: change url to $HOSTNAME.local variable
-cat <<'END_HTML' >/usr/src/redirect/index.html
+cat <<'END_HTML' >/usr/src/app/ui/index.html
 <!DOCTYPE HTML>
 <html lang="en-US">
     <head>
@@ -41,7 +41,7 @@ END_HTML
 # wifi-connect arguments: https://github.com/balena-os/wifi-connect/blob/master/docs/command-line-arguments.md
 # TODO: conflict between proxy and captive-portal on port 80
 printf 'Starting Earth Defenders Toolkit Hotspot and Captive-Portal\n'
-./wifi-connect --portal-ssid "$SSID" --ui-directory redirect
+./wifi-connect --portal-ssid "$SSID"
 
 # Start your application here.
 sleep infinity
