@@ -47,16 +47,6 @@ services:
       MAPEO_PROJECT_KEY: ${MAPEO_PROJECT_KEY}
       MAPEO_STORAGE_PATH: ${MAPEO_STORAGE_PATH}
       MAPEO_TERRASTORIES_TYPE: ${MAPEO_TERRASTORIES_TYPE}
-  # https://hub.docker.com/repository/docker/communityfirst/ssb-go-pub
-  ssb:
-    image: communityfirst/ssb-go-pub:latest
-    network_mode: host
-    environment:
-      ROOM: ${SSB_ROOM}
-      PUB: ${SSB_PUB}
-    volumes:
-      - 'ssb-data:/root/.ssb-go'
-    restart: unless-stopped
   # https://hub.docker.com/r/minio/minio/
   minio:
     image: minio/minio
