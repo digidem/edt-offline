@@ -15,6 +15,9 @@ services:
       VIRTUAL_HOST: ${DOMAIN_ICONS}
       LETSENCRYPT_HOST: ${DOMAIN_ICONS}
       LETSENCRYPT_EMAIL: ${EMAIL}
+      ICONS_TO_DOWNLOAD: ${ICONS_TO_DOWNLOAD}
+      NOUN_KEY: ${NOUN_KEY}
+      NOUN_SECRET: ${NOUN_SECRET}
       VIRTUAL_PORT: 3000
   # https://hub.docker.com/r/nginxproxy/nginx-proxy
   proxy:
