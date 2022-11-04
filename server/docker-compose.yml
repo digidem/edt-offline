@@ -3,8 +3,10 @@ services:
   # https://containrrr.dev/watchtower
   watchtower:
     image: containrrr/watchtower
+    restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 60
   # https://hub.docker.com/r/communityfirst/mapeo-icons
   mapeo-icons:
     image: communityfirst/mapeo-icons
@@ -83,15 +85,15 @@ services:
       SSB_ROOM_ADMIN_KEY: ${ROOM_ADMIN}
       SSB_ROOM_DOMAIN: ${DOMAIN_ROOM}
   # https://hub.docker.com/repository/docker/communityfirst/ssb-go-pub
-  ssb-pub:
-    image: communityfirst/ssb-go-pub:latest
-    ports:
-      - "0.0.0.0:8008:8008" # This is the port SSB clients connect to
-    environment:
-      ROOM: ${SSB_ROOM}
-    volumes:
-      - 'ssb-data:/root/.ssb-go'
-    restart: unless-stopped
+  # ssb-pub:
+  #   image: communityfirst/ssb-go-pub:latest
+  #   ports:
+  #     - "0.0.0.0:8008:8008" # This is the port SSB clients connect to
+  #   environment:
+  #     ROOM: ${SSB_ROOM}
+  #   volumes:
+  #     - ${DIR}/app-data/ssb-pub:/root/.ssb-go'
+  #   restart: unless-stopped
   # https://hub.docker.com/r/minio/minio/
   minio:
     image: minio/minio
