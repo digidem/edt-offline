@@ -1,5 +1,19 @@
 version: '3'
 services:
+  # https://containrrr.dev/watchtower
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  # https://hub.docker.com/r/communityfirst/mapeo-icons
+  mapeo-icons:
+    image: communityfirst/mapeo-icons
+    restart: always
+    environment:
+      VIRTUAL_HOST: ${DOMAIN_ICONS}
+      LETSENCRYPT_HOST: ${DOMAIN_ICONS}
+      LETSENCRYPT_EMAIL: ${EMAIL}
+      VIRTUAL_PORT: 3000
   # https://hub.docker.com/r/nginxproxy/nginx-proxy
   proxy:
     build: ../services/nginx-proxy
