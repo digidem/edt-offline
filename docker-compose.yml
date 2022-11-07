@@ -101,36 +101,42 @@ services:
       - 21027:21027/udp
     restart: unless-stopped
   # https://hub.docker.com/_/postgres
-  terrastories-db:
+  db:
     image: postgres:11
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: ${DB_USER_PASSWORD}
+      POSTGRES_DB: terrastories-dev
+      POSTGRES_PASSWORD: postgres
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
   # https://hub.docker.com/r/communityfirst/terrastories
   terrastories:
     image: communityfirst/terrastories
-    command: bundle exec rails server --binding 0.0.0.0
     ports:
-      - 8083:3000
+      - 3000:3000
     depends_on:
-      - terrastories-db
-    # environment:
-    #   RAILS_ENV: offline
+      - db
+    environment:
+      POSTGRES_DB: terrastories-dev
+      DB_USER_PASSWORD: postgres
+      RAILS_ENV: offline
+      RAILS_MASTER_KEY: '8b1d649z015e6809tg8d22222g4z8b5c'
+      CHOKIDAR_USEPOLLING: 'true'
+      USE_LOCAL_MAP_SERVER: 'true'
+      OFFLINE_MAP_STYLE: /tileserver/styles/terrastories-map/style.json
     volumes:
       - bundler:/usr/local/bundle
       - terrastories-data:/api
       - terrastories-media:/media
       - terrastories-import:/api/import/media
   # https://hub.docker.com/r/wifidb/tileserver-gl
-  tile-server:
-    image: wifidb/tileserver-gl
-    ports:
-      - 8084:80
-    volumes:
-      - mbtiles:/data
+  # tile-server:
+  #   image: wifidb/tileserver-gl
+  #   ports:
+  #     - 8084:80
+  #   volumes:
+  #     - mbtiles:/data
     # https://hub.docker.com/r/kiwix/kiwix-serve
   kiwix:
     build: services/kiwix
