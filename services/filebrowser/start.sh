@@ -10,5 +10,5 @@ echo "LOCALE: $LOCALE"
 echo "Using user: $ADMIN_LOGIN and password: $ADMIN_PASSWORD"
 sed -i -r "s/#LOCALE/$LOCALE/g" /config/custom/filebrowser.json
 ./filebrowser config import /config/custom/filebrowser.json
-./filebrowser config set --branding.files "/config/custom" # Not working
+./filebrowser config set --branding.files "/config/custom/branding" # Not working
 ./filebrowser

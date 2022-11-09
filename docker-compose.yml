@@ -68,26 +68,20 @@ services:
   filebrowser:
     build: services/filebrowser
     restart: unless-stopped
-    user: "1000:1000"
+    # user: '1000:1000' # TODO: throws permission denied error for opening database.db
     volumes:
       - kiwix:/srv/kiwix
       - mapeo:/srv/mapeo
       - fdroid:/srv/fdroid
       - installers:/srv/installers
+      - terrastories-import:/srv/terrastories/import
+      - terrastories-media:/srv/terrastories/media
     ports:
-      - 8081:8081
-    command:
-      - "--cache-dir=/config/cache"
-      - "-d=/config/database.db"
-      - "-c=/config/config "
-      - "-p=8081"
+      - 8081:80
+    command: -- c
   # https://hub.docker.com/r/linuxserver/syncthing/
   syncthing:
     build: services/syncthing
-    environment:
-      PUID: 1000
-      PGID: 1000
-      TZ: America/Brasil
     volumes:
       - kiwix:/config/kiwix
       - mapeo:/config/mapeo
@@ -104,9 +98,6 @@ services:
     image: postgres:11
     ports:
       - 5432:5432
-    environment:
-      POSTGRES_DB: terrastories-dev
-      POSTGRES_PASSWORD: postgres
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
   # https://hub.docker.com/r/communityfirst/terrastories

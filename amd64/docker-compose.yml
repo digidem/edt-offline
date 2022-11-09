@@ -70,9 +70,9 @@ services:
     command: server --address ":9000" --console-address ":9001" /data
   # https://hub.docker.com/r/filebrowser/filebrowser
   filebrowser:
-    image: filebrowser/filebrowser
+    build: ../services/filebrowser
     restart: unless-stopped
-    user: '1000:1000' # TODO: throws permission denied error for opening database.db
+    # user: '1000:1000' # TODO: throws permission denied error for opening database.db
     volumes:
       - kiwix:/srv/kiwix
       - mapeo:/srv/mapeo
@@ -85,18 +85,19 @@ services:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       LOCALE: ${LOCALE}
     ports:
-      - 8081:8081
-    command:
-      - "--cache-dir=/config/cache"
-      - "-d=/config/database.db"
-      - "-c=/config/config "
-      - "-p=8081"
+      - 8081:80
+    command: -- c
+    # command:
+    #   - "--cache-dir=/usr/app/cache"
+    #   - "-d=/usr/app/database.db"
+    #   - "-c=/usr/app/config "
+    #   - "-p=8081"
   # https://hub.docker.com/r/linuxserver/syncthing/
   syncthing:
     build: ../services/syncthing
     environment:
-      PUID: 1000
-      PGID: 1000
+      PUID: 0 # TODO change back to 1000
+      PGID: 0 # TODO change back to 1000
       TZ: America/Brasil
       SYNC_SOURCE_ID: ${SYNC_SOURCE_ID}
       SYNC_SOURCE_NAME: ${SYNC_SOURCE_NAME}
