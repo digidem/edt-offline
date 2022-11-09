@@ -13,6 +13,9 @@ volumes:
   postgres_data:
   mbtiles:
   bundler:
+  terrastories-data:
+  terrastories-media:
+  terrastories-import:
 services:
   # https://github.com/balena-os/wifi-connect
   wifi:
@@ -42,6 +45,7 @@ services:
     network_mode: host
     volumes:
       - 'mapeo-bridge:/usr/src/output'
+      - 'terrastories-import:/usr/src/terrastories'
     restart: unless-stopped
     environment:
       MAPEO_PROJECT_KEY: ${MAPEO_PROJECT_KEY}
@@ -64,31 +68,29 @@ services:
       # MINIO_BROWSER_REDIRECT_URL: https://[CI_CD_DOMAIN]
       # MINIO_SERVER_URL: https://[CI_CD_DOMAIN]:34256 
     command: server --address ":9000" --console-address ":9001" /data
-  # https://hub.docker.com/r/kiwix/kiwix-serve
-  kiwix:
-    build: ../services/kiwix
-    volumes:
-      - 'kiwix:/data/zims'
-    ports:
-      - 83:83
   # https://hub.docker.com/r/filebrowser/filebrowser
   filebrowser:
-    build: ../services/filebrowser
+    image: filebrowser/filebrowser
     restart: unless-stopped
+    user: '1000:1000' # TODO: throws permission denied error for opening database.db
     volumes:
       - kiwix:/srv/kiwix
       - mapeo:/srv/mapeo
       - fdroid:/srv/fdroid
       - installers:/srv/installers
-    ports:
-      - 81:80
+      - terrastories-import:/srv/terrastories/import
+      - terrastories-media:/srv/terrastories/media
     environment:
-      PGID: 1000
-      PUID: 1000
       ADMIN_LOGIN: ${ADMIN_LOGIN}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       LOCALE: ${LOCALE}
-    command: -- c
+    ports:
+      - 8081:8081
+    command:
+      - "--cache-dir=/config/cache"
+      - "-d=/config/database.db"
+      - "-c=/config/config "
+      - "-p=8081"
   # https://hub.docker.com/r/linuxserver/syncthing/
   syncthing:
     build: ../services/syncthing
@@ -112,7 +114,7 @@ services:
       - fdroid:/config/fdroid
       - installers:/config/installers
     ports:
-      - 82:8384
+      - 8082:8384
       - 22000:22000/tcp
       - 22000:22000/udp
       - 21027:21027/udp
@@ -128,60 +130,33 @@ services:
   #     # - type: bind
   #     #   source: ./tileserver/data
   #     #   target: /data
-  # db:
-  #   image: postgres:11
-  #   ports:
-  #     - 5432:5432
-  #   environment:
-  #     POSTGRES_PASSWORD: ${DB_USER_PASSWORD}
-  #   volumes:
-  #     - "postgres_data:/var/lib/postgresql/data"
-  # web:
-  #   image: terrastories-server
-  #   command: bundle exec rails server --binding 0.0.0.0
-  #   ports:
-  #     - 3000:3000
-  #   depends_on:
-  #     - db
-  #   volumes:
-  #     - bundler:/usr/local/bundle
-  #     - ./rails:/api
-  #     - ./data/media:/media
-  #     - ./data/import/media:/api/import/media
+  db:
+    image: postgres:11
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${DB_USER_PASSWORD}
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"
+  terrastories:
+    image: communityfirst/terrastories
+    ports:
+      - 8083:3000
+    depends_on:
+      - db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      DB_USER_PASSWORD: ${DB_USER_PASSWORD}
+      RAILS_ENV: offline
+      CHOKIDAR_USEPOLLING: 'true'
+      USE_LOCAL_MAP_SERVER: 'true'
+      RAILS_MASTER_KEY: '7a0c538b904d5919af7c11470f3b7a4b'
+      OFFLINE_MAP_STYLE: /tileserver/styles/terrastories-map/style.json
+      HOST_HOSTNAME: 0.0.0.0
+    volumes:
+      - bundler:/usr/local/bundle
+      - terrastories-data:/api
+      - terrastories-media:/media
+      - terrastories-import:/api/import/media
 
-  # web-test:
-  #   <<: *x-web-common
-  #   environment:
-  #     RAILS_ENV: test
-  #   command: scripts/test-server
-  #   ports:
-  #     - 3001:3000
-  #   depends_on:
-  #     - db
-  #   volumes:
-  #     - bundler:/usr/local/bundle
-  #     - ./rails:/api
-
-  # selenium:
-  #   # Debug version enables VNC ability
-  #   image: selenium/standalone-chrome-debug:3.0.1-germanium
-  #   # Bind selenium port & VNC port
-  #   ports: ['4444:4444', '5900:5900']
-  #   logging:
-  #     # Disable noisy logs.
-  #     driver: none
-  #   # bump this number up if pages are crashing
-  #   shm_size: '256mb'
-
-  # e2e:
-  #   image: terrastories-e2e
-  #   volumes:
-  #     - ./e2e:/opt/terrastories_e2e:cached
-  #   environment:
-  #     TEST_APP_HOST: web-test
-  #     TEST_APP_PORT: 3000
-  #     SELENIUM_HOST: selenium
-  #     SELENIUM_PORT: 4444
-  #   depends_on:
-  #     - web-test
-  #     - selenium

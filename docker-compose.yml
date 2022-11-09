@@ -48,7 +48,7 @@ services:
   # https://hub.docker.com/repository/docker/communityfirst/mapeo-bridge
   mapeo-bridge:
     image: communityfirst/mapeo-bridge
-    network_mode: host # uses port 3000
+    network_mode: host
     volumes:
       - "mapeo-bridge:/usr/src/output"
     restart: unless-stopped
@@ -75,8 +75,12 @@ services:
       - fdroid:/srv/fdroid
       - installers:/srv/installers
     ports:
-      - 8081:80
-    command: -- c
+      - 8081:8081
+    command:
+      - "--cache-dir=/config/cache"
+      - "-d=/config/database.db"
+      - "-c=/config/config "
+      - "-p=8081"
   # https://hub.docker.com/r/linuxserver/syncthing/
   syncthing:
     build: services/syncthing
