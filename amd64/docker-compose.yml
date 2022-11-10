@@ -65,8 +65,6 @@ services:
     environment:
       MINIO_ROOT_USER: ${ADMIN_LOGIN}
       MINIO_ROOT_PASSWORD: ${ADMIN_PASSWORD}
-      # MINIO_BROWSER_REDIRECT_URL: https://[CI_CD_DOMAIN]
-      # MINIO_SERVER_URL: https://[CI_CD_DOMAIN]:34256 
     command: server --address ":9000" --console-address ":9001" /data
   # https://hub.docker.com/r/filebrowser/filebrowser
   filebrowser:
@@ -87,10 +85,10 @@ services:
     ports:
       - 8081:80
     command: -- c
-    # command:
-    #   - "--cache-dir=/usr/app/cache"
-    #   - "-d=/usr/app/database.db"
-    #   - "-c=/usr/app/config "
+    # command: # TODO change folders for user 1000
+    #   - "--cache-dir=/config/cache"
+    #   - "-d=/config/database.db"
+    #   - "-c=/config/config "
     #   - "-p=8081"
   # https://hub.docker.com/r/linuxserver/syncthing/
   syncthing:

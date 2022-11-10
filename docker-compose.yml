@@ -119,10 +119,3 @@ services:
   #     - 8084:80
   #   volumes:
   #     - mbtiles:/data
-    # https://hub.docker.com/r/kiwix/kiwix-serve
-  # kiwix:
-  #   build: services/kiwix
-  #   volumes:
-  #     - "kiwix:/data/zims"
-  #   ports:
-  #     - 8085:83
