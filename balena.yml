@@ -114,4 +114,4 @@ data:
     - "raspberrypi3-64"
     - "raspberrypi4-64"
     - "intel-nuc"
-    - "genericx86-64-ext"
+    - "generic-amd64"

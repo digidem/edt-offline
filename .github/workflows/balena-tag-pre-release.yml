@@ -56,7 +56,7 @@ jobs:
             echo "BALENA_IMAGE=intel-nuc" >> $GITHUB_ENV
             echo "BALENA_ARCH=amd64" >> $GITHUB_ENV
           elif [ "${{ matrix.board }}" == 'generic_amd64' ]; then
-            echo "BALENA_IMAGE=genericx86-64" >> $GITHUB_ENV
+            echo "BALENA_IMAGE=generic-amd64" >> $GITHUB_ENV
             echo "BALENA_ARCH=amd64" >> $GITHUB_ENV
           fi
       - name: balena CLI Action - download
