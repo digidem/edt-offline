@@ -1,6 +1,8 @@
 name: Local docker-compose Stack
 on:
   pull_request:
+    paths:
+      - 'compose/**'
     branches:
       - main
 jobs:

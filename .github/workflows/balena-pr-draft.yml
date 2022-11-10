@@ -1,6 +1,10 @@
 name: Balena Draft
 on:
   pull_request:
+    paths:
+      - 'docker-compose.yml'
+      - 'balena.yml'
+      - 'services/**'
     branches:
       - main
 
