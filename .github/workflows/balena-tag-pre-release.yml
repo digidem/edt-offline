@@ -20,12 +20,19 @@ jobs:
           file: "./balena.yml" # File to read from
           key-path: '["version"]' # Access the runs key then the using key and retuns the value.
 
+      - name: Get the Ref
+        id: get-ref
+        uses: ankitvgupta/ref-to-tag-action@master
+        with:
+          ref: ${{ github.ref }}
+          head_ref: ${{ github.head_ref }}
+
       - name: Balena Deploy
         uses: Theia-Scientific/balena-cli@v1
         if: success()
         with:
           balena_api_token: ${{secrets.BALENA_TOKEN}}
-          balena_command: "push ${{secrets.BALENA_FLEET}}_${{matrix.board}} --release-tag v${{steps.yaml-data.outputs.data}} release"
+          balena_command: "push ${{secrets.BALENA_FLEET}}_${{matrix.board}} --draft --release-tag v${{steps.yaml-data.outputs.data}} ${{ steps.get-ref.outputs.tag }}"
   balena-build-images:
     strategy:
       matrix:
@@ -66,8 +73,8 @@ jobs:
           balena_cli_commands: |
             os download "$BALENA_IMAGE" \
               --output "$BALENA_IMAGE.img" \
-              --version default
-          balena_cli_version: 13.7.1
+              --version latest
+          balena_cli_version: 14.5.6
 
       - name: balena CLI Action - preload
         uses: balena-labs-research/community-cli-action@1.0.0
@@ -79,7 +86,7 @@ jobs:
               --fleet "${{secrets.BALENA_FLEET}}_${{env.BALENA_ARCH}}" \
               --dont-check-arch  \
               --commit latest
-          balena_cli_version: 13.7.1
+          balena_cli_version: 14.5.6
 
       - name: balena CLI Action - configure
         uses: balena-labs-research/community-cli-action@1.0.0
@@ -90,7 +97,7 @@ jobs:
               "$BALENA_IMAGE.img" \
               --config-network=ethernet  \
               --fleet "${{secrets.BALENA_FLEET}}_${{env.BALENA_ARCH}}"
-          balena_cli_version: 13.7.1
+          balena_cli_version: 14.5.6
 
       - name: Get the Ref
         id: get-ref

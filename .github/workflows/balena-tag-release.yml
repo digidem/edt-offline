@@ -67,8 +67,8 @@ jobs:
           balena_cli_commands: |
             os download "$BALENA_IMAGE" \
               --output "$BALENA_IMAGE.img" \
-              --version default
-          balena_cli_version: 13.7.1
+                --version latest
+          balena_cli_version: 14.5.6
 
       - name: balena CLI Action - preload
         uses: balena-labs-research/community-cli-action@1.0.0
@@ -80,7 +80,7 @@ jobs:
               --fleet "${{secrets.BALENA_FLEET}}_${{env.BALENA_ARCH}}" \
               --dont-check-arch  \
               --commit latest
-          balena_cli_version: 13.7.1
+          balena_cli_version: 14.5.6
 
       - name: balena CLI Action - configure
         uses: balena-labs-research/community-cli-action@1.0.0
@@ -91,7 +91,7 @@ jobs:
               "$BALENA_IMAGE.img" \
               --config-network=ethernet  \
               --fleet "${{secrets.BALENA_FLEET}}_${{env.BALENA_ARCH}}"
-          balena_cli_version: 13.7.1
+          balena_cli_version: 14.5.6
 
       - name: Get the Ref
         id: get-ref
