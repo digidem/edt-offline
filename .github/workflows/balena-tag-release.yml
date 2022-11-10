@@ -39,7 +39,7 @@ jobs:
       - name: Get base board
         run: |
           if [ "${{ matrix.board }}" == 'pi3' ]; then
-            echo "BALENA_IMAGE=raspberrypi3" >> $GITHUB_ENV
+            echo "BALENA_IMAGE=raspberrypi3-64" >> $GITHUB_ENV
             echo "BALENA_ARCH=aarch64" >> $GITHUB_ENV
           elif [ "${{ matrix.board }}" == 'pi4' ]; then
             echo "BALENA_IMAGE=raspberrypi4-64" >> $GITHUB_ENV
