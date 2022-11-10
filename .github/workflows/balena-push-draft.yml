@@ -1,8 +1,9 @@
 name: Balena Push Draft
 on:
-  push:
-    branches-ignore:
+  pull_request:
+    branches:
       - main
+
 jobs:
   balena-deploy:
     runs-on: ubuntu-latest
@@ -20,4 +21,4 @@ jobs:
         if: success()
         with:
           balena_api_token: ${{secrets.BALENA_TOKEN}}
-          balena_command: "push ${{secrets.BALENA_FLEET}} --draft --release-tag v${{steps.yaml-data.outputs.data}}-beta ${{github.ref_name}}"
+          balena_command: "push ${{secrets.BALENA_FLEET}} --draft --release-tag commit ${{ github.sha }}  --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{github.ref_name}}"
