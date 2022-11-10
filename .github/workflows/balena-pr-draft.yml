@@ -31,4 +31,4 @@ jobs:
         if: success()
         with:
           balena_api_token: ${{secrets.BALENA_TOKEN}}
-          balena_command: "push ${{secrets.BALENA_FLEET}}_$BALENA_ARCH --draft --release-tag commit ${{ github.sha }}  --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{github.ref_name}}"
+          balena_command: "push ${{secrets.BALENA_FLEET}}_${{BALENA_ARCH}} --draft --release-tag commit ${{ github.sha }}  --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{github.ref_name}}"
