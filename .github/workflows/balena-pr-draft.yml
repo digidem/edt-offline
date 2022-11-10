@@ -1,4 +1,4 @@
-name: Balena Push Draft
+name: Balena Draft
 on:
   pull_request:
     branches:

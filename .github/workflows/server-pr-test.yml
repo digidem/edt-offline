@@ -1,10 +1,10 @@
-name: server-push-test
+name: Server docker-compose Stack
 on:
   pull_request:
     branches:
       - main
 jobs:
-  test:
+  test-server:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -13,4 +13,4 @@ jobs:
         run: cp server/.env.example server/.env
       - name: Build the stack
         run: docker-compose -f server/docker-compose.yml up -d
-      # - name: Test # TODO add tests
+      # - name: Test # TODO add tests: filebrowser, syncthing, mapeo-icons, fdroid-repo

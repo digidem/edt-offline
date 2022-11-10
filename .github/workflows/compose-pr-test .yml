@@ -1,10 +1,10 @@
-name: server-push-test
+name: Local docker-compose Stack
 on:
   pull_request:
     branches:
       - main
 jobs:
-  test:
+  test-compose:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -13,4 +13,4 @@ jobs:
         run: cp compose/.env.example compose/.env
       - name: Build the stack
         run: docker-compose -f compose/docker-compose.yml up -d
-      # - name: Test # TODO add tests
+      # - name: Test # TODO add tests: portal, mapeo-bridge, minio, filebrowser, syncthing, terrastories

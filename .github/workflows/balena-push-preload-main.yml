@@ -1,4 +1,4 @@
-name: Balena Push Preload Main
+name: Balena Beta
 on:
   push:
     branches:

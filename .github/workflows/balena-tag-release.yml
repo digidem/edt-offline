@@ -1,4 +1,4 @@
-name: Build Balena Disk Images
+name: Balena Release
 on:
   push:
     tags:
