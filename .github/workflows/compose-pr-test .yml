@@ -12,5 +12,5 @@ jobs:
       - name: Generate .env file
         run: cp compose/.env.example compose/.env
       - name: Build the stack
-        run: docker-compose up -f compose/docker-compose.yml
+        run: docker-compose -f compose/docker-compose.yml up -d
       # - name: Test # TODO add tests
