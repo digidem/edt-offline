@@ -44,7 +44,7 @@ jobs:
             echo "BALENA_IMAGE=raspberrypi4-64" >> $GITHUB_ENV
             echo "BALENA_ARCH=aarch64" >> $GITHUB_ENV
           elif [ "${{ matrix.board }}" == 'rockpi4' ]; then
-            echo "BALENA_IMAGE=rockpi-4b" >> $GITHUB_ENV
+            echo "BALENA_IMAGE=rockpi-4b-rk3399" >> $GITHUB_ENV
             echo "BALENA_ARCH=aarch64" >> $GITHUB_ENV
           elif [ "${{ matrix.board }}" == 'rockpro64' ]; then
             echo "BALENA_IMAGE=rockpro64" >> $GITHUB_ENV
