@@ -96,6 +96,7 @@ jobs:
             os configure \
               "$BALENA_IMAGE.img" \
               --config-network=ethernet  \
+              --device-type "${{env.BALENA_IMAGE}}" \
               --fleet "${{secrets.BALENA_FLEET}}_${{env.BALENA_ARCH}}"
           balena_cli_version: 14.5.6
 
