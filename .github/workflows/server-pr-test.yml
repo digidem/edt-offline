@@ -1,0 +1,13 @@
+name: server-push-test
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the stack
+        run: cp server/.env.example server/.env && docker-compose up -f server/docker-compose.yml -d
+      # - name: Test # TODO add tests
