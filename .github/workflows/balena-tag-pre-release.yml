@@ -1,7 +1,7 @@
-name: Balena Release
+name: Balena Release Beta
 on:
   push:
-    tags:
+    tags-ignore:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 jobs:
   balena-deploy:
@@ -117,37 +117,4 @@ jobs:
           tag_name: ${{ steps.get-ref.outputs.tag }}
           body: ${{ steps.generate-changelog.outputs.changelog }}
           files: "*.zip"
-#TODO: Download and inject content into the image
-      # - name: Mount Image
-      #   id: mount-image
-      #   uses: damianperera/mount-image-action@v1
-      #   with:
-      #     imagePath: "$BALENA_IMAGE.img"
-      #     mountPoint: "/mnt/$BALENA_IMAGE"
-
-      # - name: Download content zip
-      #   run: |
-      #     sudo cp config/* ${{ steps.mount-image.outputs.rootMountLocation }}/etc/config/
-
-      # - name: Unmount image
-      #   uses: damianperera/unmount-image-action@v1
-      #   with:
-      #     imagePath: "$BALENA_IMAGE.img"
-      #     bootDeviceMapper: ${{ steps.mount-image.outputs.bootDeviceMapper }}
-      #     rootDeviceMapper: ${{ steps.mount-image.outputs.rootDeviceMapper }}
-
-#TODO: Cleanup
-      # - name: Delete workflow runs
-      #   uses: GitRML/delete-workflow-runs@main
-      #   with:
-      #     retain_days: 1
-      #     keep_minimum_runs: 3
-
-      # - name: Remove old Releases
-      #   uses: dev-drprasad/delete-older-releases@v0.1.0
-      #   if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-      #   with:
-      #     keep_latest: 3
-      #     delete_tags: true
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: true
