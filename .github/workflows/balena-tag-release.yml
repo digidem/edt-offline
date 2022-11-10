@@ -5,6 +5,9 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 jobs:
   balena-deploy:
+    strategy:
+      matrix:
+        board: ['amd64', 'aarch64']
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,7 +25,7 @@ jobs:
         if: success()
         with:
           balena_api_token: ${{secrets.BALENA_TOKEN}}
-          balena_command: "push ${{secrets.BALENA_FLEET}}_${{env.BALENA_ARCH}} --release-tag v${{steps.yaml-data.outputs.data}} release"
+          balena_command: "push ${{secrets.BALENA_FLEET}}_${{matrix.board}} --release-tag v${{steps.yaml-data.outputs.data}} release"
 
   balena-build-images:
     strategy:

@@ -19,16 +19,9 @@ jobs:
         with:
           file: './balena.yml'          # File to read from
           key-path: '["version"]' # Access the runs key then the using key and retuns the value.
-      - name: Set base board
-        run: |
-          if [ "${{ matrix.board }}" == 'amd64' ]; then
-            echo "BALENA_ARCH=amd64" >> $GITHUB_ENV
-          elif [ "${{ matrix.board }}" == 'aarch64' ]; then
-            echo "BALENA_ARCH=aarch64" >> $GITHUB_ENV
-          fi
       - name: Balena Deploy
         uses: Theia-Scientific/balena-cli@v1
         if: success()
         with:
           balena_api_token: ${{secrets.BALENA_TOKEN}}
-          balena_command: "push ${{secrets.BALENA_FLEET}}_${{env.BALENA_ARCH}} --draft --release-tag commit ${{ github.sha }}  --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{github.ref_name}}"
+          balena_command: "push ${{secrets.BALENA_FLEET}}_${{matrix.board}} --draft --release-tag commit ${{ github.sha }}  --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{github.ref_name}}"
