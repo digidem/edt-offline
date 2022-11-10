@@ -22,7 +22,7 @@ jobs:
         if: success()
         with:
           balena_api_token: ${{secrets.BALENA_TOKEN}}
-          balena_command: "push ${{secrets.BALENA_FLEET}}_${{BALENA_ARCH}} --release-tag v${{steps.yaml-data.outputs.data}} release"
+          balena_command: "push ${{secrets.BALENA_FLEET}}_${{env.BALENA_ARCH}} --release-tag v${{steps.yaml-data.outputs.data}} release"
 
   balena-build-images:
     strategy:
@@ -74,7 +74,7 @@ jobs:
           balena_cli_commands: |
             preload \
               "$BALENA_IMAGE.img" \
-              --fleet "${{secrets.BALENA_FLEET}}_${{BALENA_ARCH}}" \
+              --fleet "${{secrets.BALENA_FLEET}}_${{env.BALENA_ARCH}}" \
               --dont-check-arch  \
               --commit latest
           balena_cli_version: 13.7.1
@@ -87,7 +87,7 @@ jobs:
             os configure \
               "$BALENA_IMAGE.img" \
               --config-network=ethernet  \
-              --fleet "${{secrets.BALENA_FLEET}}_${{BALENA_ARCH}}"
+              --fleet "${{secrets.BALENA_FLEET}}_${{env.BALENA_ARCH}}"
           balena_cli_version: 13.7.1
 
       - name: Get the Ref
