@@ -1,0 +1,136 @@
+name: Build Balena Disk Images
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+jobs:
+  balena-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run read-yaml action
+        id: yaml-data
+        uses: jbutcher5/read-yaml@main # You may wish to replace main with a version tag such as '1.6' etc.
+        with:
+          file: "./balena.yml" # File to read from
+          key-path: '["version"]' # Access the runs key then the using key and retuns the value.
+
+      - name: Balena Deploy
+        uses: Theia-Scientific/balena-cli@v1
+        if: success()
+        with:
+          balena_api_token: ${{secrets.BALENA_TOKEN}}
+          balena_command: "push ${{secrets.BALENA_FLEET}} --release-tag v${{steps.yaml-data.outputs.data}} release"
+
+  balena-build-images:
+    strategy:
+      matrix:
+        board: ['pi3', 'pi4']
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Get base board
+        run: |
+          if [ "${{ matrix.board }}" == 'pi3' ]; then
+            echo "BALENA_IMAGE=raspberrypi3" >> $GITHUB_ENV
+          elif [ "${{ matrix.board }}" == 'pi4' ]; then
+            echo "BALENA_IMAGE=raspberrypi4-64" >> $GITHUB_ENV
+          fi
+      - name: balena CLI Action - download
+        uses: balena-labs-research/community-cli-action@1.0.0
+        with:
+          balena_token: ${{secrets.BALENA_TOKEN}}
+          balena_cli_commands: |
+            os download "$BALENA_IMAGE" \
+              --output "$BALENA_IMAGE.img" \
+              --version default
+          balena_cli_version: 13.7.1
+
+      - name: balena CLI Action - preload
+        uses: balena-labs-research/community-cli-action@1.0.0
+        with:
+          balena_token: ${{secrets.BALENA_TOKEN}}
+          balena_cli_commands: |
+            preload \
+              "$BALENA_IMAGE.img" \
+              --fleet ${{secrets.BALENA_FLEET}} \
+              --dont-check-arch  \
+              --commit latest
+          balena_cli_version: 13.7.1
+
+      - name: balena CLI Action - configure
+        uses: balena-labs-research/community-cli-action@1.0.0
+        with:
+          balena_token: ${{secrets.BALENA_TOKEN}}
+          balena_cli_commands: |
+            os configure \
+              "$BALENA_IMAGE.img" \
+              --config-network=ethernet  \
+              --fleet ${{secrets.BALENA_FLEET}}
+          balena_cli_version: 13.7.1
+
+      - name: Get the Ref
+        id: get-ref
+        uses: ankitvgupta/ref-to-tag-action@master
+        with:
+          ref: ${{ github.ref }}
+          head_ref: ${{ github.head_ref }}
+
+      - name: Zip image
+        run: |
+          zip -9 \
+            "$BALENA_IMAGE-${{ steps.get-ref.outputs.tag }}.zip" \
+            "$BALENA_IMAGE.img"
+
+      - name: "✏️ Generate release changelog"
+        id: generate-changelog
+        uses: heinrichreimer/github-changelog-generator-action@v2.3
+        with:
+          token: ${{ secrets.PAT }}
+
+      - name: Upload imgs to release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+        with:
+          tag_name: ${{ steps.get-ref.outputs.tag }}
+          body: ${{ steps.generate-changelog.outputs.changelog }}
+          files: "*.zip"
+#TODO: Download and inject content into the image
+      # - name: Mount Image
+      #   id: mount-image
+      #   uses: damianperera/mount-image-action@v1
+      #   with:
+      #     imagePath: "$BALENA_IMAGE.img"
+      #     mountPoint: "/mnt/$BALENA_IMAGE"
+
+      # - name: Download content zip
+      #   run: |
+      #     sudo cp config/* ${{ steps.mount-image.outputs.rootMountLocation }}/etc/config/
+
+      # - name: Unmount image
+      #   uses: damianperera/unmount-image-action@v1
+      #   with:
+      #     imagePath: "$BALENA_IMAGE.img"
+      #     bootDeviceMapper: ${{ steps.mount-image.outputs.bootDeviceMapper }}
+      #     rootDeviceMapper: ${{ steps.mount-image.outputs.rootDeviceMapper }}
+
+#TODO: Cleanup
+      # - name: Delete workflow runs
+      #   uses: GitRML/delete-workflow-runs@main
+      #   with:
+      #     retain_days: 1
+      #     keep_minimum_runs: 3
+
+      # - name: Remove old Releases
+      #   uses: dev-drprasad/delete-older-releases@v0.1.0
+      #   if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      #   with:
+      #     keep_latest: 3
+      #     delete_tags: true
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

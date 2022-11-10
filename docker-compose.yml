@@ -1,4 +1,4 @@
-version: '2.1'
+version: "2.1"
 
 volumes:
   fdroid:
@@ -9,15 +9,17 @@ volumes:
   ssb-data:
   installers:
   mapeo-bridge:
-  # Terrastories
   postgres_data:
   mbtiles:
   bundler:
+  terrastories-data:
+  terrastories-media:
+  terrastories-import:
 services:
   # https://github.com/balenablocks/hostname
   hostname:
     image: balenablocks/hostname:latest
-    restart: 'no'
+    restart: "no"
     labels:
       io.balena.features.supervisor-api: 1
     environment:
@@ -28,19 +30,19 @@ services:
     build: services/wifi-connect
     network_mode: "host"
     labels:
-        io.balena.features.dbus: '1'
+      io.balena.features.dbus: "1"
     cap_add:
-        - NET_ADMIN
+      - NET_ADMIN
     environment:
-        DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
+      DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
   # https://hub.docker.com/_/httpd
   portal:
     build: services/portal
     restart: always
     volumes:
-      - 'portal:/usr/local/apache2/htdocs'
-      - 'installers:/usr/local/apache2/htdocs/installers'
-      - 'fdroid:/usr/local/apache2/htdocs/fdroid'
+      - "portal:/usr/local/apache2/htdocs"
+      - "installers:/usr/local/apache2/htdocs/installers"
+      - "fdroid:/usr/local/apache2/htdocs/fdroid"
     ports:
       - 8080:80
   # https://hub.docker.com/repository/docker/communityfirst/mapeo-bridge
@@ -48,12 +50,8 @@ services:
     image: communityfirst/mapeo-bridge
     network_mode: host
     volumes:
-      - 'mapeo-bridge:/usr/src/output'
+      - "mapeo-bridge:/usr/src/output"
     restart: unless-stopped
-    environment:
-      MAPEO_PROJECT_KEY: "af43cbdb6827d3ddc5b39b20df174bf5c3e44d9bbcdccfe034af090440cebf69"
-      MAPEO_STORAGE_PATH: "/usr/src/output"
-      MAPEO_TERRASTORIES_TYPE: "terrastories"
   # https://hub.docker.com/r/minio/minio/
   minio:
     image: minio/minio
@@ -64,45 +62,60 @@ services:
       - 9000:9000
       - 9001:9001
     volumes:
-      - 'minio-data:/data'
+      - "minio-data:/data"
     command: server --address ":9000" --console-address ":9001" /data
-  # https://hub.docker.com/r/kiwix/kiwix-serve
-  kiwix:
-    build: services/kiwix
-    volumes:
-      - 'kiwix:/data/zims'
-    ports:
-      - 83:83
   # https://hub.docker.com/r/filebrowser/filebrowser
   filebrowser:
     build: services/filebrowser
     restart: unless-stopped
+    # user: '1000:1000' # TODO: throws permission denied error for opening database.db
     volumes:
       - kiwix:/srv/kiwix
       - mapeo:/srv/mapeo
       - fdroid:/srv/fdroid
       - installers:/srv/installers
+      - terrastories-import:/srv/terrastories/import
+      - terrastories-media:/srv/terrastories/media
     ports:
-      - 81:80
-    environment:
-      PGID: 1000
-      PUID: 1000
+      - 8081:80
     command: -- c
   # https://hub.docker.com/r/linuxserver/syncthing/
   syncthing:
     build: services/syncthing
-    environment:
-      PUID: 1000
-      PGID: 1000
-      TZ: America/Brasil
     volumes:
       - kiwix:/config/kiwix
       - mapeo:/config/mapeo
       - fdroid:/config/fdroid
       - installers:/config/installers
     ports:
-      - 82:8384
+      - 8082:8384
       - 22000:22000/tcp
       - 22000:22000/udp
       - 21027:21027/udp
     restart: unless-stopped
+  # https://hub.docker.com/_/postgres
+  db:
+    image: postgres:11
+    ports:
+      - 5432:5432
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"
+  # https://hub.docker.com/r/communityfirst/terrastories
+  terrastories:
+    image: communityfirst/terrastories
+    ports:
+      - 8083:3000
+    depends_on:
+      - db
+    volumes:
+      - bundler:/usr/local/bundle
+      - terrastories-data:/api
+      - terrastories-media:/media
+      - terrastories-import:/api/import/media
+  # https://hub.docker.com/r/wifidb/tileserver-gl
+  # tile-server:
+  #   image: wifidb/tileserver-gl
+  #   ports:
+  #     - 8084:80
+  #   volumes:
+  #     - mbtiles:/data

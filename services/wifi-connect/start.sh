@@ -4,7 +4,7 @@
 # sometimes. In this case, following checks will fail and wifi-connect
 # will be launched even if the device will be able to connect to a WiFi network.
 # If this is your case, you can wait for a while and then check for the connection.
-sleep 9
+sleep 30
 
 # Choose a condition for running WiFi Connect according to your use case:
 

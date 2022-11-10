@@ -1,8 +1,8 @@
 name: "Earth Defender's Toolkit Offline"
 type: "sw.application"
-version: 0.0.4
+version: 0.0.5
 description: "A low-energy device that creates an access-point serving applications, bridging them and exposing curated content offline.
-Software stack and content are automatically updated while online, and can be updated offline."
+  Software stack and content are automatically updated while online, and can be updated offline."
 post-provisioning: >-
     ## Getting started
 
@@ -74,7 +74,9 @@ data:
   applicationConfigVariables:
     - BALENA_HOST_CONFIG_gpu_mem: 64
   applicationEnvironmentVariables:
+    # WIFI
     PORTAL_SSID: Earth_Defenders_Toolkit
+    # PORTAL
     PORTAL_FILE: https://github.com/digidem/edt-offline/releases/download/v0.0.1-beta.1/portal.tar.gz
     # MAPEO BRIDGE
     MAPEO_PROJECT_KEY: af43cbdb6827d3ddc5b39b20df174bf5c3e44d9bbcdccfe034af090440cebf69
@@ -85,6 +87,9 @@ data:
     ADMIN_PASSWORD: admin123
     LOCALE: "pt-br"
     # Syncthing
+    PUID: 1000
+    PGID: 1000
+    TZ: America/Brasil
     SYNC_SOURCE_ID: 7MAA2AW-FBC5CFE-F32BALW-LKLZEBE-VSPN6XG-4PYESBH-NAZ42Y5-RQYULAL
     SYNC_SOURCE_NAME: EDT-Cloud
     SYNC_KIWIX_ID: ceeqg-tbhpt
@@ -95,10 +100,18 @@ data:
     SYNC_MAPEO_NAME: Mapeo
     SYNC_INSTALLERS_ID: gmyij-7gktt
     SYNC_INSTALLERS_NAME: INSTALLERS-edt
+    # Terrastories
+    POSTGRES_DB: terrastories-dev
+    DB_USER_PASSWORD: postgres
+    RAILS_ENV: offline
+    RAILS_MASTER_KEY: '7a0c538b904d5919af7c11470f3b7a4b'
+    HOST_HOSTNAME: edt.local
+    CHOKIDAR_USEPOLLING: 'true'
+    USE_LOCAL_MAP_SERVER: 'true'
+    OFFLINE_MAP_STYLE: /tileserver/styles/terrastories-map/style.json
   defaultDeviceType: "raspberrypi4-64"
   supportedDeviceTypes:
-    - "raspberrypi3"
     - "raspberrypi3-64"
     - "raspberrypi4-64"
-    - "fincm3"
-    - "nanopi-neo-air"
+    - "intel-nuc"
+    - "genericx86-64-ext"

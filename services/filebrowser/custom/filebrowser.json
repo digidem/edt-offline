@@ -31,7 +31,7 @@
         "branding": {
             "name": "Earth Defenders Toolkit",
             "disableExternal": true,
-            "files": "/opt/branding",
+            "files": "/config/custom/branding",
             "theme": "",
             "color": ""
         },

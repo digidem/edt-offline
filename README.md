@@ -2,6 +2,9 @@
 
 [![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/digidem/edt-offline)
 
+[![balena-push-preload-main]](https://github.com/digidem/edt-offline/actions/workflows/balena-push-preload-main.yml/badge.svg)
+
+[![balena-tag-release]](https://github.com/digidem/edt-offline/actions/workflows/balena-tag-release.yml/badge.svg)
 
 **EDT Offline** is a low-energy device that creates an access point with the Earth Defender's Toolkit platform running, even without the Internet. It provides applications, documentation, use cases, curated websites, and application bridges.
 
