@@ -44,9 +44,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
+
       - name: "Change version for Nuc" # https://github.com/balena-io/balena-cli/issues/1519
         if: ${{ matrix.board == 'nuc' }}
         run: echo "BALENA_OS_VERSION=v2.105.31+rev1" >> $GITHUB_ENV
+
       - name: Get base board
         run: |
           if [ "${{ matrix.board }}" == 'pi3' ]; then
