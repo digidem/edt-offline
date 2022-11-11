@@ -1,10 +1,14 @@
-name: Balena Release Beta
+name: Balena Pre-Release
 on:
   push:
     tags-ignore:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 jobs:
   balena-deploy:
+    outputs:
+      github_tag: ${{ steps.deploy.output.github_tag }}
+      balena_tag: ${{ steps.deploy.output.balena_tag }}
+
     strategy:
       matrix:
         board: ['aarch64', 'amd64']
@@ -13,26 +17,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Run read-yaml action
-        id: yaml-data
-        uses: jbutcher5/read-yaml@main # You may wish to replace main with a version tag such as '1.6' etc.
+      - name: Deploy Balena image
+        id: deploy
+        uses: ./.github/actions/deploy-balena-image
         with:
-          file: "./balena.yml" # File to read from
-          key-path: '["version"]' # Access the runs key then the using key and retuns the value.
+          github_ref: ${{ github.ref }}
+          github_head_ref: ${{ github.head_ref }}
+          balena_draft: true
 
-      - name: Get the Ref
-        id: get-ref
-        uses: ankitvgupta/ref-to-tag-action@master
-        with:
-          ref: ${{ github.ref }}
-          head_ref: ${{ github.head_ref }}
-
-      - name: Balena Deploy
-        uses: Theia-Scientific/balena-cli@v1
-        if: success()
-        with:
-          balena_api_token: ${{secrets.BALENA_TOKEN}}
-          balena_command: "push ${{secrets.BALENA_FLEET}}_${{matrix.board}} --draft --release-tag v${{steps.yaml-data.outputs.data}} ${{ steps.get-ref.outputs.tag }}"
   balena-build-images:
     strategy:
       matrix:
@@ -63,60 +55,25 @@ jobs:
     needs: [balena-deploy]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2
 
-      - name: Setup NodeJS
-        uses: actions/setup-node@v2
+      - name: Pre-load Configure Compress Upload
+        uses: ./.github/actions/create-balena-image
         with:
-          node-version: 12.22.5
+          balena_token: ${{ secrets.BALENA_TOKEN }}
+          balena_fleet: "${{ secrets.BALENA_FLEET }}_$ {{ matrix.arch }}"
+          balena_device: ${{ matrix.image }}
+          tag:  ${{ needs.balena-deploy.outputs.github_tag }}
 
-      - name: Install latest balena-cli
-        run: npm install -g balena-cli
+  github-release:
+    runs-on: ubuntu-latest
+    needs: [balena-deploy, balena-build-images]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: Login
-        run: balena login --token ${{ secrets.BALENA_TOKEN }}
-
-      - name: Get os versions
-        run: echo "OS_VERSION=$(balena os versions ${{matrix.image}} | head -n 1)" >> $GITHUB_ENV
-
-      - name: balena CLI Action - download
-        run: |
-          balena os download "${{matrix.image}}" \
-            --output "${{matrix.image}}.img"
-
-      - name: balena CLI Action - preload
-        run: |
-          balena preload \
-            "${{matrix.image}}.img" \
-            --fleet "${{secrets.BALENA_FLEET}}_${{matrix.arch}}" \
-            --dont-check-arch  \
-            --commit latest
-
-      - name: balena CLI Action - configure
-        run: |
-          balena os configure \
-            "${{matrix.image}}.img" \
-            --config-network=ethernet  \
-            --version "${{env.OS_VERSION}}" \
-            --device-type "${{matrix.image}}" \
-            --fleet "${{secrets.BALENA_FLEET}}_${{matrix.arch}}"
-
-      - name: Get the Ref
-        id: get-ref
-        uses: ankitvgupta/ref-to-tag-action@master
+      - name: Create Github pre-release
+        uses: ./.github/actions/release-images
         with:
-          ref: ${{ github.ref }}
-          head_ref: ${{ github.head_ref }}
-
-      - name: Zip image
-        run: |
-          zip -9 \
-            "${{matrix.image}}-${{ steps.get-ref.outputs.tag }}.zip" \
-            "${{matrix.image}}.img"
-
-      - name: "✏️ Upload imgs and release"
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
+          pre-release: true
           repo_token: "${{ secrets.PAT }}"
-          prerelease: TRUE
-          files: "*.zip"

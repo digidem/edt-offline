@@ -1,0 +1,89 @@
+name: "Create Balena Image"
+description: "Pre-loads, configures, compresses and uploads a Balena device"
+inputs:
+  balena_token:
+    required: true
+    description: "Balena token"
+  balena_fleet:
+    required: true
+    description: "Target Balena fleet"
+  balena_device:
+    required: true
+    description: "The official Balena device name"
+  balena_commit:
+    required: false
+    description: "The commit which to pre-load from"
+    default: "latest"
+  tag:
+    required: true
+    description: "Tag to release"
+  upload:
+    required: false
+    default: 'true'
+    description: "Uploads compressed image as artefact"
+outputs:
+  random-number:
+    description: "Random number"
+    value: ${{ steps.random-number-generator.outputs.random-number }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup NodeJS
+      uses: actions/setup-node@v2
+      with:
+        node-version: 12.22.5
+
+    - name: Install latest balena-cli
+      shell: bash
+      run: npm install -g balena-cli
+
+    - name: Login
+      shell: bash
+      run: balena login --token ${{ inputs.balena_token }}
+
+    - name: Get os versions
+      shell: bash
+      run: echo "OS_VERSION=$(balena os versions ${{inputs.balena_device}} | head -n 1)" >> $GITHUB_ENV
+
+    - name: balena CLI Action - download
+      shell: bash
+      run: |
+        balena os download "${{inputs.balena_device}}" \
+          --output "${{inputs.balena_device}}.img"
+
+    - name: balena CLI Action - preload
+      shell: bash
+      run: |
+        balena preload \
+          "${{inputs.balena_device}}.img" \
+          --fleet "${{inputs.balena_fleet}}" \
+          --dont-check-arch  \
+          --commit "${{ inputs.commit }}"
+
+    - name: balena CLI Action - configure
+      shell: bash
+      run: |
+        balena os configure \
+          "${{inputs.balena_device}}.img" \
+          --config-network=ethernet  \
+          --version "${{env.OS_VERSION}}" \
+          --device-type "${{inputs.balena_device}}" \
+          --fleet "${{inputs.balena_fleet}}"
+
+    - name: Compress
+      shell: bash
+      run: |
+        tar -czf ${{ inputs.balena_device }}-${{ inputs.tag }}.tar.gz ./${{ inputs.balena_device }}.img
+
+    - name: Upload file
+      uses: actions/upload-artifact@v3
+      if: ${{ inputs.upload }}
+      with:
+        name: artifacts
+        path: ${{ inputs.balena_device }}.tar.gz
+        retention-days: 1
+    
+    - id: random-number-generator
+      run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
+      shell: bash
