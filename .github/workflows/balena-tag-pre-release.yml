@@ -94,7 +94,7 @@ jobs:
 
       - name: balena CLI Action - configure
         run: |
-          os configure \
+          balena os configure \
             "${{matrix.image}}.img" \
             --config-network=ethernet  \
             --version "${{env.OS_VERSION}}" \
