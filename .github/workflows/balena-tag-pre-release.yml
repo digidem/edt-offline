@@ -5,7 +5,6 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 env:
   BALENA_CLI_VERSION: 14.5.6
-  TMPFILE: /tmp/version
 jobs:
   balena-deploy:
     strategy:
@@ -64,8 +63,6 @@ jobs:
             image: generic-amd64
     runs-on: ubuntu-latest
     needs: [balena-deploy]
-    # env:
-    #   NUC_OS_VERSION: v2.105.31+rev1
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
@@ -83,10 +80,6 @@ jobs:
 
       - name: Get os versions
         run: echo "OS_VERSION=$(balena os versions ${{matrix.image}} | head -n 1)" >> $GITHUB_ENV
-
-      - name: Echo OS version env
-        run: |
-          echo ${{env.OS_VERSION}}
 
       - name: balena CLI Action - download
         uses: balena-labs-research/community-cli-action@1.0.0
@@ -109,20 +102,6 @@ jobs:
               --commit latest
           balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
 
-      # - name: balena CLI Action - configure Nuc
-      #   uses: balena-labs-research/community-cli-action@1.0.0
-      #   if: ${{ matrix.board == 'nuc' }}
-      #   with:
-      #     balena_token: ${{secrets.BALENA_TOKEN}}
-      #     balena_cli_commands: |
-      #       os configure \
-      #         "${{matrix.image}}.img" \
-      #         --config-network=ethernet  \
-      #         --device-type "${{matrix.image}}" \
-      #         --version "$BALENA_OS_VERSION" \
-      #         --fleet "${{secrets.BALENA_FLEET}}_${{matrix.arch}}"
-      #     balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
-
       - name: balena CLI Action - configure
         uses: balena-labs-research/community-cli-action@1.0.0
         # if: ${{ matrix.board != 'nuc' }}
@@ -132,6 +111,7 @@ jobs:
             os configure \
               "${{matrix.image}}.img" \
               --config-network=ethernet  \
+              --version "${{env.OS_VERSION}}" \
               --device-type "${{matrix.image}}" \
               --fleet "${{secrets.BALENA_FLEET}}_${{matrix.arch}}"
           balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
