@@ -17,15 +17,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Run read-yaml action
-        id: yaml-data
-        uses: jbutcher5/read-yaml@main      # You may wish to replace main with a version tag such as '1.6' etc.
+
+      - name: Deploy Balena image
+        uses: ./.github/actions/deploy-balena-image
         with:
-          file: './balena.yml'          # File to read from
-          key-path: '["version"]' # Access the runs key then the using key and retuns the value.
-      - name: Balena Deploy
-        uses: Theia-Scientific/balena-cli@v1
-        if: success()
-        with:
-          balena_api_token: ${{secrets.BALENA_TOKEN}}
-          balena_command: "push ${{secrets.BALENA_FLEET}}_${{matrix.board}} --draft --release-tag commit ${{ github.sha }}  --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{github.ref_name}}"
+          balena_token: ${{ secrets.BALENA_TOKEN }}
+          balena_fleet: "${{ secrets.BALENA_FLEET }}${{ matrix.fleet_var }}"
+          github_ref: ${{ github.ref }}
+          github_head_ref: ${{ github.head_ref }}
+          balena_draft: true
+          release_tag: ${{ github.ref_name }}
+          commit: ${{ github.sha }}
