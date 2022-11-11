@@ -75,16 +75,12 @@ runs:
     - name: Compress
       shell: bash
       run: |
-        tar -czf ${{ inputs.balena_device }}-${{ inputs.tag }}.tar.gz ./${{ inputs.balena_device }}.img
+        tar -czf ${{ inputs.balena_device }}-${{ inputs.tag || env.OS_VERSION }}.tar.gz ./${{ inputs.balena_device }}.img
 
     - name: Upload file
       uses: actions/upload-artifact@v3
       if: ${{ inputs.upload }}
       with:
         name: artifacts
-        path: ${{ inputs.balena_device }}.tar.gz
+        path: ${{ inputs.balena_device }}-${{ inputs.tag || env.OS_VERSION }}.tar.gz
         retention-days: 1
-    
-    - id: random-number-generator
-      run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
-      shell: bash
