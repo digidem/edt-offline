@@ -70,20 +70,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.4
 
-      - name: Balena CLI Action - os versions
-        uses: balena-labs-research/community-cli-action@1.0.0
-        with:
-          balena_token: ${{secrets.BALENA_TOKEN}}
-          balena_cli_commands: |
-            os versions "${{matrix.image}}" > $TMPFILE;
-          balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
+      # - name: Balena CLI Action - os versions
+      #   uses: balena-labs-research/community-cli-action@1.0.0
+      #   with:
+      #     balena_token: ${{secrets.BALENA_TOKEN}}
+      #     balena_cli_commands: |
+      #       os versions "${{matrix.image}}" > $TMPFILE;
+      #     balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
 
-      - name: Set OS version env
-        run: |
-          echo "OS_VERSION=$(cat $TMPFILE)" >> $GITHUB_ENV
-      - name: Echo OS version env
-        run: |
-          echo ${{env.OS_VERSION}}
+      # - name: Set OS version env
+      #   run: |
+      #     echo "OS_VERSION=$(cat $TMPFILE)" >> $GITHUB_ENV
+      # - name: Echo OS version env
+      #   run: |
+      #     echo ${{env.OS_VERSION}}
 
       # - name: balena CLI Action - download
       #   uses: balena-labs-research/community-cli-action@1.0.0
