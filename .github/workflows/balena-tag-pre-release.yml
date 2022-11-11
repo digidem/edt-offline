@@ -101,7 +101,7 @@ jobs:
       - name: Download Balena image
         shell: bash
         run: |
-          wget -q -O ./${{ matrix.board }}.zip \
+          wget -q -O ./${{ matrix.image }}.zip \
           'https://api.balena-cloud.com/download?deviceType=${{ matrix.image }}&version=latest&developmentMode=false&fileType=.zip' && \
           unzip ${{ matrix.image }}.zip && \
           mv *.img ${{ matrix.image }}.img
