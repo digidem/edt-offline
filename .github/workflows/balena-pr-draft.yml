@@ -12,7 +12,7 @@ jobs:
   balena-deploy:
     strategy:
       matrix:
-        board: ['amd64', 'aarch64']
+        fleet_var: ['_aarch64', '_amd64']
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
