@@ -3,8 +3,6 @@ on:
   push:
     tags-ignore:
       - 'v[0-9]+.[0-9]+.[0-9]+'
-env:
-  BALENA_CLI_VERSION: 14.5.6
 jobs:
   balena-deploy:
     strategy:
@@ -82,39 +80,26 @@ jobs:
         run: echo "OS_VERSION=$(balena os versions ${{matrix.image}} | head -n 1)" >> $GITHUB_ENV
 
       - name: balena CLI Action - download
-        uses: balena-labs-research/community-cli-action@1.0.0
-        with:
-          balena_token: ${{secrets.BALENA_TOKEN}}
-          balena_cli_commands: |
-            os download "${{matrix.image}}" \
-              --output "${{matrix.image}}.img"
-          balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
+        run: |
+          balena os download "${{matrix.image}}" \
+            --output "${{matrix.image}}.img"
 
       - name: balena CLI Action - preload
-        uses: balena-labs-research/community-cli-action@1.0.0
-        with:
-          balena_token: ${{secrets.BALENA_TOKEN}}
-          balena_cli_commands: |
-            preload \
-              "${{matrix.image}}.img" \
-              --fleet "${{secrets.BALENA_FLEET}}_${{matrix.arch}}" \
-              --dont-check-arch  \
-              --commit latest
-          balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
+        run: |
+          balena preload \
+            "${{matrix.image}}.img" \
+            --fleet "${{secrets.BALENA_FLEET}}_${{matrix.arch}}" \
+            --dont-check-arch  \
+            --commit latest
 
       - name: balena CLI Action - configure
-        uses: balena-labs-research/community-cli-action@1.0.0
-        # if: ${{ matrix.board != 'nuc' }}
-        with:
-          balena_token: ${{secrets.BALENA_TOKEN}}
-          balena_cli_commands: |
-            os configure \
-              "${{matrix.image}}.img" \
-              --config-network=ethernet  \
-              --version "${{env.OS_VERSION}}" \
-              --device-type "${{matrix.image}}" \
-              --fleet "${{secrets.BALENA_FLEET}}_${{matrix.arch}}"
-          balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
+        run: |
+          os configure \
+            "${{matrix.image}}.img" \
+            --config-network=ethernet  \
+            --version "${{env.OS_VERSION}}" \
+            --device-type "${{matrix.image}}" \
+            --fleet "${{secrets.BALENA_FLEET}}_${{matrix.arch}}"
 
       - name: Get the Ref
         id: get-ref
