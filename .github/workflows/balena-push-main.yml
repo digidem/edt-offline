@@ -1,0 +1,30 @@
+name: Balena Beta
+on:
+  push:
+    paths:
+      - 'docker-compose.yml'
+      - 'balena.yml'
+      - 'services/**'
+    branches:
+      - main
+
+jobs:
+  balena-deploy:
+    strategy:
+      matrix:
+        fleet_var: ['_aarch64', '_amd64']
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy Balena image
+        uses: ./.github/actions/deploy-balena-image
+        with:
+          balena_token: ${{ secrets.BALENA_TOKEN }}
+          balena_fleet: "${{ secrets.BALENA_FLEET }}${{ matrix.fleet_var }}"
+          github_ref: ${{ github.ref }}
+          github_head_ref: ${{ github.head_ref }}
+          balena_draft: true
+          release_tag: main
+          commit: ${{ github.sha }}
