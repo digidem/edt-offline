@@ -17,4 +17,5 @@ runs:
       with:
         repo_token: "${{ inputs.repo_token }}"
         prerelease: ${{ inputs.pre-release }}
-        files: "*.tar.gz"
+        files: |
+          artifacts/*
