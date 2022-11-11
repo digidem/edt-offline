@@ -1,6 +1,12 @@
 name: "Create Balena Image"
 description: "Pre-loads, configures, compresses and uploads a Balena device"
 inputs:
+  balena_token:
+    required: true
+    description: "Balena token"
+  balena_fleet:
+    required: true
+    description: "Target Balena fleet"
   github_ref:
     required: true
     description: "Github ref"

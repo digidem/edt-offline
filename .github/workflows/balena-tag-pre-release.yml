@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        board: ['aarch64', 'amd64']
+        fleet_var: ['_aarch64', '_amd64']
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,6 +21,8 @@ jobs:
         id: deploy
         uses: ./.github/actions/deploy-balena-image
         with:
+          balena_token: ${{ secrets.BALENA_TOKEN }}
+          balena_fleet: "${{ secrets.BALENA_FLEET }}${{ matrix.fleet_var }}"
           github_ref: ${{ github.ref }}
           github_head_ref: ${{ github.head_ref }}
           balena_draft: true
