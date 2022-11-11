@@ -70,23 +70,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.4
 
-      - name: Setup NodeJS
-        uses: actions/setup-node@v2
-        with:
-          node-version: 12.22.5
+      # - name: Setup NodeJS
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: 12.22.5
 
-      - name: Install latest balena-cli
-        run: npm install -g balena-cli
+      # - name: Install latest balena-cli
+      #   run: npm install -g balena-cli
 
-      - name: Login
-        run: balena login --token ${{ secrets.BALENA_TOKEN }}
+      # - name: Login
+      #   run: balena login --token ${{ secrets.BALENA_TOKEN }}
 
-      - name: Get os versions
-        run: echo "OS_VERSION=$(balena os versions "${{matrix.image}})" >> $GITHUB_ENV
+      # - name: Get os versions
+      #   run: echo "OS_VERSION=$(balena os versions "${{matrix.image}})" >> $GITHUB_ENV
 
-      - name: Echo OS version env
-        run: |
-          echo ${{env.OS_VERSION}}
+      # - name: Echo OS version env
+      #   run: |
+      #     echo ${{env.OS_VERSION}}
 
       # - name: balena CLI Action - download
       #   uses: balena-labs-research/community-cli-action@1.0.0
