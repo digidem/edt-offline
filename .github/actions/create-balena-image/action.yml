@@ -30,48 +30,26 @@ runs:
       with:
         node-version: 12.22.5
 
-    - name: Get yarn cache directory path
-      id: yarn-cache-dir-path
+    - name: Get npm cache directory
       shell: bash
+      id: npm-cache-dir
       run: |
-          echo "::set-output name=dir::$(yarn cache dir)"
+        echo "::set-output name=dir::$(npm config get cache)"
 
-    - name: Set yarn global bin path
-      shell: bash
-      run: |
-          yarn config set prefix $(yarn cache dir)
-
-    - name: Add yarn bin path to system path
-      shell: bash
-      run: |
-          echo $(yarn global bin) >> $GITHUB_PATH
-
-    - name: Set yarn global installation path
-      shell: bash
-      run: |
-          yarn config set global-folder $(yarn cache dir)
-
-    - name: CACHE ACTION
-      uses: actions/cache@v2
-      env:
-          cache-version: v1
-      id: yarn-cache
+    - uses: actions/cache@v3
+      id: npm-cache
       with:
-        path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **/node_modules
-        key: ${{ runner.os }}-yarn-${{ env.cache-version }}-${{ hashFiles('**/yarn.lock') }}
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-            ${{ runner.os }}-yarn-${{ env.cache-version }}-
-            ${{ runner.os }}-yarn-
-            ${{ runner.os }}-
+          ${{ runner.os }}-node-
 
     - name: Install latest balena-cli
-      if: steps.yarn-cache.outputs.cache-hit != 'true'
+      if: steps.npm-cache.outputs.cache-hit != 'true'
       shell: bash
       run: |
           echo "NO CACHE HIT"
-          yarn global add balena-cli
+          npm i -g balena-cli
 
     - name: Login
       shell: bash
