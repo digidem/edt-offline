@@ -20,11 +20,7 @@ inputs:
   upload:
     required: false
     default: 'true'
-    description: "Uploads compressed image as artefact"
-outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-number }}
+    description: "Uploads compressed images as artifacts"
 
 runs:
   using: "composite"
