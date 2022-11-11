@@ -59,7 +59,7 @@ runs:
           "${{inputs.balena_device}}.img" \
           --fleet "${{inputs.balena_fleet}}" \
           --dont-check-arch  \
-          --commit "${{ inputs.commit }}"
+          --commit "${{ inputs.balena_commit }}"
 
     - name: balena CLI Action - configure
       shell: bash

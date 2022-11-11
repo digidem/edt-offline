@@ -65,6 +65,7 @@ jobs:
           balena_fleet: "${{ secrets.BALENA_FLEET }}${{ matrix.fleet_var }}"
           balena_device: ${{ matrix.image }}
           tag:  ${{ needs.balena-deploy.outputs.github_tag }}
+          # balena_commit: ${{ needs.balena-deploy.outputs.balena_release}}
 
   github-release:
     runs-on: ubuntu-latest
