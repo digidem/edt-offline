@@ -38,10 +38,14 @@ jobs:
       matrix:
         board: ['pi3', 'pi4', 'rockpi4', 'rockpro64', 'generic_aarch64', 'nuc', 'generic_amd64']
     runs-on: ubuntu-latest
+    env:
+      BALENA_OS_VERSION: latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
-
+      - name: "Change version for Nuc" # https://github.com/balena-io/balena-cli/issues/1519
+        if: ${{ matrix.board == 'nuc' }}
+        run: echo "BALENA_OS_VERSION=v2.105.31+rev1" >> $GITHUB_ENV
       - name: Get base board
         run: |
           if [ "${{ matrix.board }}" == 'pi3' ]; then
@@ -73,7 +77,7 @@ jobs:
           balena_cli_commands: |
             os download "$BALENA_IMAGE" \
               --output "$BALENA_IMAGE.img" \
-              --version v2.105.31+rev1
+              --version "$BALENA_OS_VERSION"
           balena_cli_version: 14.5.6
 
       - name: balena CLI Action - preload
@@ -113,18 +117,9 @@ jobs:
             "$BALENA_IMAGE-${{ steps.get-ref.outputs.tag }}.zip" \
             "$BALENA_IMAGE.img"
 
-      - name: "✏️ Generate release changelog"
-        id: generate-changelog
-        uses: heinrichreimer/github-changelog-generator-action@v2.3
+      - name: "✏️ Upload imgs and release"
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          token: ${{ secrets.PAT }}
-
-      - name: Upload imgs to release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-        with:
-          tag_name: ${{ steps.get-ref.outputs.tag }}
-          body: ${{ steps.generate-changelog.outputs.changelog }}
+          repo_token: "${{ secrets.PAT }}"
+          prerelease: TRUE
           files: "*.zip"
-          prerelease: true
