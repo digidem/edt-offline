@@ -33,11 +33,11 @@ runs:
       uses: actions/setup-node@v3
       with:
         node-version: 12.22.5
-        cache: 'npm'
+        cache: 'yarn'
 
     - name: Install latest balena-cli
       shell: bash
-      run: npm install -g balena-cli
+      run: yarn add global balena-cli --prefer-offline
 
     - name: Login
       shell: bash
