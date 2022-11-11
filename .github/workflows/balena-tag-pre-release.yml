@@ -70,41 +70,32 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.4
 
-      # - name: Setup NodeJS
-      #   uses: actions/setup-node@v2
-      #   with:
-      #     node-version: 12.22.5
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12.22.5
 
-      # - name: Install latest balena-cli
-      #   run: npm install -g balena-cli
+      - name: Install latest balena-cli
+        run: npm install -g balena-cli
 
-      # - name: Login
-      #   run: balena login --token ${{ secrets.BALENA_TOKEN }}
+      - name: Login
+        run: balena login --token ${{ secrets.BALENA_TOKEN }}
 
-      # - name: Get os versions
-      #   run: echo "OS_VERSION=$(balena os versions "${{matrix.image}})" >> $GITHUB_ENV
+      - name: Get os versions
+        run: echo "OS_VERSION=$(balena os versions ${{matrix.image}} | head -n 1)" >> $GITHUB_ENV
 
-      # - name: Echo OS version env
-      #   run: |
-      #     echo ${{env.OS_VERSION}}
-
-      # - name: balena CLI Action - download
-      #   uses: balena-labs-research/community-cli-action@1.0.0
-      #   with:
-      #     balena_token: ${{secrets.BALENA_TOKEN}}
-      #     balena_cli_commands: |
-      #       os download "${{matrix.image}}" \
-      #         --output "${{matrix.image}}.img" \
-      #         --version "$BALENA_OS_VERSION"
-      #     balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
-
-      - name: Download Balena image
-        shell: bash
+      - name: Echo OS version env
         run: |
-          wget -q -O ./${{ matrix.image }}.zip \
-          'https://api.balena-cloud.com/download?deviceType=${{ matrix.image }}&version=latest&developmentMode=false&fileType=.zip' && \
-          unzip ${{ matrix.image }}.zip && \
-          mv *.img ${{ matrix.image }}.img
+          echo ${{env.OS_VERSION}}
+
+      - name: balena CLI Action - download
+        uses: balena-labs-research/community-cli-action@1.0.0
+        with:
+          balena_token: ${{secrets.BALENA_TOKEN}}
+          balena_cli_commands: |
+            os download "${{matrix.image}}" \
+              --output "${{matrix.image}}.img"
+          balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
 
       - name: balena CLI Action - preload
         uses: balena-labs-research/community-cli-action@1.0.0
