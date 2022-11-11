@@ -3,6 +3,9 @@ on:
   push:
     tags-ignore:
       - 'v[0-9]+.[0-9]+.[0-9]+'
+env:
+  BALENA_CLI_VERSION: 14.5.6
+  TMPFILE: /tmp/version
 jobs:
   balena-deploy:
     strategy:
@@ -36,52 +39,69 @@ jobs:
   balena-build-images:
     strategy:
       matrix:
-        board: ['pi3', 'pi4', 'rockpi4', 'rockpro64', 'generic_aarch64', 'nuc', 'generic_amd64']
+        board: [pi3, pi4, rockpi4, rockpro64, generic_aarch64, nuc, generic_amd64]
+        include:
+          - board: pi3
+            arch: aarch64
+            image: raspberrypi3-64
+          - board: pi4
+            arch: aarch64
+            image: raspberrypi4-64
+          - board: rockpi4
+            arch: aarch64
+            image: rockpi-4b-rk3399
+          - board: rockpro64
+            arch: aarch64
+            image: rockpro64
+          - board: generic_aarch64
+            arch: aarch64
+            image: generic-aarch64
+          - board: nuc
+            arch: amd64
+            image: intel-nuc
+          - board: generic_amd64
+            arch: amd64
+            image: generic-amd64
     runs-on: ubuntu-latest
     needs: [balena-deploy]
-    env:
-      BALENA_OS_VERSION: latest
+    # env:
+    #   NUC_OS_VERSION: v2.105.31+rev1
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
 
-      - name: "Change version for Nuc" # https://github.com/balena-io/balena-cli/issues/1519
-        if: ${{ matrix.board == 'nuc' }}
-        run: echo "BALENA_OS_VERSION=v2.105.31+rev1" >> $GITHUB_ENV
-
-      - name: Get base board
-        run: |
-          if [ "${{ matrix.board }}" == 'pi3' ]; then
-            echo "BALENA_IMAGE=raspberrypi3-64" >> $GITHUB_ENV
-            echo "BALENA_ARCH=aarch64" >> $GITHUB_ENV
-          elif [ "${{ matrix.board }}" == 'pi4' ]; then
-            echo "BALENA_IMAGE=raspberrypi4-64" >> $GITHUB_ENV
-            echo "BALENA_ARCH=aarch64" >> $GITHUB_ENV
-          elif [ "${{ matrix.board }}" == 'rockpi4' ]; then
-            echo "BALENA_IMAGE=rockpi-4b-rk3399" >> $GITHUB_ENV
-            echo "BALENA_ARCH=aarch64" >> $GITHUB_ENV
-          elif [ "${{ matrix.board }}" == 'rockpro64' ]; then
-            echo "BALENA_IMAGE=rockpro64" >> $GITHUB_ENV
-            echo "BALENA_ARCH=aarch64" >> $GITHUB_ENV
-          elif [ "${{ matrix.board }}" == 'generic_aarch64' ]; then
-            echo "BALENA_IMAGE=generic-aarch64" >> $GITHUB_ENV
-            echo "BALENA_ARCH=aarch64" >> $GITHUB_ENV
-          elif [ "${{ matrix.board }}" == 'nuc' ]; then
-            echo "BALENA_IMAGE=intel-nuc" >> $GITHUB_ENV
-            echo "BALENA_ARCH=amd64" >> $GITHUB_ENV
-          elif [ "${{ matrix.board }}" == 'generic_amd64' ]; then
-            echo "BALENA_IMAGE=generic-amd64" >> $GITHUB_ENV
-            echo "BALENA_ARCH=amd64" >> $GITHUB_ENV
-          fi
-      - name: balena CLI Action - download
+      - name: Balena CLI Action - os versions
         uses: balena-labs-research/community-cli-action@1.0.0
         with:
           balena_token: ${{secrets.BALENA_TOKEN}}
           balena_cli_commands: |
-            os download "$BALENA_IMAGE" \
-              --output "$BALENA_IMAGE.img" \
-              --version "$BALENA_OS_VERSION"
-          balena_cli_version: 14.5.6
+            os versions "${{matrix.image}}" > $TMPFILE;
+          balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
+
+      - name: Set OS version env
+        run: |
+          echo "OS_VERSION=$(cat $TMPFILE)" >> $GITHUB_ENV
+      - name: Echo OS version env
+        run: |
+          echo ${{env.OS_VERSION}}
+
+      # - name: balena CLI Action - download
+      #   uses: balena-labs-research/community-cli-action@1.0.0
+      #   with:
+      #     balena_token: ${{secrets.BALENA_TOKEN}}
+      #     balena_cli_commands: |
+      #       os download "${{matrix.image}}" \
+      #         --output "${{matrix.image}}.img" \
+      #         --version "$BALENA_OS_VERSION"
+      #     balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
+
+      - name: Download Balena image
+        shell: bash
+        run: |
+          wget -q -O ./${{ matrix.board }}.zip \
+          'https://api.balena-cloud.com/download?deviceType=${{ matrix.image }}&version=latest&developmentMode=false&fileType=.zip' && \
+          unzip ${{ matrix.board }}.zip && \
+          mv *.img ${{ matrix.board }}.img
 
       - name: balena CLI Action - preload
         uses: balena-labs-research/community-cli-action@1.0.0
@@ -89,38 +109,38 @@ jobs:
           balena_token: ${{secrets.BALENA_TOKEN}}
           balena_cli_commands: |
             preload \
-              "$BALENA_IMAGE.img" \
-              --fleet "${{secrets.BALENA_FLEET}}_${{env.BALENA_ARCH}}" \
+              "${{matrix.image}}.img" \
+              --fleet "${{secrets.BALENA_FLEET}}_${{matrix.arch}}" \
               --dont-check-arch  \
               --commit latest
-          balena_cli_version: 14.5.6
+          balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
 
-      - name: balena CLI Action - configure Nuc
-        uses: balena-labs-research/community-cli-action@1.0.0
-        if: ${{ matrix.board == 'nuc' }}
-        with:
-          balena_token: ${{secrets.BALENA_TOKEN}}
-          balena_cli_commands: |
-            os configure \
-              "$BALENA_IMAGE.img" \
-              --config-network=ethernet  \
-              --device-type "${{env.BALENA_IMAGE}}" \
-              --version "$BALENA_OS_VERSION" \
-              --fleet "${{secrets.BALENA_FLEET}}_${{env.BALENA_ARCH}}"
-          balena_cli_version: 14.5.6
+      # - name: balena CLI Action - configure Nuc
+      #   uses: balena-labs-research/community-cli-action@1.0.0
+      #   if: ${{ matrix.board == 'nuc' }}
+      #   with:
+      #     balena_token: ${{secrets.BALENA_TOKEN}}
+      #     balena_cli_commands: |
+      #       os configure \
+      #         "${{matrix.image}}.img" \
+      #         --config-network=ethernet  \
+      #         --device-type "${{matrix.image}}" \
+      #         --version "$BALENA_OS_VERSION" \
+      #         --fleet "${{secrets.BALENA_FLEET}}_${{matrix.arch}}"
+      #     balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
 
       - name: balena CLI Action - configure
         uses: balena-labs-research/community-cli-action@1.0.0
-        if: ${{ matrix.board != 'nuc' }}
+        # if: ${{ matrix.board != 'nuc' }}
         with:
           balena_token: ${{secrets.BALENA_TOKEN}}
           balena_cli_commands: |
             os configure \
-              "$BALENA_IMAGE.img" \
+              "${{matrix.image}}.img" \
               --config-network=ethernet  \
-              --device-type "${{env.BALENA_IMAGE}}" \
-              --fleet "${{secrets.BALENA_FLEET}}_${{env.BALENA_ARCH}}"
-          balena_cli_version: 14.5.6
+              --device-type "${{matrix.image}}" \
+              --fleet "${{secrets.BALENA_FLEET}}_${{matrix.arch}}"
+          balena_cli_version: ${{ env.BALENA_CLI_VERSION }}
 
       - name: Get the Ref
         id: get-ref
@@ -132,8 +152,8 @@ jobs:
       - name: Zip image
         run: |
           zip -9 \
-            "$BALENA_IMAGE-${{ steps.get-ref.outputs.tag }}.zip" \
-            "$BALENA_IMAGE.img"
+            "${{matrix.image}}-${{ steps.get-ref.outputs.tag }}.zip" \
+            "${{matrix.image}}.img"
 
       - name: "✏️ Upload imgs and release"
         uses: "marvinpinto/action-automatic-releases@latest"
