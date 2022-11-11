@@ -55,4 +55,4 @@ runs:
           ${{inputs.balena_draft && '--draft' || ''}} \
           "--release-tag v${{steps.yaml-data.outputs.data}}${{inputs.balena_draft && '-draft' || ''}}" \
           ${{ inputs.release_tag || steps.get-ref.outputs.tag }} \
-          ${{ inputs.commit && "--release-tag commit ${{ inputs.commit }} || '' "}}
+          ${{ inputs.commit && ('--release-tag commit ${{ inputs.commit }}') || '' }}
