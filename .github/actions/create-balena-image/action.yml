@@ -30,9 +30,10 @@ runs:
   using: "composite"
   steps:
     - name: Setup NodeJS
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: 12.22.5
+        cache: 'npm'
 
     - name: Install latest balena-cli
       shell: bash
