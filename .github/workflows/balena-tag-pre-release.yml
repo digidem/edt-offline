@@ -8,7 +8,6 @@ jobs:
     outputs:
       github_tag: ${{ steps.deploy.output.github_tag }}
       balena_tag: ${{ steps.deploy.output.balena_tag }}
-
     strategy:
       matrix:
         fleet_var: ['_aarch64', '_amd64']
@@ -33,25 +32,25 @@ jobs:
         board: [pi3, pi4, rockpi4, rockpro64, generic_aarch64, nuc, generic_amd64]
         include:
           - board: pi3
-            arch: aarch64
+            fleet_var: _aarch64
             image: raspberrypi3-64
           - board: pi4
-            arch: aarch64
+            fleet_var: _aarch64
             image: raspberrypi4-64
           - board: rockpi4
-            arch: aarch64
+            fleet_var: _aarch64
             image: rockpi-4b-rk3399
           - board: rockpro64
-            arch: aarch64
+            fleet_var: _aarch64
             image: rockpro64
           - board: generic_aarch64
-            arch: aarch64
+            fleet_var: _aarch64
             image: generic-aarch64
           - board: nuc
-            arch: amd64
+            fleet_var: _amd64
             image: intel-nuc
           - board: generic_amd64
-            arch: amd64
+            fleet_var: _amd64
             image: generic-amd64
     runs-on: ubuntu-latest
     needs: [balena-deploy]
@@ -63,7 +62,7 @@ jobs:
         uses: ./.github/actions/create-balena-image
         with:
           balena_token: ${{ secrets.BALENA_TOKEN }}
-          balena_fleet: "${{ secrets.BALENA_FLEET }}_$ {{ matrix.arch }}"
+          balena_fleet: "${{ secrets.BALENA_FLEET }}${{ matrix.fleet_var }}"
           balena_device: ${{ matrix.image }}
           tag:  ${{ needs.balena-deploy.outputs.github_tag }}
 
