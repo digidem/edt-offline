@@ -1,7 +1,7 @@
-name: Balena Release
+name: Balena Pre-Release
 on:
   push:
-    tags:
+    tags-ignore:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 jobs:
   balena-deploy:
@@ -24,8 +24,7 @@ jobs:
           balena_fleet: "${{ secrets.BALENA_FLEET }}${{ matrix.fleet_var }}"
           github_ref: ${{ github.ref }}
           github_head_ref: ${{ github.head_ref }}
-          release_tag: release
-          balena_draft: false
+          balena_draft: true
 
   balena-build-images:
     strategy:
@@ -66,6 +65,7 @@ jobs:
           balena_fleet: "${{ secrets.BALENA_FLEET }}${{ matrix.fleet_var }}"
           balena_device: ${{ matrix.image }}
           tag: ${{ needs.balena-deploy.outputs.github_tag }}
+          # balena_commit: ${{ needs.balena-deploy.outputs.balena_release}}
 
   github-release:
     runs-on: ubuntu-latest
@@ -79,38 +79,3 @@ jobs:
         with:
           pre-release: true
           repo_token: "${{ secrets.PAT }}"
-
-#TODO: Download and inject content into the image
-      # - name: Mount Image
-      #   id: mount-image
-      #   uses: damianperera/mount-image-action@v1
-      #   with:
-      #     imagePath: "${{matrix.image}}.img"
-      #     mountPoint: "/mnt/${{matrix.image}}"
-
-      # - name: Download content zip
-      #   run: |
-      #     sudo cp config/* ${{ steps.mount-image.outputs.rootMountLocation }}/etc/config/
-
-      # - name: Unmount image
-      #   uses: damianperera/unmount-image-action@v1
-      #   with:
-      #     imagePath: "${{matrix.image}}.img"
-      #     bootDeviceMapper: ${{ steps.mount-image.outputs.bootDeviceMapper }}
-      #     rootDeviceMapper: ${{ steps.mount-image.outputs.rootDeviceMapper }}
-
-#TODO: Cleanup
-      # - name: Delete workflow runs
-      #   uses: GitRML/delete-workflow-runs@main
-      #   with:
-      #     retain_days: 1
-      #     keep_minimum_runs: 3
-
-      # - name: Remove old Releases
-      #   uses: dev-drprasad/delete-older-releases@v0.1.0
-      #   if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-      #   with:
-      #     keep_latest: 3
-      #     delete_tags: true
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

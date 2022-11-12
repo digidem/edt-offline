@@ -21,7 +21,7 @@ services:
       VIRTUAL_PORT: 3000
   # https://hub.docker.com/r/nginxproxy/nginx-proxy
   proxy:
-    build: ../services/nginx-proxy
+    build: ../../services/nginx-proxy
     restart: always
     container_name: proxy
     labels:

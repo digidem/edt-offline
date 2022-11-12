@@ -6,7 +6,7 @@
 
 ![balena-tag-release](https://github.com/digidem/edt-offline/actions/workflows/balena-tag-release.yml/badge.svg)
 
-**EDT Offline** is a low-energy device that creates an access point with the Earth Defender's Toolkit platform running, even without the Internet. It provides applications, documentation, use cases, curated websites, and application bridges.
+**EDT Offline** is a multi-device stack, which can be easily installed on single-board-computers, Nucs, or any recycled marchine. It creates an access point with the [Earth Defender's Toolkit](http://earthdefenderstoolkit.com/) platform running, even without the Internet. It provides applications, documentation, use cases, curated websites, and application bridges.
 
 The software stack and content are automatically updated while online, and there are different strategies to update them while offline.
 
@@ -14,8 +14,7 @@ The software stack and content are automatically updated while online, and there
 
 EDT offline provides full support for community mapping and land-based storytelling projects.
 
-There's the possibility to cover more themes such as community genealogy, communication, networking, radio, education and content streaming projects in the future.
-
+There's the possibility to cover more themes such as community archiving, communication, networking, radio, education and content streaming projects in the future.
 
 ![Raspberry Pi 3](docs/imgs/pi.jpg)
 *Raspberry Pi 3*

@@ -1,0 +1,98 @@
+name: "Create Balena Image"
+description: "Pre-loads, configures, compresses and uploads a Balena device"
+inputs:
+  balena_token:
+    required: true
+    description: "Balena token"
+  balena_fleet:
+    required: true
+    description: "Target Balena fleet"
+  balena_device:
+    required: true
+    description: "The official Balena device name"
+  balena_commit:
+    required: false
+    description: "The commit which to pre-load from"
+    default: "latest"
+  tag:
+    required: true
+    description: "Tag to release"
+  upload:
+    required: false
+    default: 'true'
+    description: "Uploads compressed images as artifacts"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup NodeJS
+      uses: actions/setup-node@v3
+      with:
+        node-version: 12.22.5
+
+    - name: Get npm cache directory
+      shell: bash
+      id: npm-cache-dir
+      run: |
+        echo "::set-output name=dir::$(npm config get cache)"
+
+    - uses: actions/cache@v3
+      id: npm-cache
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install latest balena-cli
+      if: steps.npm-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+          echo "NO CACHE HIT"
+          npm i -g balena-cli
+
+    - name: Login
+      shell: bash
+      run: balena login --token ${{ inputs.balena_token }}
+
+    - name: Get os versions
+      shell: bash
+      run: echo "OS_VERSION=$(balena os versions ${{inputs.balena_device}} | head -n 1)" >> $GITHUB_ENV
+
+    - name: balena CLI Action - download
+      shell: bash
+      run: |
+        balena os download "${{inputs.balena_device}}" \
+          --output "${{inputs.balena_device}}.img"
+
+    - name: balena CLI Action - preload
+      shell: bash
+      run: |
+        balena preload \
+          "${{inputs.balena_device}}.img" \
+          --fleet "${{inputs.balena_fleet}}" \
+          --dont-check-arch  \
+          --commit "${{ inputs.balena_commit }}"
+
+    - name: balena CLI Action - configure
+      shell: bash
+      run: |
+        balena os configure \
+          "${{inputs.balena_device}}.img" \
+          --config-network=ethernet  \
+          --version "${{env.OS_VERSION}}" \
+          --device-type "${{inputs.balena_device}}" \
+          --fleet "${{inputs.balena_fleet}}"
+
+    - name: Compress
+      shell: bash
+      run: |
+        tar -czf ${{ inputs.balena_device }}-${{ inputs.tag || env.OS_VERSION }}.tar.gz ./${{ inputs.balena_device }}.img
+
+    - name: Upload file
+      uses: actions/upload-artifact@v3
+      if: ${{ inputs.upload }}
+      with:
+        name: artifacts
+        path: ${{ inputs.balena_device }}-${{ inputs.tag || env.OS_VERSION }}.tar.gz
+        retention-days: 1
