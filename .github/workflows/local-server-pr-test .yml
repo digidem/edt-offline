@@ -2,7 +2,7 @@ name: Local docker-compose Stack
 on:
   pull_request:
     paths:
-      - 'compose/**'
+      - 'docker/local/**'
     branches:
       - main
 jobs:
@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Generate .env file
-        run: cp compose/.env.example compose/.env
+        run: cp docker/local/.env.example docker/local/.env
       - name: Build the stack
-        run: docker-compose -f compose/docker-compose.yml up -d
+        run: docker-compose -f docker/local/docker-compose.yml up -d
       # - name: Test # TODO add tests: portal, mapeo-bridge, minio, filebrowser, syncthing, terrastories
