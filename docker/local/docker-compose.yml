@@ -119,16 +119,12 @@ services:
       - 21027:21027/udp
     restart: unless-stopped
   # Terrastories
-  # tileserver:
-  #   restart: always
-  #   image: klokantech/tileserver-gl
-  #   ports:
-  #     - '8080:80'
-  #   volumes:
-  #     - 'mbtiles:/data'
-  #     # - type: bind
-  #     #   source: ./tileserver/data
-  #     #   target: /data
+  tile-server:
+    image: wifidb/tileserver-gl
+    ports:
+      - 8084:80
+    volumes:
+      - mbtiles:/data
   db:
     image: postgres:11
     ports:
