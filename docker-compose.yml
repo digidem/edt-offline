@@ -45,7 +45,7 @@ services:
       - "fdroid:/usr/local/apache2/htdocs/fdroid"
     ports:
       - 8080:80
-  # https://hub.docker.com/repository/docker/communityfirst/mapeo-bridge
+  # https://hub.docker.com/r/communityfirst/mapeo-bridge
   mapeo-bridge:
     image: communityfirst/mapeo-bridge
     network_mode: host
@@ -113,9 +113,9 @@ services:
       - terrastories-media:/media
       - terrastories-import:/api/import/media
   # https://hub.docker.com/r/wifidb/tileserver-gl
-  # tile-server:
-  #   image: wifidb/tileserver-gl
-  #   ports:
-  #     - 8084:80
-  #   volumes:
-  #     - mbtiles:/data
+  tile-server:
+    image: wifidb/tileserver-gl
+    ports:
+      - 8084:80
+    volumes:
+      - mbtiles:/data
