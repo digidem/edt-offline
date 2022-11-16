@@ -4,7 +4,8 @@ volumes:
   fdroid:
   portal:
   mapeo:
-  kiwix:
+  crawls:
+  pywb-archive:
   minio-data:
   ssb-data:
   installers:
@@ -72,7 +73,7 @@ services:
     restart: unless-stopped
     # user: '1000:1000' # TODO: throws permission denied error for opening database.db
     volumes:
-      - kiwix:/srv/kiwix
+      - crawls:/srv/crawls
       - mapeo:/srv/mapeo
       - fdroid:/srv/fdroid
       - installers:/srv/installers
@@ -99,8 +100,8 @@ services:
       TZ: America/Brasil
       SYNC_SOURCE_ID: ${SYNC_SOURCE_ID}
       SYNC_SOURCE_NAME: ${SYNC_SOURCE_NAME}
-      SYNC_KIWIX_ID: ${SYNC_KIWIX_ID}
-      SYNC_KIWIX_NAME: ${SYNC_KIWIX_NAME}
+      SYNC_CRAWLS_ID: ${SYNC_CRAWLS_ID}
+      SYNC_CRAWLS_NAME: ${SYNC_CRAWLS_NAME}
       SYNC_FDROID_ID: ${SYNC_FDROID_ID}
       SYNC_FDROID_NAME: ${SYNC_FDROID_NAME}
       SYNC_MAPEO_ID: ${SYNC_MAPEO_ID}
@@ -108,7 +109,7 @@ services:
       SYNC_INSTALLERS_ID: ${SYNC_INSTALLERS_ID}
       SYNC_INSTALLERS_NAME: ${SYNC_INSTALLERS_NAME}
     volumes:
-      - kiwix:/config/kiwix
+      - crawls:/config/crawls
       - mapeo:/config/mapeo
       - fdroid:/config/fdroid
       - installers:/config/installers

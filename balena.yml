@@ -92,8 +92,8 @@ data:
     TZ: America/Brasil
     SYNC_SOURCE_ID: 7MAA2AW-FBC5CFE-F32BALW-LKLZEBE-VSPN6XG-4PYESBH-NAZ42Y5-RQYULAL
     SYNC_SOURCE_NAME: EDT-Cloud
-    SYNC_KIWIX_ID: ceeqg-tbhpt
-    SYNC_KIWIX_NAME: ZIM-edt-pt
+    SYNC_CRAWLS_ID: ceeqg-tbhpt
+    SYNC_CRAWLS_NAME: ZIM-edt-pt
     SYNC_FDROID_ID: zwozu-ajxlu
     SYNC_FDROID_NAME: FDROID-edt
     SYNC_MAPEO_ID: atzye-79v6o
