@@ -136,5 +136,9 @@ services:
       - 22000:22000/tcp
       - 22000:22000/udp
       - 21027:21027/udp
+  crawler:
+    image: webrecorder/browsertrix-crawler
+    volumes:
+        - ${DIR}/app-data/crawler:/
   # TODO: Terrastories, Portal
   # V2: Open Balena, Zimit, Zimit Youtube
