@@ -118,6 +118,14 @@ services:
       - 22000:22000/udp
       - 21027:21027/udp
     restart: unless-stopped
+  # https://hub.docker.com/r/communityfirst/pywb
+  pywb:
+    image: communityfirst/pywb
+    ports:
+      - 8086:8080
+    volumes:
+      - pywb-archive:/webarchive
+      - crawls:/source
   # Terrastories
   tile-server:
     image: wifidb/tileserver-gl
