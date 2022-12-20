@@ -121,7 +121,7 @@ services:
       - mbtiles:/data
   # https://hub.docker.com/r/communityfirst/pywb
   pywb:
-    image: communityfirst/pywb
+    build: services/pywb
     ports:
       - 8086:8080
     volumes:
