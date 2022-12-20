@@ -24,9 +24,9 @@ Meant to run on [Balena](https://balena.io), which runs easily composable servic
 - **Browser**: exposes a kiosk browser pointed to portal application to output devices connected to hdmi
 - **Portal**: application which onboards new users and links to content and services (ND)
 - **F-Droid**: repository of apks to be used with offline app installer F-Droid
-- **Kiwix**: backup whole websites and wikis for offline viewing
+- **WebRecorder**: backup whole websites and wikis for offline viewing
 - **Distributed File System**: automatically updates content if online through p2p sync (ND)
-- **Usb-update:** update services (f-droid, kiwix) with new content through a usb device, and display operations in GUI  (ND)
+- **Usb-update:** update services (f-droid repo, crawls) with new content through a usb device, and display operations in GUI  (ND)
 - **Usb-backup**: creates backup of all application state data, and display operations in GUI (ND)
 - **Installers**: track and download latest installers for apps and expose them through a simple GUI (ND)
 - **Pataka**: Ahau's distributed community storage server
