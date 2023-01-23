@@ -139,6 +139,6 @@ services:
   crawler:
     image: webrecorder/browsertrix-crawler
     volumes:
-        - ${DIR}/app-data/crawler:/
+        - ${DIR}/app-data/crawls:/crawls/
   # TODO: Terrastories, Portal
   # V2: Open Balena, Zimit, Zimit Youtube
