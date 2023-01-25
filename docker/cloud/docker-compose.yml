@@ -136,5 +136,9 @@ services:
       - 22000:22000/tcp
       - 22000:22000/udp
       - 21027:21027/udp
+  crawler:
+    build: ../../services/crawler
+    volumes:
+        - ${DIR}/app-data/crawls:/crawls/
   # TODO: Terrastories, Portal
   # V2: Open Balena, Zimit, Zimit Youtube

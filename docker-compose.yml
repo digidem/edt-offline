@@ -4,9 +4,9 @@ volumes:
   fdroid:
   portal:
   mapeo:
-  kiwix:
+  crawls:
+  pywb-archive:
   minio-data:
-  ssb-data:
   installers:
   mapeo-bridge:
   postgres_data:
@@ -70,7 +70,7 @@ services:
     restart: unless-stopped
     # user: '1000:1000' # TODO: throws permission denied error for opening database.db
     volumes:
-      - kiwix:/srv/kiwix
+      - crawls:/srv/crawls
       - mapeo:/srv/mapeo
       - fdroid:/srv/fdroid
       - installers:/srv/installers
@@ -83,7 +83,7 @@ services:
   syncthing:
     build: services/syncthing
     volumes:
-      - kiwix:/config/kiwix
+      - crawls:/config/crawls
       - mapeo:/config/mapeo
       - fdroid:/config/fdroid
       - installers:/config/installers
@@ -119,3 +119,11 @@ services:
       - 8084:80
     volumes:
       - mbtiles:/data
+  # https://hub.docker.com/r/communityfirst/pywb
+  pywb:
+    build: services/pywb
+    ports:
+      - 8086:8080
+    volumes:
+      - pywb-archive:/webarchive
+      - crawls:/source

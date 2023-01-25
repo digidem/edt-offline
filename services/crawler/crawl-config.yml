@@ -1,0 +1,8 @@
+seeds:
+  - url: https://earthdefenderstoolkit.com
+    include: earthdefenderstoolkit.com/(?:\?lang=)?es
+    depth: 2
+combineWARCs: true
+blockRules:
+   - url: googleanalytics.com
+netIdleWait: networkidle0
