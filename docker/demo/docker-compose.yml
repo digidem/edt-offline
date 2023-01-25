@@ -93,7 +93,7 @@ services:
   tile-server:
     image: maptiler/tileserver-gl
     ports:
-      - 8085:80
+      - 8085:8080
     volumes:
       - mbtiles:/data
     restart: unless-stopped
