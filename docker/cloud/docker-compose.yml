@@ -141,4 +141,4 @@ services:
     volumes:
         - ${DIR}/app-data/crawls:/crawls/
   # TODO: Terrastories, Portal
-  # V2: Open Balena, Zimit, Zimit Youtube
+  # V2: Open Balena
