@@ -1,0 +1,128 @@
+version: '2.1'
+
+volumes:
+  portal:
+  mapeo:
+  crawls:
+  pywb-archive:
+  minio-data:
+  installers:
+  mapeo-bridge:
+  # Terrastories
+  postgres_data:
+  mbtiles:
+  bundler:
+  terrastories-data:
+  terrastories-media:
+  terrastories-import:
+services:
+  portal:
+    build: ../../services/portal
+    restart: always
+    volumes:
+      - 'portal:/usr/local/apache2/htdocs'
+      - 'installers:/usr/local/apache2/htdocs/installers'
+      - 'fdroid:/usr/local/apache2/htdocs/fdroid'
+    ports:
+      - 8080:80
+    environment:
+      PORTAL_GZ_URL: ${PORTAL_FILE}
+  mapeo-bridge:
+    image: communityfirst/mapeo-bridge
+    network_mode: host
+    volumes:
+      - 'mapeo-bridge:/usr/src/output'
+      - 'terrastories-import:/usr/src/terrastories'
+    restart: unless-stopped
+    environment:
+      MAPEO_PROJECT_KEY: ${MAPEO_PROJECT_KEY}
+      MAPEO_STORAGE_PATH: ${MAPEO_STORAGE_PATH}
+      MAPEO_TERRASTORIES_TYPE: ${MAPEO_TERRASTORIES_TYPE}
+  filebrowser:
+    build: ../../services/filebrowser
+    restart: unless-stopped
+    volumes:
+      - crawls:/srv/crawls
+      - mapeo:/srv/mapeo
+      - fdroid:/srv/fdroid
+      - installers:/srv/installers
+      - terrastories-import:/srv/terrastories/import
+      - terrastories-media:/srv/terrastories/media
+    environment:
+      ADMIN_LOGIN: ${ADMIN_LOGIN}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      LOCALE: ${LOCALE}
+    ports:
+      - 8081:80
+    command: -- c
+  syncthing:
+    build: ../../services/syncthing
+    environment:
+      PUID: 0 # TODO change back to 1000
+      PGID: 0 # TODO change back to 1000
+      TZ: America/Brasil
+      SYNC_SOURCE_ID: ${SYNC_SOURCE_ID}
+      SYNC_SOURCE_NAME: ${SYNC_SOURCE_NAME}
+      SYNC_CRAWLS_ID: ${SYNC_CRAWLS_ID}
+      SYNC_CRAWLS_NAME: ${SYNC_CRAWLS_NAME}
+      SYNC_FDROID_ID: ${SYNC_FDROID_ID}
+      SYNC_FDROID_NAME: ${SYNC_FDROID_NAME}
+      SYNC_MAPEO_ID: ${SYNC_MAPEO_ID}
+      SYNC_MAPEO_NAME: ${SYNC_MAPEO_NAME}
+      SYNC_INSTALLERS_ID: ${SYNC_INSTALLERS_ID}
+      SYNC_INSTALLERS_NAME: ${SYNC_INSTALLERS_NAME}
+    volumes:
+      - crawls:/config/crawls
+      - mapeo:/config/mapeo
+      - fdroid:/config/fdroid
+      - installers:/config/installers
+    ports:
+      - 8082:8384
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+    restart: unless-stopped
+  pywb:
+    build: ../../services/pywb
+    ports:
+      - 8086:8080
+    volumes:
+      - pywb-archive:/webarchive
+      - crawls:/source
+  # Terrastories
+  tile-server:
+    image: wifidb/tileserver-gl
+    ports:
+      - 8085:80
+    volumes:
+      - mbtiles:/data
+  db:
+    image: postgres:11
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${DB_USER_PASSWORD}
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"
+  terrastories:
+    image: terrastories/terrastories
+    ports:
+      - 8083:3000
+    depends_on:
+      - db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      DB_USER_PASSWORD: ${DB_USER_PASSWORD}
+      RAILS_ENV: offline
+      CHOKIDAR_USEPOLLING: 'true'
+      USE_LOCAL_MAP_SERVER: 'true'
+      RAILS_MASTER_KEY: '7a0c538b904d5919af7c11470f3b7a4b'
+      OFFLINE_MAP_STYLE: /tileserver/styles/terrastories-map/style.json
+      HOST_HOSTNAME: 0.0.0.0
+    volumes:
+      - bundler:/usr/local/bundle
+      - terrastories-data:/api
+      - terrastories-media:/media
+      - terrastories-import:/api/import/media
+
