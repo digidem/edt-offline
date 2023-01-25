@@ -2,6 +2,7 @@ version: '2.1'
 
 volumes:
   portal:
+  fdroid:
   mapeo:
   crawls:
   pywb-archive:
