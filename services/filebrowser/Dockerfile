@@ -1,4 +1,4 @@
-FROM filebrowser/filebrowser:latest
+FROM filebrowser/filebrowser:s6
 
 COPY custom /config/custom
 COPY start.sh .
