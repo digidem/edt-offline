@@ -25,9 +25,7 @@ services:
       - 'installers:/usr/local/apache2/htdocs/installers'
       - 'fdroid:/usr/local/apache2/htdocs/fdroid'
     ports:
-      - 8080:80
-    environment:
-      PORTAL_GZ_URL: ${PORTAL_FILE}
+      - 80:80
   mapeo-bridge:
     image: communityfirst/mapeo-bridge
     network_mode: host

@@ -38,8 +38,6 @@ services:
       - 'fdroid:/usr/local/apache2/htdocs/fdroid'
     ports:
       - 8080:80
-    environment:
-      PORTAL_GZ_URL: ${PORTAL_FILE}
   # https://hub.docker.com/repository/docker/communityfirst/mapeo-bridge
   mapeo-bridge:
     image: communityfirst/mapeo-bridge
