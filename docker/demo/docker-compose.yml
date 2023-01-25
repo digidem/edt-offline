@@ -88,6 +88,7 @@ services:
     volumes:
       - pywb-archive:/webarchive
       - crawls:/source
+    restart: unless-stopped
   # Terrastories
   tile-server:
     image: wifidb/tileserver-gl
@@ -95,6 +96,7 @@ services:
       - 8085:80
     volumes:
       - mbtiles:/data
+    restart: unless-stopped
   db:
     image: postgres:11
     ports:
@@ -104,6 +106,7 @@ services:
       POSTGRES_PASSWORD: ${DB_USER_PASSWORD}
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
+    restart: unless-stopped
   terrastories:
     image: terrastories/terrastories
     ports:
@@ -124,4 +127,5 @@ services:
       - terrastories-data:/api
       - terrastories-media:/media
       - terrastories-import:/api/import/media
+    restart: unless-stopped
 
