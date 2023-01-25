@@ -91,7 +91,7 @@ services:
     restart: unless-stopped
   # Terrastories
   tile-server:
-    image: wifidb/tileserver-gl
+    image: maptiler/tileserver-gl
     ports:
       - 8085:80
     volumes:
