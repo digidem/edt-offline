@@ -102,7 +102,7 @@ services:
       - "postgres_data:/var/lib/postgresql/data"
   # https://hub.docker.com/r/communityfirst/terrastories
   terrastories:
-    image: communityfirst/terrastories
+    image: terrastories/terrastories
     ports:
       - 8083:3000
     depends_on:

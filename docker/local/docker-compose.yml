@@ -144,7 +144,7 @@ services:
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
   terrastories:
-    image: communityfirst/terrastories
+    image: terrastories/terrastories
     ports:
       - 8083:3000
     depends_on:
