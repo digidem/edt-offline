@@ -137,7 +137,7 @@ services:
       - 22000:22000/udp
       - 21027:21027/udp
   crawler:
-    image: webrecorder/browsertrix-crawler
+    build: ../../services/crawler
     volumes:
         - ${DIR}/app-data/crawls:/crawls/
   # TODO: Terrastories, Portal
