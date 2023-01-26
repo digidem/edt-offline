@@ -68,8 +68,8 @@ services:
       VIRTUAL_HOST: ${DOMAIN_FILEBROWSER}
       LETSENCRYPT_HOST: ${DOMAIN_FILEBROWSER}
       LETSENCRYPT_EMAIL: ${EMAIL}
-      PGID: ${PGID}
-      PUID: ${PUID}
+      PGID: 1000
+      PUID: 1000
     command: -- c
   # https://hub.docker.com/r/ksinica/go-ssb-room
   ssb-room:
@@ -122,12 +122,12 @@ services:
     image: lscr.io/linuxserver/syncthing
     restart: always
     environment:
+      PUID: 1000
+      PGID: 1000
       VIRTUAL_HOST: ${DOMAIN_SYNCTHING}
       LETSENCRYPT_HOST: ${DOMAIN_SYNCTHING}
       LETSENCRYPT_EMAIL: ${EMAIL}
       VIRTUAL_PORT: 8384
-      PUID: ${PUID}
-      PGID: ${PGID}
       TZ: America/Brasil
     volumes:
       - ${DIR}/app-data/syncthing:/config

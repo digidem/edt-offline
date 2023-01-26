@@ -41,7 +41,7 @@ services:
     build: ../../services/filebrowser
     restart: unless-stopped
     volumes:
-      - crawls:/srv/crawls
+      - crawls:/srv/websites
       - mapeo:/srv/mapeo
       - fdroid:/srv/fdroid
       - installers:/srv/installers
@@ -61,6 +61,8 @@ services:
     environment:
       PUID: 1000
       PGID: 1000
+      ADMIN_LOGIN: ${ADMIN_LOGIN}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       TZ: America/Brasil
       SYNC_SOURCE_ID: ${SYNC_SOURCE_ID}
       SYNC_SOURCE_NAME: ${SYNC_SOURCE_NAME}
@@ -73,7 +75,7 @@ services:
       SYNC_INSTALLERS_ID: ${SYNC_INSTALLERS_ID}
       SYNC_INSTALLERS_NAME: ${SYNC_INSTALLERS_NAME}
     volumes:
-      - crawls:/config/crawls
+      - crawls:/config/websites
       - mapeo:/config/mapeo
       - fdroid:/config/fdroid
       - installers:/config/installers
@@ -95,7 +97,7 @@ services:
   tile-server:
     image: maptiler/tileserver-gl
     ports:
-      - 8085:8080
+      - 8084:8080
     volumes:
       - mbtiles:/data
     restart: unless-stopped

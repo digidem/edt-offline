@@ -68,9 +68,8 @@ services:
   filebrowser:
     build: services/filebrowser
     restart: unless-stopped
-    # user: '1000:1000' # TODO: throws permission denied error for opening database.db
     volumes:
-      - crawls:/srv/crawls
+      - crawls:/srv/websites
       - mapeo:/srv/mapeo
       - fdroid:/srv/fdroid
       - installers:/srv/installers
@@ -83,7 +82,7 @@ services:
   syncthing:
     build: services/syncthing
     volumes:
-      - crawls:/config/crawls
+      - crawls:/config/websites
       - mapeo:/config/mapeo
       - fdroid:/config/fdroid
       - installers:/config/installers
@@ -116,7 +115,7 @@ services:
   tile-server:
     image: wifidb/tileserver-gl
     ports:
-      - 8084:80
+      - 8084:8080
     volumes:
       - mbtiles:/data
   # https://hub.docker.com/r/communityfirst/pywb
