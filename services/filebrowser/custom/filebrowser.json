@@ -51,7 +51,7 @@
         "rules": []
     },
     "server": {
-        "root": ".",
+        "root": "/srv",
         "baseURL": "",
         "socket": "",
         "tlsKey": "",
