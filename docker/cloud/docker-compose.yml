@@ -60,7 +60,7 @@ services:
       LETSENCRYPT_HOST: ${DOMAIN_FDROID}
       LETSENCRYPT_EMAIL: ${EMAIL}
   filebrowser:
-    image: filebrowser/filebrowser
+    image: filebrowser/filebrowser:s6
     restart: always
     volumes:
       - ${DIR}:/srv

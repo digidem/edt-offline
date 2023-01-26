@@ -125,7 +125,7 @@ services:
       - crawls:/source
   # Terrastories
   tile-server:
-    image: wifidb/tileserver-gl
+    image: maptiler/tileserver-gl
     ports:
       - 8085:80
     volumes:
@@ -135,8 +135,8 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PASSWORD: ${DB_USER_PASSWORD}
+      DB_HOST: db
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
   terrastories:
@@ -146,8 +146,8 @@ services:
     depends_on:
       - db
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
       DB_USER_PASSWORD: ${DB_USER_PASSWORD}
+      DB_HOST: db
       RAILS_ENV: offline
       CHOKIDAR_USEPOLLING: 'true'
       USE_LOCAL_MAP_SERVER: 'true'

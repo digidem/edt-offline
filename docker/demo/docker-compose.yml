@@ -106,7 +106,6 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PASSWORD: ${DB_USER_PASSWORD}
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
@@ -118,7 +117,6 @@ services:
     depends_on:
       - db
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
       DB_USER_PASSWORD: ${DB_USER_PASSWORD}
       RAILS_ENV: offline
       CHOKIDAR_USEPOLLING: 'true'
@@ -132,4 +130,3 @@ services:
       - terrastories-media:/media
       - terrastories-import:/api/import/media
     restart: unless-stopped
-
