@@ -103,7 +103,7 @@ services:
   tile-server:
     image: maptiler/tileserver-gl
     ports:
-      - 8084:8080
+      - 8085:8080
     volumes:
       - mbtiles:/data
   # https://hub.docker.com/r/webrecorder/pywb
