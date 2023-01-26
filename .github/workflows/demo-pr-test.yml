@@ -1,0 +1,17 @@
+name: Demo docker-compose Stack
+on:
+  pull_request:
+    paths:
+      - 'docker/demo/**'
+    branches:
+      - main
+jobs:
+  test-compose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Generate .env file
+        run: cp docker/demo/.env.example docker/demo/.env
+      - name: Build the stack
+        run: docker-compose -f docker/demo/docker-compose.yml up -d

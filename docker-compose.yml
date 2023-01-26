@@ -52,25 +52,12 @@ services:
     volumes:
       - "mapeo-bridge:/usr/src/output"
     restart: unless-stopped
-  # https://hub.docker.com/r/minio/minio/
-  minio:
-    image: minio/minio
-    restart: always
-    dns:
-      - 8.8.8.8
-    ports:
-      - 9000:9000
-      - 9001:9001
-    volumes:
-      - "minio-data:/data"
-    command: server --address ":9000" --console-address ":9001" /data
   # https://hub.docker.com/r/filebrowser/filebrowser
   filebrowser:
     build: services/filebrowser
     restart: unless-stopped
-    # user: '1000:1000' # TODO: throws permission denied error for opening database.db
     volumes:
-      - crawls:/srv/crawls
+      - crawls:/srv/websites
       - mapeo:/srv/mapeo
       - fdroid:/srv/fdroid
       - installers:/srv/installers
@@ -83,7 +70,7 @@ services:
   syncthing:
     build: services/syncthing
     volumes:
-      - crawls:/config/crawls
+      - crawls:/config/websites
       - mapeo:/config/mapeo
       - fdroid:/config/fdroid
       - installers:/config/installers
@@ -100,7 +87,7 @@ services:
       - 5432:5432
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
-  # https://hub.docker.com/r/communityfirst/terrastories
+  # https://hub.docker.com/r/terrastories/terrastories
   terrastories:
     image: terrastories/terrastories
     ports:
@@ -112,14 +99,14 @@ services:
       - terrastories-data:/api
       - terrastories-media:/media
       - terrastories-import:/api/import/media
-  # https://hub.docker.com/r/wifidb/tileserver-gl
+  # https://hub.docker.com/r/maptiler/tileserver-gl
   tile-server:
-    image: wifidb/tileserver-gl
+    image: maptiler/tileserver-gl
     ports:
-      - 8084:80
+      - 8085:8080
     volumes:
       - mbtiles:/data
-  # https://hub.docker.com/r/communityfirst/pywb
+  # https://hub.docker.com/r/webrecorder/pywb
   pywb:
     build: services/pywb
     ports:
