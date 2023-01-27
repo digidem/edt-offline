@@ -26,4 +26,4 @@ jobs:
           script: |
             cd /srv/edt-offline
             git pull origin main
-            docker compose -f docker/demo up -d --build
+            docker compose -f docker/demo/docker-compose.yml up -d --build
