@@ -1,0 +1,29 @@
+name: Demo Build & Push
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docker/demo/**'
+      - 'scripts/**'
+      - 'services/**'
+      - docker-compose.yml
+      - balena.yml
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+      - name: Deploy Stack
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_SECRET }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /srv/edt-offline
+            git pull origin main
+            docker compose -f docker/demo up -d --build
