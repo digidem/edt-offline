@@ -106,18 +106,20 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: ${DB_USER_PASSWORD}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: terrastories
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
     restart: unless-stopped
   terrastories:
-    image: terrastories/terrastories
+    build: ../../services/terrastories
     ports:
       - 8083:3000
     depends_on:
       - db
     environment:
-      DB_USER_PASSWORD: ${DB_USER_PASSWORD}
+      DATABASE_URL: postgres://postgres:postgres@db:5432/terrastories
       RAILS_ENV: offline
       CHOKIDAR_USEPOLLING: 'true'
       USE_LOCAL_MAP_SERVER: 'true'
