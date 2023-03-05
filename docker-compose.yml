@@ -15,15 +15,33 @@ volumes:
   terrastories-data:
   terrastories-media:
   terrastories-import:
+  bdi_db:
+  bdi_storage:
 services:
   # https://github.com/balenablocks/hostname
-  hostname:
-    image: balenablocks/hostname:latest
-    restart: "no"
+  # hostname:
+  #   image: balenablocks/hostname:latest
+  #   restart: "no"
+  #   labels:
+  #     io.balena.features.supervisor-api: 1
+  #   environment:
+  #     SET_HOSTNAME: edt
+  # https://balena-labs-research.github.io/starter-interface
+  balena-starter-interface:
+    build: services/interface
+    environment:
+      SET_HOSTNAME: "edt" # Optional. Changes the device hostname. UI will become accesible on `balena.local`.
+      UDEV: on # Enables ability to auto mount USB drives in to the container
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - "bdi_db:/app/db" # Stores UI database files
+      - "bdi_storage:/app/storage" # Storage for the File Manager. See docs for more info.
+    privileged: true # This can be removed if not using the USB mounting feature
     labels:
       io.balena.features.supervisor-api: 1
-    environment:
-      SET_HOSTNAME: edt
+      io.balena.features.balena-api: 1
   # https://github.com/balena-os/wifi-connect
   wifi:
     restart: always
