@@ -63,16 +63,6 @@ services:
     cap_add:
       - NET_ADMIN
     privileged: true # This can be removed if you do not need the LED connectivity indicator.
-  # https://github.com/nikosft/captive-portal/blob/master/captive_portal.py
-  captive-portal:
-    build: services/captive-portal
-    restart: always
-    network_mode: host
-    privileged: true
-    labels:
-      io.balena.features.dbus: '1'
-    depends_on:
-      - python-wifi-connect
   # https://hub.docker.com/_/httpd
   portal:
     build: services/portal
