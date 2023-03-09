@@ -70,4 +70,4 @@ styles:
     language_selector: true # Show the language selector in the header bar
     reboot_icon: true # Show the reboot icon in the header bar
     shutdown_icon: true # Show the shutdown icon in the header bar
-    title: # Override the default header 
+    title: "EDT Offline"
