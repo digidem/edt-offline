@@ -1,4 +1,4 @@
-FROM ghcr.io/balena-labs-research/bsi:0.0.17
+FROM communityfirst/balena-interface:latest
 
 COPY config.yml .
 
