@@ -19,9 +19,10 @@ volumes:
   pwc_db:
 services:
   # https://balena-labs-research.github.io/starter-interface
-  balena-starter-interface:
+  balena-interface:
     build: services/interface
     environment:
+      PORTAL_PORT: 8080
       SET_HOSTNAME: "edt" # Optional. Changes the device hostname. UI will become accesible on `balena.local`.
       UDEV: on # Enables ability to auto mount USB drives in to the container
       NETWORK_MODE: bridge
