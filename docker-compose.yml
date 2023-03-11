@@ -40,6 +40,8 @@ services:
   # https://github.com/balena-labs-research/python-wifi-connect
   python-wifi-connect:
     image: ghcr.io/balena-labs-research/python-wifi-connect:latest
+    environment:
+      DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
     network_mode: "host"
     restart: on-failure
     volumes:
