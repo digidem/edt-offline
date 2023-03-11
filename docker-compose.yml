@@ -18,14 +18,9 @@ volumes:
   bdi_db:
   pwc_db:
 services:
-  # https://balena-labs-research.github.io/starter-interface
+  # https://github.com/digidem/starter-interface
   balena-interface:
     build: services/interface
-    environment:
-      PORTAL_PORT: 8080
-      SET_HOSTNAME: "edt" # Optional. Changes the device hostname. UI will become accesible on `balena.local`.
-      UDEV: on # Enables ability to auto mount USB drives in to the container
-      NETWORK_MODE: bridge
     restart: always
     ports:
       - "80:80"
@@ -45,17 +40,6 @@ services:
   # https://github.com/balena-labs-research/python-wifi-connect
   python-wifi-connect:
     image: ghcr.io/balena-labs-research/python-wifi-connect:latest
-    environment:
-      # Listening IP and port
-      PWC_HOST: bridge # `bridge` specifies that this is on the bridge network and to use container name
-      PWC_PORT: 9090
-      # Hotspot details
-      PWC_HOTSPOT_SSID: "Earth Defenders Toolkit" # Name as it appears in list of WiFi networks
-      # PWC_HOTSPOT_PASSWORD: "balena01" # Optional. Must be 8 characters or more
-      # PWC_INTERFACE: "wlan0"
-
-      # Required system variables
-      DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
     network_mode: "host"
     restart: on-failure
     volumes:
