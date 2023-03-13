@@ -19,11 +19,9 @@ data:
     # BALENA INTERFACE
     SET_HOSTNAME: "edt"
     UDEV: on # Enables ability to auto mount USB drives in to the container
-    NETWORK_MODE: bridge
     PORTAL_PORT: 8080
     # WIFI
     PWC_HOTSPOT_SSID: "Earth_Defenders_Toolkit" # Name as it appears in list of WiFi networks
-    PWC_HOST: bridge # `bridge` specifies that this is on the bridge network and to use container name
     PWC_PORT: 9090
     # PWC_HOTSPOT_PASSWORD: "balena01" # Optional. Must be 8 characters or more
     # PWC_INTERFACE: "wlan0"

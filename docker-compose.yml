@@ -22,6 +22,8 @@ services:
   balena-interface:
     build: services/interface
     restart: always
+    environment:
+      NETWORK_MODE: bridge
     ports:
       - "80:80"
       - "8079:8079"
@@ -41,6 +43,7 @@ services:
   python-wifi-connect:
     image: ghcr.io/balena-labs-research/python-wifi-connect:latest
     environment:
+      PWC_HOST: bridge
       DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
     network_mode: "host"
     restart: on-failure
