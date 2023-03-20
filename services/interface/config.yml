@@ -1,0 +1,73 @@
+pages:
+  #####
+  # A list of pages from ui/src/pages to load and the ui/src/components to show on each one.
+  #
+  # Example that creates an Environment Variable configuration interface:
+  #
+  # ----------------------------------------------------------------------------------------------------
+  # IndexPage:
+  #   frames: 
+  #     1: 
+  #       components: [SystemEnvConfig]
+  #   icon: settings   # The label from Google Material Icons to display in the sidebar: https://fonts.google.com/icons
+  #   label: yml_config.environment_variables   # The i18n key from ui/src/i18n/en-US.json to use as sidebar text. Only use `yml_config` keys!
+  # ----------------------------------------------------------------------------------------------------
+  #
+  # All the other sections are removed so you only see the environment variable configuration
+  #
+  #####
+  IndexPage: # This page cannot be removed
+    frames: 
+      1: 
+        components: [SystemDeviceInfo]
+    # Path will always be '/'
+    icon: visibility
+    label: yml_config.device_info
+  FileManager:
+    frames:
+      1: 
+        components: [ToolsFileManager]
+    path: filemanager
+    icon: folder
+    label: yml_config.file_manager
+  Configuration: 
+    frames:
+      1: 
+        components: [SystemChangeHostname]
+        title: yml_config.network_config
+      2:
+        components: [SystemEnvConfig]
+        title: yml_config.environment_variables
+    path: configuration
+    icon: settings
+    label: yml_config.configuration
+  ContainerManager:
+    frames:
+      1:
+        components: [ToolsContainerManager]
+    path: containermanager
+    icon: all_inbox
+    label: yml_config.container_manager
+  Networking:
+    frames:
+      1:
+        components: [WifiConnect]
+    path: networking
+    icon: router
+    label: yml_config.networking
+  SystemInfo:
+    frames:
+      1:
+        components: [SystemJournalDLogs, ToolsSystemInfo]
+    path: systeminfo
+    icon: info
+    label: yml_config.system_info
+captive_portal: 
+  welcome_page: true
+styles:
+  header:
+    visible: true # Whether the header logo should be visible
+    language_selector: true # Show the language selector in the header bar
+    reboot_icon: true # Show the reboot icon in the header bar
+    shutdown_icon: true # Show the shutdown icon in the header bar
+    title: "EDT Offline"
