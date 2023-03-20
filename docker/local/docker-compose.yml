@@ -30,7 +30,7 @@ services:
       PORTAL_SSID: ${PORTAL_SSID}
   # https://hub.docker.com/_/httpd
   portal:
-    build: ../../services/portal
+    image: communityfirst/portal:nightly-full
     restart: always
     volumes:
       - 'portal:/usr/local/apache2/htdocs'

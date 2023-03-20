@@ -54,9 +54,9 @@ services:
     cap_add:
       - NET_ADMIN
     privileged: true # This can be removed if you do not need the LED connectivity indicator.
-  # https://hub.docker.com/_/httpd
+  # https://hub.docker.com/r/communityfirst/edt-offline-portal
   portal:
-    build: services/portal
+    image: communityfirst/portal:nightly-full
     restart: always
     volumes:
       - "portal:/usr/local/apache2/htdocs"

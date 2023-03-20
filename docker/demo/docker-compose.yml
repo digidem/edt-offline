@@ -18,7 +18,7 @@ volumes:
   terrastories-import:
 services:
   portal:
-    build: ../../services/portal
+    image: communityfirst/portal:nightly-full
     restart: always
     volumes:
       - 'portal:/usr/local/apache2/htdocs'
