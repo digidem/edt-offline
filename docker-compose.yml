@@ -56,7 +56,7 @@ services:
     privileged: true # This can be removed if you do not need the LED connectivity indicator.
   # https://hub.docker.com/r/communityfirst/edt-offline-portal
   portal:
-    image: communityfirst/portal:nightly-full
+    image: communityfirst/edt-offline-portal:nightly-full
     restart: always
     volumes:
       - "portal:/usr/local/apache2/htdocs"
