@@ -21,11 +21,9 @@ services:
     image: communityfirst/edt-offline-portal:nightly-full
     restart: always
     volumes:
-      - 'portal:/usr/local/apache2/htdocs'
-      - 'installers:/usr/local/apache2/htdocs/installers'
-      - 'fdroid:/usr/local/apache2/htdocs/fdroid'
+      - 'portal:/usr/src/nuxt-app'
     ports:
-      - 80:80
+      - 80:3000
   mapeo-bridge:
     image: communityfirst/mapeo-bridge
     network_mode: host
