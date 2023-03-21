@@ -147,5 +147,6 @@ services:
       LETSENCRYPT_HOST: ${DOMAIN_CRAWLER}
       LETSENCRYPT_EMAIL: ${EMAIL}
       VIRTUAL_PORT: 8080
+      CRAWL_TIMER: ${CRAWL_TIMER}
   # TODO: Terrastories, Portal
   # V2: Open Balena
