@@ -71,9 +71,9 @@ services:
       PGID: 1000
       PUID: 1000
     command: -- c
-  # https://hub.docker.com/r/ksinica/go-ssb-room
+  # https://hub.docker.com/r/cooldracula/go-ssb-room
   ssb-room:
-    image: ksinica/go-ssb-room
+    image: cooldracula/go-ssb-room
     restart: always
     ports:
       - "0.0.0.0:8007:8008" # This is the port SSB clients connect to
