@@ -140,5 +140,8 @@ services:
     build: ../../services/crawler
     volumes:
         - ${DIR}/app-data/crawls:/crawls/
+        - ${DIR}/content/offline-websites:/app/content/
+    ports:
+      - "8080:8080"
   # TODO: Terrastories, Portal
   # V2: Open Balena
