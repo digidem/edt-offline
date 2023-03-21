@@ -1,13 +1,8 @@
 seeds:
-  - url: https://earthdefenderstoolkit.com
-    include: earthdefenderstoolkit.com/(?:\?lang=)?es
-    depth: 2
+  - url: https://www.earthdefenderstoolkit.com
   - url: https://docs.mapeo.app/
-    depth: 1
   - url: https://docs.terrastories.app/
-    depth: 1
   - url: https://docs.earthdefenderstoolkit.com/
-    depth: 1
 combineWARCs: true
 blockRules:
    - url: googleanalytics.com
