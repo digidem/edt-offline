@@ -64,6 +64,8 @@ services:
     restart: always
     volumes:
       - ${DIR}:/srv
+      - ${DIR}/app-data/filebrowser/filebrowser.db:/database/filebrowser.db
+      - ${DIR}/app-data/filebrowser/settings.json:/config/settings.json
     environment:
       VIRTUAL_HOST: ${DOMAIN_FILEBROWSER}
       LETSENCRYPT_HOST: ${DOMAIN_FILEBROWSER}
