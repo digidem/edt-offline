@@ -74,21 +74,21 @@ services:
       PUID: ${PUID}
     command: -- c
   # https://hub.docker.com/r/cooldracula/go-ssb-room
-  ssb-room:
-    build: ../../services/ssb-room
-    restart: always
-    ports:
-      - "0.0.0.0:8008:8008" # This is the port SSB clients connect to
-    volumes:
-      - ${DIR}/app-data/ssb-room:/ssb-go-room
-    environment:
-      VIRTUAL_HOST: ${DOMAIN_ROOM}
-      LETSENCRYPT_HOST: ${DOMAIN_ROOM}
-      LETSENCRYPT_EMAIL: ${EMAIL}
-      VIRTUAL_PORT: 3000
-      SSB_ROOM_MODE: ${ROOM_MODE}
-      SSB_ROOM_ADMIN_KEY: ${ROOM_ADMIN}
-      SSB_ROOM_DOMAIN: ${DOMAIN_ROOM}
+  # ssb-room:
+  #   build: ../../services/ssb-room
+  #   restart: always
+  #   ports:
+  #     - "0.0.0.0:8008:8008" # This is the port SSB clients connect to
+  #   volumes:
+  #     - ${DIR}/app-data/ssb-room:/ssb-go-room
+  #   environment:
+  #     VIRTUAL_HOST: ${DOMAIN_ROOM}
+  #     LETSENCRYPT_HOST: ${DOMAIN_ROOM}
+  #     LETSENCRYPT_EMAIL: ${EMAIL}
+  #     VIRTUAL_PORT: 3000
+  #     SSB_ROOM_MODE: ${ROOM_MODE}
+  #     SSB_ROOM_ADMIN_KEY: ${ROOM_ADMIN}
+  #     SSB_ROOM_DOMAIN: ${DOMAIN_ROOM}
   # https://hub.docker.com/repository/docker/communityfirst/ssb-go-pub
   # ssb-pub:
   #   image: communityfirst/ssb-go-pub:latest
