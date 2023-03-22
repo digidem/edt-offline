@@ -23,7 +23,7 @@ jobs:
           port: ${{ secrets.SSH_CLOUD_PORT }}
           script: |
             cd ${{ secrets.CLOUD_FOLDER_PATH }}
-            git checkout .
-            git pull origin main
+            git fetch
+            git checkout origin/main
             docker compose -f docker/cloud/docker-compose.yml down
             docker compose -f docker/cloud/docker-compose.yml up -d --build
