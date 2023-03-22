@@ -65,15 +65,14 @@ services:
     restart: always
     volumes:
       - ${DIR}:/srv
-      - ${DIR}/app-data/filebrowser/filebrowser.db:/database/filebrowser.db
-      - ${DIR}/app-data/filebrowser/settings.json:/config/settings.json
+      - ${DIR}/app-data/filebrowser/database:/database
+      - ${DIR}/app-data/filebrowser/config:/config
     environment:
       VIRTUAL_HOST: ${DOMAIN_FILEBROWSER}
       LETSENCRYPT_HOST: ${DOMAIN_FILEBROWSER}
       LETSENCRYPT_EMAIL: ${EMAIL}
       PGID: ${PGID}
       PUID: ${PUID}
-    command: -- c
   # https://hub.docker.com/r/minio/minio/
   minio:
     image: minio/minio
