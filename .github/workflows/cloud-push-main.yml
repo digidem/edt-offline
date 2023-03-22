@@ -1,4 +1,4 @@
-name: Demo Build & Push
+name: Cloud Build & Push
 
 on:
   push:
