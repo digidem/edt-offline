@@ -68,15 +68,15 @@ services:
       VIRTUAL_HOST: ${DOMAIN_FILEBROWSER}
       LETSENCRYPT_HOST: ${DOMAIN_FILEBROWSER}
       LETSENCRYPT_EMAIL: ${EMAIL}
-      PGID: 1000
-      PUID: 1000
+      PGID: ${PGID}
+      PUID: ${PUID}
     command: -- c
   # https://hub.docker.com/r/cooldracula/go-ssb-room
   ssb-room:
-    image: cooldracula/go-ssb-room
+    build: ../../services/ssb-room
     restart: always
     ports:
-      - "0.0.0.0:8007:8008" # This is the port SSB clients connect to
+      - "0.0.0.0:8008:8008" # This is the port SSB clients connect to
     volumes:
       - ${DIR}/app-data/ssb-room:/ssb-go-room
     environment:
@@ -122,8 +122,8 @@ services:
     image: lscr.io/linuxserver/syncthing
     restart: always
     environment:
-      PUID: 1000
-      PGID: 1000
+      PUID: ${PUID}
+      PGID: ${PGID}
       VIRTUAL_HOST: ${DOMAIN_SYNCTHING}
       LETSENCRYPT_HOST: ${DOMAIN_SYNCTHING}
       LETSENCRYPT_EMAIL: ${EMAIL}
