@@ -7,7 +7,6 @@ volumes:
   crawls:
   pywb-archive:
   minio-data:
-  ssb-data:
   installers:
   mapeo-bridge:
   # Terrastories

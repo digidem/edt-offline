@@ -59,6 +59,7 @@ services:
       VIRTUAL_HOST: ${DOMAIN_FDROID}
       LETSENCRYPT_HOST: ${DOMAIN_FDROID}
       LETSENCRYPT_EMAIL: ${EMAIL}
+  # https://filebrowser.org
   filebrowser:
     image: filebrowser/filebrowser:s6
     restart: always
@@ -73,32 +74,6 @@ services:
       PGID: ${PGID}
       PUID: ${PUID}
     command: -- c
-  # https://hub.docker.com/r/cooldracula/go-ssb-room
-  # ssb-room:
-  #   build: ../../services/ssb-room
-  #   restart: always
-  #   ports:
-  #     - "0.0.0.0:8008:8008" # This is the port SSB clients connect to
-  #   volumes:
-  #     - ${DIR}/app-data/ssb-room:/ssb-go-room
-  #   environment:
-  #     VIRTUAL_HOST: ${DOMAIN_ROOM}
-  #     LETSENCRYPT_HOST: ${DOMAIN_ROOM}
-  #     LETSENCRYPT_EMAIL: ${EMAIL}
-  #     VIRTUAL_PORT: 3000
-  #     SSB_ROOM_MODE: ${ROOM_MODE}
-  #     SSB_ROOM_ADMIN_KEY: ${ROOM_ADMIN}
-  #     SSB_ROOM_DOMAIN: ${DOMAIN_ROOM}
-  # https://hub.docker.com/repository/docker/communityfirst/ssb-go-pub
-  # ssb-pub:
-  #   image: communityfirst/ssb-go-pub:latest
-  #   ports:
-  #     - "0.0.0.0:8008:8008" # This is the port SSB clients connect to
-  #   environment:
-  #     ROOM: ${SSB_ROOM}
-  #   volumes:
-  #     - ${DIR}/app-data/ssb-pub:/root/.ssb-go'
-  #   restart: unless-stopped
   # https://hub.docker.com/r/minio/minio/
   minio:
     image: minio/minio
@@ -150,5 +125,5 @@ services:
       LETSENCRYPT_EMAIL: ${EMAIL}
       VIRTUAL_PORT: 8080
       CRAWL_TIMER: ${CRAWL_TIMER}
-  # TODO: Terrastories, Portal
+  # TODO: Terrastories
   # V2: Open Balena
