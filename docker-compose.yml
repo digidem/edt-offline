@@ -2,7 +2,7 @@ version: "2.1"
 
 volumes:
   fdroid:
-  portal:
+  edt-offline-portal:
   mapeo:
   crawls:
   pywb-archive:
@@ -15,8 +15,8 @@ volumes:
   terrastories-data:
   terrastories-media:
   terrastories-import:
-  bdi_db:
-  pwc_db:
+  interface_db:
+  wifi_db:
 services:
   # https://github.com/digidem/starter-interface
   balena-interface:
@@ -28,7 +28,7 @@ services:
       - "80:80"
       - "8079:8079"
     volumes:
-      - "bdi_db:/app/db" # Stores UI database files
+      - interface_db:/app/db # Stores UI database files
       - crawls:/app/storage/websites
       - mapeo:/app/storage/mapeo
       - fdroid:/app/storage/fdroid
@@ -48,18 +48,18 @@ services:
     network_mode: "host"
     restart: on-failure
     volumes:
-      - "pwc_db:/app/db" # Optional if not setting the hotspot ssid and password via the API
+      - wifi_db:/app/db # Optional if not setting the hotspot ssid and password via the API
     labels:
       io.balena.features.dbus: "1"
     cap_add:
       - NET_ADMIN
     privileged: true # This can be removed if you do not need the LED connectivity indicator.
-  # https://hub.docker.com/r/communityfirst/edt-offline-portal
+  # https://hub.docker.com/r/communityfirst/edt-offline-edt-portal
   portal:
     image: communityfirst/edt-offline-portal:nightly-full
     restart: always
     volumes:
-      - 'portal:/usr/src/nuxt-app'
+      - edt-offline-portal:/usr/src/nuxt-app
     ports:
       - 8080:3000
   # https://hub.docker.com/r/communityfirst/mapeo-bridge
