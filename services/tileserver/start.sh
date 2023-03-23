@@ -24,14 +24,14 @@ if ! which -- "${1}"; then
     # if not, download
     echo "Not tiles, let's download"
     echo "Cloning Terrastories/default-offline-map"
-    git clone --quiet "https://github.com/Terrastories/default-offline-map" tmp
+    git clone --quiet "https://github.com/Terrastories/default-offline-map" tmp-dir
     echo "Cloned!"
     echo "Moving files to /data folder"
     mkdir -p /data/fonts /data/sprites /data/styles
-    cp -r tmp/fonts/* /data/fonts
-    cp tmp/sprites/* /data/sprites
-    cp tmp/styles/* /data/styles
-    rm -rf tmp
+    cp -r tmp-dir/fonts/* /data/fonts
+    cp tmp-dir/sprites/* /data/sprites
+    cp tmp-dir/styles/* /data/styles
+    rm -rf tmp-dir
     echo "Downloading tiles..."
     curl -fSL "https://bit.ly/39EdYoQ" -o "/data/mbtiles/tiles.mbtiles" --create-dirs
     echo "All done!"
