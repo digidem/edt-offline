@@ -41,6 +41,7 @@ services:
     volumes:
       - crawls:/srv/websites
       - mapeo:/srv/mapeo
+      - mbtiles:/srv/mbtiles
       - fdroid:/srv/fdroid
       - installers:/srv/installers
       - terrastories-import:/srv/terrastories/import
@@ -77,6 +78,7 @@ services:
       - mapeo:/config/mapeo
       - fdroid:/config/fdroid
       - installers:/config/installers
+      - mbtiles:/config/mbtiles
     ports:
       - 8082:8384
       - 22000:22000/tcp
@@ -98,6 +100,9 @@ services:
       - 8085:8080
     volumes:
       - mbtiles:/data
+    environment:
+      PUID: 1000
+      PGID: 1000
     restart: unless-stopped
   db:
     image: postgres:11
