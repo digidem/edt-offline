@@ -1,4 +1,4 @@
-FROM maptiler/tileserver-gl
+FROM communityfirst/tileserver-gl
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 USER root:root
 RUN apt-get update
