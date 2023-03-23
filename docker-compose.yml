@@ -67,7 +67,8 @@ services:
     image: communityfirst/mapeo-bridge
     network_mode: host
     volumes:
-      - "mapeo-bridge:/usr/src/output"
+      - mapeo-bridge:/usr/src/output
+      - mbtiles:/data/mbtiles
     restart: unless-stopped
   # https://hub.docker.com/r/filebrowser/filebrowser
   filebrowser:
@@ -78,6 +79,7 @@ services:
       - mapeo:/srv/mapeo
       - fdroid:/srv/fdroid
       - installers:/srv/installers
+      - mbtiles:/srv/mbtiles
       - terrastories-import:/srv/terrastories/import
       - terrastories-media:/srv/terrastories/media
     ports:
@@ -91,6 +93,7 @@ services:
       - mapeo:/config/mapeo
       - fdroid:/config/fdroid
       - installers:/config/installers
+      - mbtiles:/config/mbtiles
     ports:
       - 8082:8384
       - 22000:22000/tcp
@@ -102,23 +105,34 @@ services:
     image: postgres:11
     ports:
       - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: terrastories
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
   # https://hub.docker.com/r/terrastories/terrastories
   terrastories:
-    image: terrastories/terrastories
+    build: services/terrastories
     ports:
       - 8083:3000
     depends_on:
       - db
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/terrastories
+      RAILS_ENV: offline
+      CHOKIDAR_USEPOLLING: 'true'
+      USE_LOCAL_MAP_SERVER: 'true'
+      OFFLINE_MAP_STYLE: /tileserver/styles/terrastories-map/style.json
+      HOST_HOSTNAME: 0.0.0.0
     volumes:
       - bundler:/usr/local/bundle
       - terrastories-data:/api
       - terrastories-media:/media
       - terrastories-import:/api/import/media
   # https://hub.docker.com/r/maptiler/tileserver-gl
-  tile-server:
-    image: maptiler/tileserver-gl
+  tileserver:
+    build: services/tileserver
     ports:
       - 8085:8080
     volumes:
