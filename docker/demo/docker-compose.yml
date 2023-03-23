@@ -92,8 +92,8 @@ services:
       - crawls:/source
     restart: unless-stopped
   # Terrastories
-  tile-server:
-    image: maptiler/tileserver-gl
+  tileserver:
+    build: ../../services/tileserver
     ports:
       - 8085:8080
     volumes:
