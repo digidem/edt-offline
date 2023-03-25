@@ -6,6 +6,8 @@
 
 ![balena-tag-release](https://github.com/digidem/edt-offline/actions/workflows/balena-tag-release.yml/badge.svg)
 
+[![Crowdin](https://badges.crowdin.net/edt-offline-portal/localized.svg)](https://crowdin.com/project/edt-offline-portal)
+
 **EDT Offline** is a multi-device stack, which can be easily installed on single-board-computers, Nucs, or any recycled marchine. It creates an access point with the [Earth Defender's Toolkit](http://earthdefenderstoolkit.com/) platform running, even without the Internet. It provides applications, documentation, use cases, curated websites, and application bridges.
 
 The software stack and content are automatically updated while online, and there are different strategies to update them while offline.
