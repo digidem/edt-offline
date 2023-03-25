@@ -57,7 +57,7 @@ services:
     privileged: true # This can be removed if you do not need the LED connectivity indicator.
   # https://hub.docker.com/r/communityfirst/edt-offline-edt-portal
   portal:
-    image: communityfirst/edt-offline-portal:nightly-full
+    image: communityfirst/edt-offline-portal:nightly
     restart: always
     volumes:
       - edt-offline-portal:/usr/src/nuxt-app
@@ -69,7 +69,6 @@ services:
     network_mode: host
     volumes:
       - mapeo-bridge:/usr/src/output
-      - mbtiles:/data/mbtiles
     restart: unless-stopped
   # https://hub.docker.com/r/filebrowser/filebrowser
   filebrowser:
