@@ -2,12 +2,7 @@
 echo "Starting tileserver-gl"
 
 run () {
-  if ! which -- "${1}"; then
-    # first arg is not an executable
-    if [ -e /tmp/.X99-lock ]; then rm /tmp/.X99-lock -f; fi
-    export DISPLAY=:99
-    Xvfb "${DISPLAY}" -nolisten unix &
-    # exec node /usr/src/app/ "$@"
+  echo "Running..."
     # Check if config exists
     if [ -e /data/config.json ] && [ -e /data/mbtiles/tiles.mbtiles ] #this should be dynamic from config.json
     then
@@ -19,8 +14,14 @@ run () {
       sleep 30
       run "$@"
     fi
-  fi
   exec "$@"
 }
 
-
+if ! which -- "${1}"; then
+  # first arg is not an executable
+  if [ -e /tmp/.X99-lock ]; then rm /tmp/.X99-lock -f; fi
+  export DISPLAY=:99
+  Xvfb "${DISPLAY}" -nolisten unix &
+  # exec node /usr/src/app/ "$@"
+  run "$@"
+fi
