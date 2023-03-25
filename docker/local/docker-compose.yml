@@ -71,6 +71,7 @@ services:
       - mapeo:/srv/mapeo
       - fdroid:/srv/fdroid
       - installers:/srv/installers
+      - mapeo-bridge:/srv/terrastories-places
       - terrastories-import:/srv/terrastories/import
       - terrastories-media:/srv/terrastories/media
     environment:

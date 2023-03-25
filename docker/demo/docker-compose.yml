@@ -44,6 +44,7 @@ services:
       - mbtiles:/srv/mbtiles
       - fdroid:/srv/fdroid
       - installers:/srv/installers
+      - mapeo-bridge:/srv/terrastories-places
       - terrastories-import:/srv/terrastories/import
       - terrastories-media:/srv/terrastories/media
     environment:
@@ -106,7 +107,7 @@ services:
       PUID: 1000
       PGID: 1000
     restart: unless-stopped
-  db:
+  terrastories-db:
     image: postgres:11
     ports:
       - 5432:5432

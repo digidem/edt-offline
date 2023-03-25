@@ -12,7 +12,7 @@ if ! which -- "${1}"; then
   then
     echo "config ok..."
   else
-    echo "NO CONFIG!"
+    echo "NO CONFIG! This is unexpected behavior!"
   fi
   # Check if mbtiles exists
   if [ -e /data/mbtiles/tiles.mbtiles ]

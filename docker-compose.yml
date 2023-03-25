@@ -33,6 +33,7 @@ services:
       - mapeo:/app/storage/mapeo
       - fdroid:/app/storage/fdroid
       - installers:/app/storage/installers
+      - mbtiles:/app/storage//mbtiles
       - terrastories-import:/app/storage/terrastories/import
       - terrastories-media:/app/storage/terrastories/media
     privileged: true # This can be removed if not using the USB mounting feature
@@ -80,6 +81,7 @@ services:
       - fdroid:/srv/fdroid
       - installers:/srv/installers
       - mbtiles:/srv/mbtiles
+      - mapeo-bridge:/srv/terrastories-places
       - terrastories-import:/srv/terrastories/import
       - terrastories-media:/srv/terrastories/media
     ports:
@@ -101,7 +103,7 @@ services:
       - 21027:21027/udp
     restart: unless-stopped
   # https://hub.docker.com/_/postgres
-  db:
+  terrastories-db:
     image: postgres:11
     ports:
       - 5432:5432
