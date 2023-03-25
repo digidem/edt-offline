@@ -123,7 +123,7 @@ services:
     ports:
       - 8083:3000
     depends_on:
-      - db
+      - terrastories-db
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/terrastories
       RAILS_ENV: offline
