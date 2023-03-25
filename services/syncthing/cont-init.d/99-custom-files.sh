@@ -13,6 +13,9 @@ sed -i -r "s/#FDROID_ID/$SYNC_FDROID_ID/g" /config/config.xml
 sed -i -r "s/#FDROID_NAME/$SYNC_FDROID_NAME/g" /config/config.xml
 sed -i -r "s/#INSTALLERS_ID/$SYNC_INSTALLERS_ID/g" /config/config.xml
 sed -i -r "s/#INSTALLERS_NAME/$SYNC_INSTALLERS_NAME/g" /config/config.xml
+sed -i -r "s/#TILES_ID/$SYNC_TILES_ID/g" /config/config.xml
+sed -i -r "s/#TILES_NAME/$SYNC_TILES_NAME/g" /config/config.xml
+
 
 echo "=======" "Adding authentication and setting permissions" "====="
 syncthing generate --home=/config --gui-user=${ADMIN_LOGIN} --gui-password=${ADMIN_PASSWORD}

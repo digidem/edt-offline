@@ -71,6 +71,7 @@ services:
       - mapeo:/srv/mapeo
       - fdroid:/srv/fdroid
       - installers:/srv/installers
+      - mapeo-bridge:/srv/terrastories-places
       - terrastories-import:/srv/terrastories/import
       - terrastories-media:/srv/terrastories/media
     environment:
@@ -101,6 +102,8 @@ services:
       SYNC_MAPEO_NAME: ${SYNC_MAPEO_NAME}
       SYNC_INSTALLERS_ID: ${SYNC_INSTALLERS_ID}
       SYNC_INSTALLERS_NAME: ${SYNC_INSTALLERS_NAME}
+      SYNC_TILES_ID: ${SYNC_TILES_ID}
+      SYNC_TILES_NAME: ${SYNC_TILES_NAME}
     volumes:
       - crawls:/config/websites
       - mapeo:/config/mapeo
@@ -120,14 +123,15 @@ services:
     volumes:
       - pywb-archive:/webarchive
       - crawls:/source
-  # Terrastories
-  tile-server:
-    image: maptiler/tileserver-gl
+  # https://hub.docker.com/r/maptiler/tileserver-gl
+  tileserver:
+    build: ../../services/tileserver
     ports:
-      - 8085:80
+      - 8085:8080
     volumes:
       - mbtiles:/data
-  db:
+  # Terrastories
+  terrastories-db:
     image: postgres:11
     ports:
       - 5432:5432
@@ -141,7 +145,7 @@ services:
     ports:
       - 8083:3000
     depends_on:
-      - db
+      - terrastories-db
     environment:
       DB_USER_PASSWORD: ${DB_USER_PASSWORD}
       DB_HOST: db

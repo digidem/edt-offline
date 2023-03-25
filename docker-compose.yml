@@ -2,7 +2,7 @@ version: "2.1"
 
 volumes:
   fdroid:
-  portal:
+  edt-offline-portal:
   mapeo:
   crawls:
   pywb-archive:
@@ -15,8 +15,8 @@ volumes:
   terrastories-data:
   terrastories-media:
   terrastories-import:
-  bdi_db:
-  pwc_db:
+  interface_db:
+  wifi_db:
 services:
   # https://github.com/digidem/starter-interface
   balena-interface:
@@ -28,11 +28,12 @@ services:
       - "80:80"
       - "8079:8079"
     volumes:
-      - "bdi_db:/app/db" # Stores UI database files
+      - interface_db:/app/db # Stores UI database files
       - crawls:/app/storage/websites
       - mapeo:/app/storage/mapeo
       - fdroid:/app/storage/fdroid
       - installers:/app/storage/installers
+      - mbtiles:/app/storage//mbtiles
       - terrastories-import:/app/storage/terrastories/import
       - terrastories-media:/app/storage/terrastories/media
     privileged: true # This can be removed if not using the USB mounting feature
@@ -48,18 +49,18 @@ services:
     network_mode: "host"
     restart: on-failure
     volumes:
-      - "pwc_db:/app/db" # Optional if not setting the hotspot ssid and password via the API
+      - wifi_db:/app/db # Optional if not setting the hotspot ssid and password via the API
     labels:
       io.balena.features.dbus: "1"
     cap_add:
       - NET_ADMIN
     privileged: true # This can be removed if you do not need the LED connectivity indicator.
-  # https://hub.docker.com/r/communityfirst/edt-offline-portal
+  # https://hub.docker.com/r/communityfirst/edt-offline-edt-portal
   portal:
-    image: communityfirst/edt-offline-portal:nightly-full
+    image: communityfirst/edt-offline-portal:nightly
     restart: always
     volumes:
-      - 'portal:/usr/src/nuxt-app'
+      - edt-offline-portal:/usr/src/nuxt-app
     ports:
       - 8080:3000
   # https://hub.docker.com/r/communityfirst/mapeo-bridge
@@ -67,7 +68,7 @@ services:
     image: communityfirst/mapeo-bridge
     network_mode: host
     volumes:
-      - "mapeo-bridge:/usr/src/output"
+      - mapeo-bridge:/usr/src/output
     restart: unless-stopped
   # https://hub.docker.com/r/filebrowser/filebrowser
   filebrowser:
@@ -78,6 +79,8 @@ services:
       - mapeo:/srv/mapeo
       - fdroid:/srv/fdroid
       - installers:/srv/installers
+      - mbtiles:/srv/mbtiles
+      - mapeo-bridge:/srv/terrastories-places
       - terrastories-import:/srv/terrastories/import
       - terrastories-media:/srv/terrastories/media
     ports:
@@ -91,6 +94,7 @@ services:
       - mapeo:/config/mapeo
       - fdroid:/config/fdroid
       - installers:/config/installers
+      - mbtiles:/config/mbtiles
     ports:
       - 8082:8384
       - 22000:22000/tcp
@@ -98,27 +102,38 @@ services:
       - 21027:21027/udp
     restart: unless-stopped
   # https://hub.docker.com/_/postgres
-  db:
+  terrastories-db:
     image: postgres:11
     ports:
       - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: terrastories
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
   # https://hub.docker.com/r/terrastories/terrastories
   terrastories:
-    image: terrastories/terrastories
+    build: services/terrastories
     ports:
       - 8083:3000
     depends_on:
-      - db
+      - terrastories-db
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/terrastories
+      RAILS_ENV: offline
+      CHOKIDAR_USEPOLLING: 'true'
+      USE_LOCAL_MAP_SERVER: 'true'
+      OFFLINE_MAP_STYLE: /tileserver/styles/terrastories-map/style.json
+      HOST_HOSTNAME: 0.0.0.0
     volumes:
       - bundler:/usr/local/bundle
       - terrastories-data:/api
       - terrastories-media:/media
       - terrastories-import:/api/import/media
   # https://hub.docker.com/r/maptiler/tileserver-gl
-  tile-server:
-    image: maptiler/tileserver-gl
+  tileserver:
+    build: services/tileserver
     ports:
       - 8085:8080
     volumes:

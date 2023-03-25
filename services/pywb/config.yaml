@@ -12,9 +12,6 @@ autoindex: 30
 
 collections:
     all: $all
-    earthdefenderstoolkit:
-        index_paths: /webarchive
-        archive_paths: /source
 
 # Settings for each collection
 use_js_obj_proxy: true
