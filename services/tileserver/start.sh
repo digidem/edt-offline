@@ -1,42 +1,26 @@
 #!/bin/sh
 echo "Starting tileserver-gl"
 
-if ! which -- "${1}"; then
-  # first arg is not an executable
-  if [ -e /tmp/.X99-lock ]; then rm /tmp/.X99-lock -f; fi
-  export DISPLAY=:99
-  Xvfb "${DISPLAY}" -nolisten unix &
-  # exec node /usr/src/app/ "$@"
-  # Check if config exists
-  if [ -e /data/config.json ]
-  then
-    echo "config ok..."
-  else
-    echo "NO CONFIG! This is unexpected behavior!"
-  fi
-  # Check if mbtiles exists
-  if [ -e /data/mbtiles/tiles.mbtiles ]
-  then
-      # run && check size
-      echo "mbtile ok..."
+run () {
+  if ! which -- "${1}"; then
+    # first arg is not an executable
+    if [ -e /tmp/.X99-lock ]; then rm /tmp/.X99-lock -f; fi
+    export DISPLAY=:99
+    Xvfb "${DISPLAY}" -nolisten unix &
+    # exec node /usr/src/app/ "$@"
+    # Check if config exists
+    if [ -e /data/config.json ] && [ -e /data/mbtiles/tiles.mbtiles ] #this should be dynamic from config.json
+    then
+      echo "config and mbtile ok..."
       node /usr/src/app/ --config /data/config.json
-  else
-    # if not, download
-    echo "Not tiles, let's download"
-    echo "Cloning Terrastories/default-offline-map"
-    git clone --quiet "https://github.com/Terrastories/default-offline-map" tmp-dir
-    echo "Cloned!"
-    echo "Moving files to /data folder"
-    mkdir -p /data/fonts /data/sprites /data/styles
-    cp -r tmp-dir/fonts/* /data/fonts
-    cp tmp-dir/sprites/* /data/sprites
-    cp tmp-dir/styles/* /data/styles
-    rm -rf tmp-dir
-    echo "Downloading tiles..."
-    curl -fSL "https://bit.ly/39EdYoQ" -o "/data/mbtiles/tiles.mbtiles" --create-dirs
-    echo "All done!"
-    node /usr/src/app/ --config /data/config.json
+    else
+      echo "No config or mbtile! This is unexpected behavior!"
+      echo "Checking again in 30secs"
+      sleep 30
+      run "$@"
+    fi
   fi
-fi
+  exec "$@"
+}
 
-exec "$@"
+
