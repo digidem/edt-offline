@@ -73,6 +73,8 @@ services:
       SYNC_MAPEO_NAME: ${SYNC_MAPEO_NAME}
       SYNC_INSTALLERS_ID: ${SYNC_INSTALLERS_ID}
       SYNC_INSTALLERS_NAME: ${SYNC_INSTALLERS_NAME}
+      SYNC_TILES_ID: ${SYNC_TILES_ID}
+      SYNC_TILES_NAME: ${SYNC_TILES_NAME}
     volumes:
       - crawls:/config/websites
       - mapeo:/config/mapeo
