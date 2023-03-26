@@ -146,3 +146,11 @@ services:
     volumes:
       - pywb-archive:/webarchive
       - crawls:/source
+  # https://hub.docker.com/_/httpd
+  httpd:
+    build: services/httpd
+    ports:
+      - 8087:80
+    volumes:
+      - installers:/usr/local/apache2/htdocs/installers
+      - fdroid:/usr/local/apache2/htdocs/repo
