@@ -107,6 +107,13 @@ services:
       PUID: 1000
       PGID: 1000
     restart: unless-stopped
+  httpd:
+    build: ../../services/httpd
+    ports:
+      - 8087:80
+    volumes:
+      - installers:/usr/local/apache2/htdocs/installers
+      - fdroid:/usr/local/apache2/htdocs/repo
   terrastories-db:
     image: postgres:11
     ports:
