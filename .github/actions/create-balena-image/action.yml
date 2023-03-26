@@ -95,4 +95,4 @@ runs:
       with:
         name: artifacts
         path: ${{ inputs.balena_device }}-${{ inputs.tag || env.OS_VERSION }}.tar.gz
-        retention-days: 1
+        retention-days: 2

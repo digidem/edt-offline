@@ -18,3 +18,4 @@ jobs:
         with:
           name: edt-warcz
           path: /opt/app/*.warcz
+          retention-days: 2
