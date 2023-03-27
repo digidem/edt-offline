@@ -1,9 +1,24 @@
-name: 'Delete old artifacts'
+name: 'Delete old artifacts and clean docker'
 on:
   schedule:
-    - cron: '* 12 10-16/2 * *' # every hour
+    - cron: '* 12 10-16/2 * *' # every 2 days
 
 jobs:
+  clean-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run docker cleaner
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_SECRET }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            docker run --rm -v /var/run/docker.sock:/var/run/docker.sock zzrot/docker-clean run
+            docker system prune -f
   delete-artifacts:
     runs-on: ubuntu-latest
     steps:

@@ -27,5 +27,5 @@ jobs:
             cd /srv/edt-offline
             git checkout .
             git pull origin main
-            docker compose -f docker/demo/docker-compose.yml down
+            docker compose -f docker/demo/docker-compose.yml build --no-cache
             docker compose -f docker/demo/docker-compose.yml up -d --build
