@@ -1,12 +1,7 @@
 ![logo](docs/imgs/EDT-offline-dark-logo.png)
 
-[![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/digidem/edt-offline)
-
-![balena-tag-release](https://github.com/digidem/edt-offline/actions/workflows/balena-tag-release.yml/badge.svg)
-
-![balena-push-preload-main](https://github.com/digidem/edt-offline/actions/workflows/balena-push-main.yml/badge.svg)
-
-[![Crowdin](https://badges.crowdin.net/edt-offline-portal/localized.svg)](https://crowdin.com/project/edt-offline-portal)
+[![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/digidem/edt-offline) ![balena-tag-release](https://github.com/digidem/edt-offline/actions/workflows/balena-tag-release.yml/badge.svg)
+ ![balena-push-preload-main](https://github.com/digidem/edt-offline/actions/workflows/balena-push-main.yml/badge.svg) [![Crowdin](https://badges.crowdin.net/edt-offline-portal/localized.svg)](https://crowdin.com/project/edt-offline-portal)
 
 **EDT Offline** is a multi-device stack, which can be easily installed on single-board-computers, Nucs, or any recycled marchine. It creates an access point with the [Earth Defender's Toolkit](http://earthdefenderstoolkit.com/) platform running, even without the Internet. It provides applications, documentation, use cases, curated websites, and application bridges.
 
