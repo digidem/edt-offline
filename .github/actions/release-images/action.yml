@@ -7,15 +7,37 @@ inputs:
   repo_token:
     required: true
     description: "Github repository personal access token"
+  access_key:
+    required: true
+    description: "Digital Ocean spaces access key"
+  secret_key:
+    required: true
+    description: "Digital Ocean spaces secret key"
+  space_name:
+    required: true
+    description: "Digital Ocean spaces name"
+  space_region:
+    required: true
+    description: "Digital Ocean spaces region"
+  tag:
+    description: "The tag version of the release"
 runs:
   using: "composite"
   steps:
     - name: Download all workflow artifacts
       uses: actions/download-artifact@v3
+    - uses: BetaHuhn/do-spaces-action@v2
+      with:
+        access_key: ${{ inputs.access_key}}
+        secret_key: ${{ inputs.secret_key }}
+        space_name: ${{ inputs.space_name }}
+        space_region: ${{ inputs.space_region }}
+        source: artifacts
+        out_dir: "releases_${{ inputs.tag }}"
     - name: "✏️ Upload imgs and release"
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ inputs.repo_token }}"
         prerelease: ${{ inputs.pre-release }}
-        files: |
-          artifacts/*
+        # files: |
+        #   artifacts/*
