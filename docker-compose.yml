@@ -119,6 +119,7 @@ services:
     depends_on:
       - terrastories-db
     environment:
+      DATABASE_URL: postgres://postgres:postgres@terrastories-db:5432/terrastories
       CHOKIDAR_USEPOLLING: 'true'
       SECRET_KEY_BASE: "a845b372237fe58988e8fb7698b9a7b61f8cc7581dc685387ff1cb8ec5f250d57b733379d53f5c3e7b816d0bf0fdf5f7b02558c64b932903e5ec3fbe10c4b205"
     volumes:
