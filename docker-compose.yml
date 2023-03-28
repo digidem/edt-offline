@@ -120,12 +120,8 @@ services:
     depends_on:
       - terrastories-db
     environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432/terrastories
-      RAILS_ENV: offline
       CHOKIDAR_USEPOLLING: 'true'
-      USE_LOCAL_MAP_SERVER: 'true'
-      OFFLINE_MAP_STYLE: /tileserver/styles/terrastories-map/style.json
-      HOST_HOSTNAME: 0.0.0.0
+      SECRET_KEY_BASE: "a845b372237fe58988e8fb7698b9a7b61f8cc7581dc685387ff1cb8ec5f250d57b733379d53f5c3e7b816d0bf0fdf5f7b02558c64b932903e5ec3fbe10c4b205"
     volumes:
       - bundler:/usr/local/bundle
       - terrastories-data:/api

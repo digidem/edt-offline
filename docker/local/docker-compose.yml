@@ -142,25 +142,26 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: ${DB_USER_PASSWORD}
-      DB_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: terrastories
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
   terrastories:
-    image: terrastories/terrastories
+    build: ../../services/terrastories
     ports:
       - 8083:3000
     depends_on:
       - terrastories-db
     environment:
-      DB_USER_PASSWORD: ${DB_USER_PASSWORD}
-      DB_HOST: db
-      RAILS_ENV: offline
+      MAPBOX_ACCESS_TOKEN: ${MAPBOX_ACCESS_TOKEN}
+      DATABASE_URL: postgres://postgres:postgres@terrastories-db:5432/terrastories
+      RAILS_ENV: ${RAILS_ENV}
       CHOKIDAR_USEPOLLING: 'true'
-      USE_LOCAL_MAP_SERVER: 'true'
-      RAILS_MASTER_KEY: '7a0c538b904d5919af7c11470f3b7a4b'
-      OFFLINE_MAP_STYLE: /tileserver/styles/terrastories-map/style.json
-      HOST_HOSTNAME: 0.0.0.0
+      USE_LOCAL_MAP_SERVER: ${USE_LOCAL_MAP_SERVER}
+      OFFLINE_MAP_STYLE: ${OFFLINE_MAP_URL}
+      SECRET_KEY_BASE: "a845b372237fe58988e8fb7698b9a7b61f8cc7581dc685387ff1cb8ec5f250d57b733379d53f5c3e7b816d0bf0fdf5f7b02558c64b932903e5ec3fbe10c4b205"
+      HOST_HOSTNAME: ${HOST_HOSTNAME}
     volumes:
       - bundler:/usr/local/bundle
       - terrastories-data:/api
