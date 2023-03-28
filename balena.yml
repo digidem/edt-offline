@@ -51,7 +51,6 @@ data:
     - SYNC_TILES_NAME: Map-Tiles
     # Terrastories
     - HOST_HOSTNAME: edt.local
-    - OFFLINE_MAP_STYLE: /tileserver/styles/terrastories-map/style.json
     - OFFLINE_MAP_URL: http://edt.local:8085/styles/terrastories-map/style.json
     - MAPBOX_ACCESS_TOKEN: "pk.eyJ1IjoibHVhbmRybyIsImEiOiJjanY2djRpdnkwOWdqM3lwZzVuaGIxa3VsIn0.jamcK2t2I1j3TXkUQFIsjQ"
     - USE_LOCAL_MAP_SERVER: "true"
