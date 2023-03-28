@@ -1,4 +1,4 @@
-name: Local docker-compose Stack
+name: Local docker-compose Stack Test
 on:
   pull_request:
     paths:

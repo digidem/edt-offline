@@ -16,7 +16,7 @@ docker run -it \
     -e API_TOKEN="your_balena_token" \
     -e FLEET="your_balena_fleet" \
     -e MEM=1024M \
-    -e DISK=15G \
+    -e DISK=20G \
     -e DEV_MODE=true \
     --network host \
     ghcr.io/balena-labs-research/balena-virt:latest

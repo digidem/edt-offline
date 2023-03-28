@@ -8,7 +8,6 @@ volumes:
   pywb-archive:
   minio-data:
   installers:
-  mapeo-bridge:
   # Terrastories
   postgres_data:
   mbtiles:
@@ -28,13 +27,13 @@ services:
     image: communityfirst/mapeo-bridge
     network_mode: host
     volumes:
-      - 'mapeo-bridge:/usr/src/output'
-      - 'terrastories-import:/usr/src/terrastories'
+      - terrastories-import:/usr/src/output
     restart: unless-stopped
     environment:
       MAPEO_PROJECT_KEY: ${MAPEO_PROJECT_KEY}
       MAPEO_STORAGE_PATH: ${MAPEO_STORAGE_PATH}
       MAPEO_TERRASTORIES_TYPE: ${MAPEO_TERRASTORIES_TYPE}
+      CSV_PATH: /usr/src/output
   filebrowser:
     build: ../../services/filebrowser
     restart: unless-stopped
@@ -44,7 +43,6 @@ services:
       - mbtiles:/srv/mbtiles
       - fdroid:/srv/fdroid
       - installers:/srv/installers
-      - mapeo-bridge:/srv/terrastories-places
       - terrastories-import:/srv/terrastories/import
       - terrastories-media:/srv/terrastories/media
     environment:
@@ -96,7 +94,6 @@ services:
       - pywb-archive:/webarchive
       - crawls:/source
     restart: unless-stopped
-  # Terrastories
   tileserver:
     build: ../../services/tileserver
     ports:

@@ -1,4 +1,4 @@
-name: Demo docker-compose Stack
+name: Demo docker-compose Stack Test
 on:
   pull_request:
     paths:
