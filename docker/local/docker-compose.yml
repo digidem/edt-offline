@@ -8,7 +8,6 @@ volumes:
   pywb-archive:
   minio-data:
   installers:
-  mapeo-bridge:
   # Terrastories
   postgres_data:
   mbtiles:
@@ -40,13 +39,13 @@ services:
     image: communityfirst/mapeo-bridge
     network_mode: host
     volumes:
-      - 'mapeo-bridge:/usr/src/output'
-      - 'terrastories-import:/usr/src/terrastories'
+      - terrastories-import:/usr/src/output
     restart: unless-stopped
     environment:
       MAPEO_PROJECT_KEY: ${MAPEO_PROJECT_KEY}
       MAPEO_STORAGE_PATH: ${MAPEO_STORAGE_PATH}
       MAPEO_TERRASTORIES_TYPE: ${MAPEO_TERRASTORIES_TYPE}
+      CSV_PATH: /usr/src/output
   # https://hub.docker.com/r/minio/minio/
   minio:
     image: minio/minio

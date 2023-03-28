@@ -8,7 +8,6 @@ volumes:
   pywb-archive:
   minio-data:
   installers:
-  mapeo-bridge:
   postgres_data:
   mbtiles:
   bundler:
@@ -68,7 +67,9 @@ services:
     image: communityfirst/mapeo-bridge
     network_mode: host
     volumes:
-      - mapeo-bridge:/usr/src/output
+      - terrastories-import:/usr/src/output
+    environment:
+      CSV_PATH: /usr/src/output
     restart: unless-stopped
   # https://hub.docker.com/r/filebrowser/filebrowser
   filebrowser:
@@ -80,7 +81,6 @@ services:
       - fdroid:/srv/fdroid
       - installers:/srv/installers
       - mbtiles:/srv/mbtiles
-      - mapeo-bridge:/srv/terrastories-places
       - terrastories-import:/srv/terrastories/import
       - terrastories-media:/srv/terrastories/media
     ports:
