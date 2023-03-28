@@ -130,7 +130,7 @@ services:
       - terrastories-db
     environment:
       DATABASE_URL: postgres://postgres:postgres@terrastories-db:5432/terrastories
-      RAILS_ENV: offline
+      RAILS_ENV: ${RAILS_ENV}
       CHOKIDAR_USEPOLLING: 'true'
       USE_LOCAL_MAP_SERVER: 'true'
       OFFLINE_MAP_STYLE: ${OFFLINE_MAP_URL}
