@@ -8,7 +8,6 @@ volumes:
   pywb-archive:
   minio-data:
   installers:
-  mapeo-bridge:
   # Terrastories
   postgres_data:
   mbtiles:
@@ -95,7 +94,6 @@ services:
       - pywb-archive:/webarchive
       - crawls:/source
     restart: unless-stopped
-  # Terrastories
   tileserver:
     build: ../../services/tileserver
     ports:
