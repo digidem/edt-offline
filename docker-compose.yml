@@ -1,12 +1,13 @@
 version: "2.1"
 
 volumes:
+  interface_db:
+  wifi_db:
   fdroid:
-  edt-offline-portal:
+  portal:
   mapeo:
   crawls:
   pywb-archive:
-  minio-data:
   installers:
   postgres_data:
   mbtiles:
@@ -14,8 +15,6 @@ volumes:
   terrastories-data:
   terrastories-media:
   terrastories-import:
-  interface_db:
-  wifi_db:
 services:
   # https://github.com/digidem/starter-interface
   balena-interface:
@@ -40,7 +39,7 @@ services:
       io.balena.features.supervisor-api: 1
       io.balena.features.balena-api: 1
   # https://github.com/balena-labs-research/python-wifi-connect
-  python-wifi-connect:
+  wifi:
     image: ghcr.io/balena-labs-research/python-wifi-connect:latest
     environment:
       PWC_HOST: bridge
@@ -59,7 +58,7 @@ services:
     image: communityfirst/edt-offline-portal:nightly
     restart: always
     volumes:
-      - edt-offline-portal:/usr/src/nuxt-app
+      - portal:/usr/src/nuxt-app
     ports:
       - 8080:3000
   # https://hub.docker.com/r/communityfirst/mapeo-bridge
