@@ -17,7 +17,7 @@ volumes:
   terrastories-import:
 services:
   portal:
-    image: communityfirst/edt-offline-portal:nightly-full
+    image: communityfirst/edt-offline-portal:nightly
     restart: always
     volumes:
       - 'portal:/usr/src/nuxt-app'

@@ -23,7 +23,7 @@ services:
     privileged: true
     environment:
       PORTAL_SSID: ${PORTAL_SSID}
-  # https://hub.docker.com/_/httpd
+  # https://hub.docker.com/r/communityfirst/edt-offline-edt-portal
   portal:
     image: communityfirst/edt-offline-portal:nightly
     restart: always
