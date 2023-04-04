@@ -7,7 +7,6 @@ if [ ! -e "$file" ] ; then
     echo "================================"
     echo "Running migration"
     bin/rails db:migrate db:seed
-    yarn
     touch "$file"
 fi
 
