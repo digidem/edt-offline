@@ -1,6 +1,6 @@
 name: "Earth Defender's Toolkit Offline"
 type: "sw.application"
-version: 0.4.8
+version: 0.4.9
 description: "A low-energy device that creates an access-point serving applications, bridging them and exposing curated content offline.
   Software stack and content are automatically updated while online, and can be updated offline."
 assets:
@@ -51,7 +51,7 @@ data:
     - SYNC_TILES_NAME: Map-Tiles
     # Terrastories
     - HOST_HOSTNAME: edt.local
-    - OFFLINE_MAP_URL: http://edt.local:8085/styles/terrastories-map/style.json
+    - OFFLINE_MAP_STYLE: http://edt.local:8085/styles/terrastories-map/style.json
     - MAPBOX_ACCESS_TOKEN: "pk.eyJ1IjoibHVhbmRybyIsImEiOiJjanY2djRpdnkwOWdqM3lwZzVuaGIxa3VsIn0.jamcK2t2I1j3TXkUQFIsjQ"
     - USE_LOCAL_MAP_SERVER: "true"
     - RAILS_ENV: "offline"
