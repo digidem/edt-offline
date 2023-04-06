@@ -8,6 +8,7 @@ volumes:
   pywb-archive:
   minio-data:
   installers:
+  pataka:
   # Terrastories
   postgres_data:
   mbtiles:
@@ -143,3 +144,10 @@ services:
       - terrastories-media:/media
       - terrastories-import:/api/import/media
     restart: unless-stopped
+  # https://hub.docker.com/r/communityfirst/pataka-cli
+  pataka:
+    image: communityfirst/pataka-cli:latest
+    network_mode: "host"
+    restart: unless-stopped
+    volumes:
+      - pataka:/root/.local/share/ahau-pataka

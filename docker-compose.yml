@@ -14,6 +14,7 @@ volumes:
   bundler:
   terrastories-media:
   terrastories-import:
+  pataka:
 services:
   # https://github.com/digidem/starter-interface
   balena-interface:
@@ -110,6 +111,7 @@ services:
       POSTGRES_DB: terrastories
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
+    restart: unless-stopped
   # https://hub.docker.com/r/terrastories/terrastories
   terrastories:
     build: services/terrastories
@@ -125,6 +127,7 @@ services:
       - bundler:/usr/local/bundle
       - terrastories-media:/media
       - terrastories-import:/api/import/media
+    restart: unless-stopped
   # https://hub.docker.com/r/maptiler/tileserver-gl
   tileserver:
     build: services/tileserver
@@ -132,6 +135,7 @@ services:
       - 8085:8080
     volumes:
       - mbtiles:/data
+    restart: unless-stopped
   # https://hub.docker.com/r/webrecorder/pywb
   pywb:
     build: services/pywb
@@ -140,6 +144,7 @@ services:
     volumes:
       - pywb-archive:/webarchive
       - crawls:/source
+    restart: unless-stopped
   # https://hub.docker.com/_/httpd
   httpd:
     build: services/httpd
@@ -148,3 +153,11 @@ services:
     volumes:
       - installers:/usr/local/apache2/htdocs/installers
       - fdroid:/usr/local/apache2/htdocs/repo
+    restart: unless-stopped
+  # https://hub.docker.com/r/communityfirst/pataka-cli
+  pataka:
+    image: communityfirst/pataka-cli:latest
+    network_mode: "host"
+    restart: unless-stopped
+    volumes:
+      - pataka:/root/.local/share/ahau-pataka
