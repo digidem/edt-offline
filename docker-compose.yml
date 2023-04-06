@@ -161,3 +161,5 @@ services:
     restart: unless-stopped
     volumes:
       - pataka:/root/.local/share/ahau-pataka
+    environment:
+      PATAKA_WEB_PORT: 8089
