@@ -1,7 +1,6 @@
 version: '2.1'
 
 volumes:
-  portal:
   fdroid:
   mapeo:
   crawls:
@@ -20,8 +19,6 @@ services:
   portal:
     image: communityfirst/edt-offline-portal:nightly
     restart: always
-    volumes:
-      - 'portal:/usr/src/nuxt-app'
     ports:
       - 80:3000
   mapeo-bridge:

@@ -4,7 +4,6 @@ volumes:
   interface_db:
   wifi_db:
   fdroid:
-  portal:
   mapeo:
   crawls:
   pywb-archive:
@@ -57,8 +56,6 @@ services:
   portal:
     image: communityfirst/edt-offline-portal:nightly
     restart: always
-    volumes:
-      - portal:/usr/src/nuxt-app
     ports:
       - 8080:3000
   # https://hub.docker.com/r/communityfirst/mapeo-bridge
