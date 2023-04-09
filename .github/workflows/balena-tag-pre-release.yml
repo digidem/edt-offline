@@ -65,7 +65,6 @@ jobs:
           balena_fleet: "${{ secrets.BALENA_FLEET }}${{ matrix.fleet_var }}"
           balena_device: ${{ matrix.image }}
           tag: ${{ needs.balena-deploy.outputs.github_tag }}
-          # balena_commit: ${{ needs.balena-deploy.outputs.balena_release}}
 
   github-release:
     runs-on: ubuntu-latest
@@ -83,3 +82,4 @@ jobs:
           secret_key: ${{ secrets.SECRET_KEY }}
           space_name: ${{ secrets.SPACE_NAME }}
           space_region: ${{ secrets.SPACE_REGION }}
+          tag: ${{ needs.balena-deploy.outputs.github_tag }}

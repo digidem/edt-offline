@@ -20,6 +20,7 @@ inputs:
     required: true
     description: "Digital Ocean spaces region"
   tag:
+    required: true
     description: "The tag version of the release"
 runs:
   using: "composite"
