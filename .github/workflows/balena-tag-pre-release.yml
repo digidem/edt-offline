@@ -78,4 +78,9 @@ jobs:
         uses: ./.github/actions/release-images
         with:
           pre-release: true
+          tag: ${{ needs.balena-deploy.outputs.github_tag }}
           repo_token: "${{ secrets.PAT }}"
+          access_key: ${{ secrets.ACCESS_KEY}}
+          secret_key: ${{ secrets.SECRET_KEY }}
+          space_name: ${{ secrets.SPACE_NAME }}
+          space_region: ${{ secrets.SPACE_REGION }}

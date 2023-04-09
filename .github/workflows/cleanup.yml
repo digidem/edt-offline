@@ -1,7 +1,7 @@
 name: 'Delete old artifacts and clean docker'
 on:
   schedule:
-    - cron: '* 12 10-16/2 * *' # every 2 days
+    - cron: '33 3 * * *' # every day at 3:33
 
 jobs:
   clean-docker:
