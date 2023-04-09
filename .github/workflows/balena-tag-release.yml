@@ -25,7 +25,7 @@ jobs:
           github_ref: ${{ github.ref }}
           github_head_ref: ${{ github.head_ref }}
           release_tag: release
-          balena_draft: false
+          balena_release_type: release
 
   balena-build-images:
     strategy:
