@@ -4,7 +4,6 @@ volumes:
   interface_db:
   wifi_db:
   fdroid:
-  portal:
   mapeo:
   crawls:
   pywb-archive:
@@ -12,9 +11,9 @@ volumes:
   postgres_data:
   mbtiles:
   bundler:
-  terrastories-data:
   terrastories-media:
   terrastories-import:
+  pataka:
 services:
   # https://github.com/digidem/starter-interface
   balena-interface:
@@ -57,8 +56,6 @@ services:
   portal:
     image: communityfirst/edt-offline-portal:nightly
     restart: always
-    volumes:
-      - portal:/usr/src/nuxt-app
     ports:
       - 8080:3000
   # https://hub.docker.com/r/communityfirst/mapeo-bridge
@@ -111,6 +108,7 @@ services:
       POSTGRES_DB: terrastories
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
+    restart: unless-stopped
   # https://hub.docker.com/r/terrastories/terrastories
   terrastories:
     build: services/terrastories
@@ -124,9 +122,9 @@ services:
       SECRET_KEY_BASE: "a845b372237fe58988e8fb7698b9a7b61f8cc7581dc685387ff1cb8ec5f250d57b733379d53f5c3e7b816d0bf0fdf5f7b02558c64b932903e5ec3fbe10c4b205"
     volumes:
       - bundler:/usr/local/bundle
-      - terrastories-data:/api
       - terrastories-media:/media
       - terrastories-import:/api/import/media
+    restart: unless-stopped
   # https://hub.docker.com/r/maptiler/tileserver-gl
   tileserver:
     build: services/tileserver
@@ -134,6 +132,7 @@ services:
       - 8085:8080
     volumes:
       - mbtiles:/data
+    restart: unless-stopped
   # https://hub.docker.com/r/webrecorder/pywb
   pywb:
     build: services/pywb
@@ -142,6 +141,7 @@ services:
     volumes:
       - pywb-archive:/webarchive
       - crawls:/source
+    restart: unless-stopped
   # https://hub.docker.com/_/httpd
   httpd:
     build: services/httpd
@@ -150,3 +150,13 @@ services:
     volumes:
       - installers:/usr/local/apache2/htdocs/installers
       - fdroid:/usr/local/apache2/htdocs/repo
+    restart: unless-stopped
+  # https://hub.docker.com/r/communityfirst/pataka-cli
+  pataka:
+    image: communityfirst/pataka-cli:latest
+    network_mode: "host"
+    restart: unless-stopped
+    volumes:
+      - pataka:/root/.local/share/ahau-pataka
+    environment:
+      PATAKA_WEB_PORT: 8089

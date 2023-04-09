@@ -1,13 +1,13 @@
 version: '2.1'
 
 volumes:
-  portal:
   fdroid:
   mapeo:
   crawls:
   pywb-archive:
   minio-data:
   installers:
+  pataka:
   # Terrastories
   postgres_data:
   mbtiles:
@@ -17,10 +17,8 @@ volumes:
   terrastories-import:
 services:
   portal:
-    image: communityfirst/edt-offline-portal:nightly-full
+    image: communityfirst/edt-offline-portal:nightly
     restart: always
-    volumes:
-      - 'portal:/usr/src/nuxt-app'
     ports:
       - 80:3000
   mapeo-bridge:
@@ -143,3 +141,12 @@ services:
       - terrastories-media:/media
       - terrastories-import:/api/import/media
     restart: unless-stopped
+  # https://hub.docker.com/r/communityfirst/pataka-cli
+  pataka:
+    image: communityfirst/pataka-cli:latest
+    network_mode: "host"
+    restart: unless-stopped
+    volumes:
+      - pataka:/root/.local/share/ahau-pataka
+    environment:
+      PATAKA_WEB_PORT: 8089

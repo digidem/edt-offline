@@ -24,7 +24,7 @@ jobs:
           balena_fleet: "${{ secrets.BALENA_FLEET }}${{ matrix.fleet_var }}"
           github_ref: ${{ github.ref }}
           github_head_ref: ${{ github.head_ref }}
-          balena_draft: true
+          balena_release_type: draft
 
   balena-build-images:
     strategy:
@@ -79,3 +79,7 @@ jobs:
         with:
           pre-release: true
           repo_token: "${{ secrets.PAT }}"
+          access_key: ${{ secrets.ACCESS_KEY}}
+          secret_key: ${{ secrets.SECRET_KEY }}
+          space_name: ${{ secrets.SPACE_NAME }}
+          space_region: ${{ secrets.SPACE_REGION }}
