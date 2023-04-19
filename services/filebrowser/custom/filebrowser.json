@@ -8,7 +8,7 @@
             "scope": "./users",
             "locale": "#LOCALE",
             "viewMode": "list",
-            "singleClick": true,
+            "singleClick": false,
             "sorting": {
                 "by": "name",
                 "asc": false
