@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv bash
 # shellcheck shell=bash
 
-file=firstboot
+file=/config/firstboot
 
 if [ ! -e "$file" ]; then
     echo "First run!"
