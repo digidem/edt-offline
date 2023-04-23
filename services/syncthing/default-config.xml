@@ -1,5 +1,5 @@
 <configuration version="36">
-    <folder id="#TILES_ID" label="#TILES_NAME" path="/config/mbtiles" type="receiveonly" rescanIntervalS="3600" fsWatcherEnabled="true" fsWatcherDelayS="10" ignorePerms="true" autoNormalize="true">
+    <folder id="#TILES_ID" label="#TILES_NAME" path="/data/mbtiles" type="receiveonly" rescanIntervalS="3600" fsWatcherEnabled="true" fsWatcherDelayS="10" ignorePerms="true" autoNormalize="true">
         <filesystemType>basic</filesystemType>
         <device id="#SOURCE_ID" introducedBy="">
             <encryptionPassword></encryptionPassword>
@@ -32,7 +32,7 @@
         <caseSensitiveFS>false</caseSensitiveFS>
         <junctionsAsDirs>false</junctionsAsDirs>
     </folder>
-    <folder id="#INSTALLERS_ID" label="#INSTALLERS_NAME" path="/config/installers" type="receiveonly" rescanIntervalS="3600" fsWatcherEnabled="true" fsWatcherDelayS="10" ignorePerms="true" autoNormalize="true">
+    <folder id="#INSTALLERS_ID" label="#INSTALLERS_NAME" path="/data/installers" type="receiveonly" rescanIntervalS="3600" fsWatcherEnabled="true" fsWatcherDelayS="10" ignorePerms="true" autoNormalize="true">
         <filesystemType>basic</filesystemType>
         <device id="#SOURCE_ID" introducedBy="">
             <encryptionPassword></encryptionPassword>
@@ -65,7 +65,7 @@
         <caseSensitiveFS>false</caseSensitiveFS>
         <junctionsAsDirs>false</junctionsAsDirs>
     </folder>
-    <folder id="#MAPEO_ID" label="#MAPEO_NAME" path="/config/mapeo" type="receiveonly" rescanIntervalS="3600" fsWatcherEnabled="true" fsWatcherDelayS="10" ignorePerms="true" autoNormalize="true">
+    <folder id="#MAPEO_ID" label="#MAPEO_NAME" path="/data/mapeo" type="receiveonly" rescanIntervalS="3600" fsWatcherEnabled="true" fsWatcherDelayS="10" ignorePerms="true" autoNormalize="true">
         <filesystemType>basic</filesystemType>
         <device id="#SOURCE_ID" introducedBy="">
             <encryptionPassword></encryptionPassword>
@@ -98,7 +98,7 @@
         <caseSensitiveFS>false</caseSensitiveFS>
         <junctionsAsDirs>false</junctionsAsDirs>
     </folder>
-    <folder id="#FDROID_ID" label="#FDROID_NAME" path="/config/fdroid" type="receiveonly" rescanIntervalS="3600" fsWatcherEnabled="true" fsWatcherDelayS="10" ignorePerms="true" autoNormalize="true">
+    <folder id="#FDROID_ID" label="#FDROID_NAME" path="/data/fdroid" type="receiveonly" rescanIntervalS="3600" fsWatcherEnabled="true" fsWatcherDelayS="10" ignorePerms="true" autoNormalize="true">
         <filesystemType>basic</filesystemType>
         <device id="#SOURCE_ID" introducedBy="">
             <encryptionPassword></encryptionPassword>
@@ -131,7 +131,7 @@
         <caseSensitiveFS>false</caseSensitiveFS>
         <junctionsAsDirs>false</junctionsAsDirs>
     </folder>
-    <folder id="#CRAWLS_ID" label="#CRAWLS_NAME" path="/config/websites" type="receiveonly" rescanIntervalS="3600" fsWatcherEnabled="true" fsWatcherDelayS="10" ignorePerms="true" autoNormalize="true">
+    <folder id="#CRAWLS_ID" label="#CRAWLS_NAME" path="/data/websites" type="receiveonly" rescanIntervalS="3600" fsWatcherEnabled="true" fsWatcherDelayS="10" ignorePerms="true" autoNormalize="true">
         <filesystemType>basic</filesystemType>
         <device id="#SOURCE_ID" introducedBy="">
             <encryptionPassword></encryptionPassword>
@@ -226,7 +226,7 @@
         <insecureAllowOldTLSVersions>false</insecureAllowOldTLSVersions>
     </options>
     <defaults>
-      <folder id="" label="" path="/config/data" type="receiveonly" rescanIntervalS="3600" fsWatcherEnabled="true" fsWatcherDelayS="10" ignorePerms="true" autoNormalize="true">
+      <folder id="" label="" path="/data/data" type="receiveonly" rescanIntervalS="3600" fsWatcherEnabled="true" fsWatcherDelayS="10" ignorePerms="true" autoNormalize="true">
             <filesystemType>basic</filesystemType>
             <minDiskFree unit="%">1</minDiskFree>
             <versioning>
@@ -258,4 +258,4 @@
         </folder>
         <ignores></ignores>
     </defaults>
-</configuration>
+</datauration>
