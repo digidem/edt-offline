@@ -55,7 +55,7 @@ services:
     privileged: true # This can be removed if you do not need the LED connectivity indicator.
   # https://hub.docker.com/r/communityfirst/edt-offline-edt-portal
   portal:
-    image: communityfirst/edt-offline-portal:nightly
+    image: communityfirst/edt-offline-portal:latest
     restart: always
     ports:
       - 8080:3000
