@@ -3,6 +3,7 @@ version: '2.1'
 volumes:
   fdroid:
   mapeo:
+  syncthing:
   crawls:
   pywb-archive:
   installers:
@@ -57,11 +58,12 @@ services:
   syncthing:
     build: ../../services/syncthing
     volumes:
-      - crawls:/config/websites
-      - mapeo:/config/mapeo
-      - fdroid:/config/fdroid
-      - installers:/config/installers
-      - mbtiles:/config/mbtiles
+      - syncthing:/config
+      - crawls:/data/websites
+      - mapeo:/data/mapeo
+      - fdroid:/data/fdroid
+      - installers:/data/installers
+      - mbtiles:/data/mbtiles
     ports:
       - 8082:8384
       - 22000:22000/tcp
