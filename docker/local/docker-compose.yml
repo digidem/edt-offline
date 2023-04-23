@@ -26,7 +26,7 @@ services:
       PORTAL_SSID: ${PORTAL_SSID}
   # https://hub.docker.com/r/communityfirst/edt-offline-edt-portal
   portal:
-    image: communityfirst/edt-offline-portal:nightly
+    image: communityfirst/edt-offline-portal:latest
     restart: always
     ports:
       - 8080:3000

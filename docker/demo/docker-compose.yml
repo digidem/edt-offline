@@ -18,7 +18,7 @@ volumes:
   terrastories-import:
 services:
   portal:
-    image: communityfirst/edt-offline-portal:nightly
+    image: communityfirst/edt-offline-portal:latest
     restart: always
     ports:
       - 80:3000
