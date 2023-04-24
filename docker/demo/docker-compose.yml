@@ -3,6 +3,7 @@ version: '2.1'
 volumes:
   fdroid:
   mapeo:
+  syncthing:
   crawls:
   pywb-archive:
   minio-data:
@@ -11,13 +12,13 @@ volumes:
   # Terrastories
   postgres_data:
   mbtiles:
-  bundler:
+  terrastories-bundler:
   terrastories-data:
   terrastories-media:
   terrastories-import:
 services:
   portal:
-    image: communityfirst/edt-offline-portal:nightly
+    image: communityfirst/edt-offline-portal:latest
     restart: always
     ports:
       - 80:3000
@@ -73,11 +74,12 @@ services:
       SYNC_TILES_ID: ${SYNC_TILES_ID}
       SYNC_TILES_NAME: ${SYNC_TILES_NAME}
     volumes:
-      - crawls:/config/websites
-      - mapeo:/config/mapeo
-      - fdroid:/config/fdroid
-      - installers:/config/installers
-      - mbtiles:/config/mbtiles
+      - syncthing:/config
+      - crawls:/data/websites
+      - mapeo:/data/mapeo
+      - fdroid:/data/fdroid
+      - installers:/data/installers
+      - mbtiles:/data/mbtiles
     ports:
       - 8082:8384
       - 22000:22000/tcp
@@ -109,6 +111,8 @@ services:
     volumes:
       - installers:/usr/local/apache2/htdocs/installers
       - fdroid:/usr/local/apache2/htdocs/repo
+      - mapeo:/usr/local/apache2/htdocs/mapeo
+      - mbtiles:/usr/local/apache2/htdocs/mbtiles
   terrastories-db:
     image: postgres:11
     ports:
@@ -136,7 +140,7 @@ services:
       MAPBOX_ACCESS_TOKEN: ${MAPBOX_ACCESS_TOKEN}
       SECRET_KEY_BASE: "a845b372237fe58988e8fb7698b9a7b61f8cc7581dc685387ff1cb8ec5f250d57b733379d53f5c3e7b816d0bf0fdf5f7b02558c64b932903e5ec3fbe10c4b205"
     volumes:
-      - bundler:/usr/local/bundle
+      - terrastories-bundler:/usr/local/bundle
       - terrastories-data:/api
       - terrastories-media:/media
       - terrastories-import:/api/import/media

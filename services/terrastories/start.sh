@@ -6,7 +6,7 @@ if [ ! -e "$file" ] ; then
     echo "First run!"
     echo "================================"
     echo "Running migration"
-    bin/rails db:migrate db:seed
+    bin/rails db:migrate
     touch "$file"
 fi
 

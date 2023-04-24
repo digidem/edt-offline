@@ -1,6 +1,6 @@
 name: "Earth Defender's Toolkit Offline"
 type: "sw.application"
-version: 0.4.9
+version: 0.5.0
 description: "A low-energy device that creates an access-point serving applications, bridging them and exposing curated content offline.
   Software stack and content are automatically updated while online, and can be updated offline."
 assets:

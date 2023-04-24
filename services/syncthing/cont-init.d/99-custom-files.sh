@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv bash
 # shellcheck shell=bash
 
-file=firstboot
+file=/config/firstboot
 
 if [ ! -e "$file" ]; then
     echo "First run!"
@@ -21,7 +21,9 @@ if [ ! -e "$file" ]; then
     sed -i -r "s/#TILES_NAME/$SYNC_TILES_NAME/g" /config/config.xml
     echo "=======" "Adding authentication and setting permissions" "====="
     syncthing generate --home=/config --gui-user=${ADMIN_LOGIN} --gui-password=${ADMIN_PASSWORD}
+    mkdir -p /data
     chown -R 1000:1000 /config
+    chown -R 1000:1000 /data
     touch "$file"
 fi
 
