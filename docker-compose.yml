@@ -46,7 +46,7 @@ services:
       PWC_HOST: bridge
       DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
     network_mode: "host"
-    restart: on-failure
+    restart: always
     volumes:
       - wifi_db:/app/db # Optional if not setting the hotspot ssid and password via the API
     labels:
