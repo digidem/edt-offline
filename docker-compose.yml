@@ -16,6 +16,8 @@ volumes:
   terrastories-media:
   terrastories-import:
   pataka:
+  photo-config:
+  photo-thumbs:
 services:
   # https://github.com/digidem/starter-interface
   balena-interface:
@@ -168,3 +170,18 @@ services:
       - pataka:/root/.local/share/ahau-pataka
     environment:
       PATAKA_WEB_PORT: 8089
+  # https://github.com/linuxserver/docker-photoshow
+  photoshow:
+    image: lscr.io/linuxserver/photoshow:latest
+    container_name: photoshow
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - photo-config:/config
+      - users:/Pictures:ro
+      - photo-thumbs:/Thumbs
+    ports:
+      - 8090:80
+    restart: unless-stopped
