@@ -4,6 +4,8 @@ echo "--------- Starting FileBrowser -----------"
 echo "Initiating config"
 filebrowser config init
 echo "Creating new user"
+mkdir -p /users
+chown -R 1000:1000 /users
 filebrowser users add ${ADMIN_LOGIN} ${ADMIN_PASSWORD} --perm.admin --lockPassword
 echo "Loading config file"
 echo "LOCALE: $LOCALE"
