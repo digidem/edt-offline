@@ -7,6 +7,7 @@ volumes:
   fdroid:
   mapeo:
   crawls:
+  users:
   pywb-archive:
   installers:
   postgres_data:
@@ -78,6 +79,7 @@ services:
       - fdroid:/srv/fdroid
       - installers:/srv/installers
       - mbtiles:/srv/mbtiles
+      - users:/srv/users
       - terrastories-import:/srv/terrastories/import
       - terrastories-media:/srv/terrastories/media
     ports:
@@ -93,6 +95,7 @@ services:
       - fdroid:/data/fdroid
       - installers:/data/installers
       - mbtiles:/data/mbtiles
+      - users:/data/users
     ports:
       - 8082:8384
       - 22000:22000/tcp
@@ -154,6 +157,7 @@ services:
       - fdroid:/usr/local/apache2/htdocs/repo
       - mapeo:/usr/local/apache2/htdocs/mapeo
       - mbtiles:/usr/local/apache2/htdocs/mbtiles
+      - users:/usr/local/apache2/htdocs/users
     restart: unless-stopped
   # https://hub.docker.com/r/communityfirst/pataka-cli
   pataka:
