@@ -1,17 +1,19 @@
 version: "2.1"
 
 volumes:
-  interface_db:
-  wifi_db:
-  syncthing:
   fdroid:
   mapeo:
   crawls:
-  users:
-  pywb-archive:
-  installers:
-  postgres_data:
   mbtiles:
+  installers:
+  pywb-archive:
+  users:
+  interface_db:
+  wifi_db:
+  syncthing:
+  postgres_data:
+  filebrowser-db:
+  filebrowser-json:
   terrastories-bundler:
   terrastories-media:
   terrastories-import:
@@ -84,6 +86,8 @@ services:
       - users:/srv/users
       - terrastories-import:/srv/terrastories/import
       - terrastories-media:/srv/terrastories/media
+      - filebrowser-db:/database.db
+      - filebrowser-json:/.filebrowser.json
     ports:
       - 8081:80
     command: -- c
