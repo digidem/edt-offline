@@ -125,7 +125,7 @@ services:
     volumes:
       - terrastories-bundler:/usr/local/bundle
       - terrastories-media:/media
-      - terrastories-import:/rails/import/media
+      - terrastories-import:/api/import/media
     restart: unless-stopped
   # https://hub.docker.com/r/maptiler/tileserver-gl
   tileserver:
