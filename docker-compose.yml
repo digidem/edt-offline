@@ -1,6 +1,10 @@
 version: "2.1"
 
 volumes:
+  jellyfin-config:
+  jellyfin-cache:
+  media:
+  jellyfin-lib:
   interface_db:
   wifi_db:
   syncthing:
@@ -16,6 +20,23 @@ volumes:
   terrastories-import:
   pataka:
 services:
+  # https://hub.docker.com/r/jellyfin/jellyfin/
+  jellyfin:
+    image: jellyfin/jellyfin
+    restart: unless-stopped
+    ports:
+      - 8090:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      - 1900:1900/udp #optional
+    volumes:
+      - 'jellyfin-config:/config'
+      - 'jellyfin-cache:/cache'
+      - 'media:/media'
+      - 'jellyfin-lib:/opt/vc/lib'
+    environment:
+      PUID: '1000'
+      PGID: '1000'
   # https://github.com/digidem/starter-interface
   balena-interface:
     build: services/interface
@@ -23,7 +44,7 @@ services:
     environment:
       NETWORK_MODE: bridge
     ports:
-      - "80:80"
+      - "8088:80"
       - "8079:8079"
     volumes:
       - interface_db:/app/db # Stores UI database files
@@ -31,7 +52,8 @@ services:
       - mapeo:/app/storage/mapeo
       - fdroid:/app/storage/fdroid
       - installers:/app/storage/installers
-      - mbtiles:/app/storage//mbtiles
+      - mbtiles:/app/storage/mbtiles
+      - media:/app/storage/media
       - terrastories-import:/app/storage/terrastories/import
       - terrastories-media:/app/storage/terrastories/media
     privileged: true # This can be removed if not using the USB mounting feature
@@ -55,7 +77,7 @@ services:
     privileged: true # This can be removed if you do not need the LED connectivity indicator.
   # https://hub.docker.com/r/communityfirst/edt-offline-edt-portal
   portal:
-    image: communityfirst/edt-offline-portal:latest
+    image: communityfirst/edt-offline-portal:jellyfin
     restart: always
     ports:
       - 8080:3000
@@ -80,6 +102,7 @@ services:
       - mbtiles:/srv/mbtiles
       - terrastories-import:/srv/terrastories/import
       - terrastories-media:/srv/terrastories/media
+      - media:/srv/media
     ports:
       - 8081:80
     command: -- c
@@ -93,6 +116,7 @@ services:
       - fdroid:/data/fdroid
       - installers:/data/installers
       - mbtiles:/data/mbtiles
+      - media:/data/media
     ports:
       - 8082:8384
       - 22000:22000/tcp
