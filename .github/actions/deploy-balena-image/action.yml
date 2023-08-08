@@ -53,7 +53,8 @@ runs:
       if: ${{(inputs.balena_release_type == 'draft') && (success())}}
       with:
         balena_token: ${{inputs.balena_token}}
-        balena_commands: push ${{inputs.balena_fleet}} --draft --release-tag commit ${{inputs.commit}} --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{ inputs.release_tag || steps.get-ref.outputs.tag }}
+        balena_commands: >
+          push ${{inputs.balena_fleet}} --draft --release-tag commit ${{inputs.commit}} --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{ inputs.release_tag || steps.get-ref.outputs.tag }};
         balena_cli_version: 16.1.0
 
     - name: Balena Deploy Release
@@ -61,5 +62,6 @@ runs:
       if: ${{(inputs.balena_release_type == 'release') && (success())}}
       with:
         balena_token: ${{inputs.balena_token}}
-        balena_commands: push ${{inputs.balena_fleet}} --release-tag release v${{steps.yaml-data.outputs.data}}
+        balena_commands: >
+          push ${{inputs.balena_fleet}} --release-tag release v${{steps.yaml-data.outputs.data}};
         balena_cli_version: 16.1.0
