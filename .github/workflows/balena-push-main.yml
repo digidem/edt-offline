@@ -27,4 +27,4 @@ jobs:
           github_head_ref: ${{ github.head_ref }}
           balena_release_type: draft
           release_tag: main
-          commit: ${{ github.sha }}
+          commit: $(git rev-parse HEAD)

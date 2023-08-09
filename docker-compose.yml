@@ -1,16 +1,19 @@
 version: "2.1"
 
 volumes:
-  interface_db:
-  wifi_db:
-  syncthing:
   fdroid:
   mapeo:
   crawls:
-  pywb-archive:
-  installers:
-  postgres_data:
   mbtiles:
+  installers:
+  pywb-archive:
+  users:
+  interface_db:
+  wifi_db:
+  syncthing:
+  postgres_data:
+  filebrowser-db:
+  filebrowser-json:
   terrastories-bundler:
   terrastories-media:
   terrastories-import:
@@ -78,8 +81,11 @@ services:
       - fdroid:/srv/fdroid
       - installers:/srv/installers
       - mbtiles:/srv/mbtiles
+      - users:/srv/users
       - terrastories-import:/srv/terrastories/import
       - terrastories-media:/srv/terrastories/media
+      - filebrowser-db:/database.db
+      - filebrowser-json:/.filebrowser.json
     ports:
       - 8081:80
     command: -- c
@@ -93,6 +99,7 @@ services:
       - fdroid:/data/fdroid
       - installers:/data/installers
       - mbtiles:/data/mbtiles
+      - users:/data/users
     ports:
       - 8082:8384
       - 22000:22000/tcp
@@ -154,6 +161,7 @@ services:
       - fdroid:/usr/local/apache2/htdocs/repo
       - mapeo:/usr/local/apache2/htdocs/mapeo
       - mbtiles:/usr/local/apache2/htdocs/mbtiles
+      - users:/usr/local/apache2/htdocs/users
     restart: unless-stopped
   # https://hub.docker.com/r/communityfirst/pataka-cli
   pataka:
