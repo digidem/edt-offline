@@ -1,0 +1,5 @@
+  portal:
+    ports:
+      - 80:80
+    environment:
+      - BALENA_INTERFACE_API=http://balena-interface
