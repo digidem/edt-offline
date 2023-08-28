@@ -83,12 +83,30 @@ runs:
           --version "${{env.OS_VERSION}}" \
           --device-type "${{inputs.balena_device}}" \
           --fleet "${{inputs.balena_fleet}}"
-
+    # Download and inject content into the image
+    - name: Mount Image
+      id: mount-image
+      uses: damianperera/mount-image-action@v1
+      with:
+        imagePath: "${{inputs.balena_device}}.img"
+        mountPoint: "/mnt/${{inputs.balena_device}}"
+    - name: Download content zip
+      shell: bash
+      run: |
+      https://files.earthdefenderstoolkit.com/api/public/dl/9YEgFGDr/
+      https://files.earthdefenderstoolkit.com/api/public/dl/mlmIbi1F/ > 1988450_mapeo/
+        sudo cp config/* ${{ steps.mount-image.outputs.rootMountLocation }}/etc/config/
+    - name: Unmount image
+      uses: damianperera/unmount-image-action@v1
+      with:
+        imagePath: "${{matrix.image}}.img"
+        bootDeviceMapper: ${{ steps.mount-image.outputs.bootDeviceMapper }}
+        rootDeviceMapper: ${{ steps.mount-image.outputs.rootDeviceMapper }}
     - name: Compress
       shell: bash
       run: |
         tar -czf ${{ inputs.balena_device }}-${{ inputs.tag || env.OS_VERSION }}.tar.gz ./${{ inputs.balena_device }}.img
-
+    # Upload files
     - name: Upload file
       uses: actions/upload-artifact@v3
       if: ${{ inputs.upload }}

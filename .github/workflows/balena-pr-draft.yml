@@ -14,12 +14,15 @@ jobs:
       matrix:
         fleet_var: ['_aarch64', '_amd64']
     runs-on: ubuntu-latest
+    outputs:
+      hash: ${{ steps.push-balena.outputs.hash }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Deploy Balena image
         uses: ./.github/actions/deploy-balena-image
+        id: push-balena
         with:
           balena_token: ${{ secrets.BALENA_TOKEN }}
           balena_fleet: "${{ secrets.BALENA_FLEET }}${{ matrix.fleet_var }}"

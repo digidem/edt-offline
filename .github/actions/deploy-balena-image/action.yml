@@ -30,6 +30,9 @@ outputs:
   balena_tag:
     description: "Current Balena tag from balena.yml"
     value: ${{ steps.yaml-data.outputs.data }}
+  release-id:
+    description: "The hash id of the released image"
+    value: ${{ steps.balena-release.outputs.}}
 runs:
   using: "composite"
   steps:

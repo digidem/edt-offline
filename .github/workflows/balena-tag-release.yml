@@ -85,25 +85,6 @@ jobs:
           space_region: ${{ secrets.SPACE_REGION }}
           tag: ${{ needs.balena-deploy.outputs.github_tag }}
 
-#TODO: Download and inject content into the image
-      # - name: Mount Image
-      #   id: mount-image
-      #   uses: damianperera/mount-image-action@v1
-      #   with:
-      #     imagePath: "${{matrix.image}}.img"
-      #     mountPoint: "/mnt/${{matrix.image}}"
-
-      # - name: Download content zip
-      #   run: |
-      #     sudo cp config/* ${{ steps.mount-image.outputs.rootMountLocation }}/etc/config/
-
-      # - name: Unmount image
-      #   uses: damianperera/unmount-image-action@v1
-      #   with:
-      #     imagePath: "${{matrix.image}}.img"
-      #     bootDeviceMapper: ${{ steps.mount-image.outputs.bootDeviceMapper }}
-      #     rootDeviceMapper: ${{ steps.mount-image.outputs.rootDeviceMapper }}
-
 #TODO: Cleanup
       # - name: Delete workflow runs
       #   uses: GitRML/delete-workflow-runs@main
