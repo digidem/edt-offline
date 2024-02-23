@@ -38,6 +38,9 @@ services:
       - terrastories-import:/usr/src/output
     environment:
       CSV_PATH: /usr/src/output
+      MAPEO_PROJECT_KEY: ${MAPEO_PROJECT_KEY}
+      MAPEO_TERRASTORIES_TYPE: ${MAPEO_TERRASTORIES_TYPE}
+      MAPEO_STORAGE_PATH: ${MAPEO_STORAGE_PATH}
     restart: unless-stopped
   # https://hub.docker.com/r/filebrowser/filebrowser
   filebrowser:
@@ -54,6 +57,10 @@ services:
     ports:
       - 8081:80
     command: -- c
+    environment:
+      ADMIN_LOGIN: ${ADMIN_LOGIN}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      LOCALE: ${LOCALE}
   # https://hub.docker.com/r/linuxserver/syncthing/
   syncthing:
     build: ../../services/syncthing
@@ -64,6 +71,22 @@ services:
       - fdroid:/data/fdroid
       - installers:/data/installers
       - mbtiles:/data/mbtiles
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - ADMIN_LOGIN=${ADMIN_LOGIN}
+      - SYNC_SOURCE_ID=${SYNC_SOURCE_ID}
+      - SYNC_SOURCE_NAME=${SYNC_SOURCE_NAME}
+      - SYNC_CRAWLS_ID=${SYNC_CRAWLS_ID}
+      - SYNC_CRAWLS_NAME=${SYNC_CRAWLS_NAME}
+      - SYNC_FDROID_ID=${SYNC_FDROID_ID}
+      - SYNC_FDROID_NAME=${SYNC_FDROID_NAME}
+      - SYNC_MAPEO_ID=${SYNC_MAPEO_ID}
+      - SYNC_MAPEO_NAME=${SYNC_MAPEO_NAME}
+      - SYNC_INSTALLERS_ID=${SYNC_INSTALLERS_ID}
+      - SYNC_INSTALLERS_NAME=${SYNC_INSTALLERS_NAME}
+      - SYNC_TILES_ID=${SYNC_TILES_ID}
+      - SYNC_TILES_NAME=${SYNC_TILES_NAME}
     ports:
       - 8082:8384
       - 22000:22000/tcp
@@ -93,6 +116,11 @@ services:
       DATABASE_URL: postgres://postgres:postgres@terrastories-db:5432/terrastories
       CHOKIDAR_USEPOLLING: 'true'
       SECRET_KEY_BASE: "a845b372237fe58988e8fb7698b9a7b61f8cc7581dc685387ff1cb8ec5f250d57b733379d53f5c3e7b816d0bf0fdf5f7b02558c64b932903e5ec3fbe10c4b205"
+      OFFLINE_MAP_STYLE: ${OFFLINE_MAP_STYLE}
+      MAPBOX_ACCESS_TOKEN: ${MAPBOX_ACCESS_TOKEN}
+      HOST_HOSTNAME: ${HOST_HOSTNAME}
+      USE_LOCAL_MAP_SERVER: ${USE_LOCAL_MAP_SERVER}
+      RAILS_ENV: ${RAILS_ENV}
     volumes:
       - terrastories-bundler:/usr/local/bundle
       - terrastories-media:/media
