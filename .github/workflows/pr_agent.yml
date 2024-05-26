@@ -19,3 +19,5 @@ jobs:
         env:
           OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_action_config.model: "gpt-4o"
+          github_action_config.auto_review: "true"
