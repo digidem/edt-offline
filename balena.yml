@@ -55,6 +55,16 @@ data:
     - MAPBOX_ACCESS_TOKEN: "pk.eyJ1IjoibHVhbmRybyIsImEiOiJjanY2djRpdnkwOWdqM3lwZzVuaGIxa3VsIn0.jamcK2t2I1j3TXkUQFIsjQ"
     - USE_LOCAL_MAP_SERVER: "true"
     - RAILS_ENV: "offline"
+    # map-packer
+    - AZURE_STORAGE_CONNECTION_ACCOUNT_NAME: 
+    - AZURE_STORAGE_CONNECTION_STORAGE_KEY:
+    - MAPBOX_ACCESS_TOKEN:
+    - MAPBOX_STYLE:
+    - MAPBOX_STYLE_NAME:
+    - MAP_ZOOM:
+    - MAP_LATITUDE:
+    - MAP_LONGITUDE:
+    - VUE_APP_PLANET_API_KEY:
   defaultDeviceType: "raspberrypi4-64"
   supportedDeviceTypes:
     - "raspberrypi3-64"
