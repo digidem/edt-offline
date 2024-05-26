@@ -198,3 +198,21 @@ services:
       OFFLINE_MAPS_URI: edt.local:8087/offline_maps/
       PORT: 8091
       VUE_APP_API_KEY: 3700dc88-b8d7-4237-bd89-3b865a3915e6      
+  # https://hub.docker.com/r/communityfirst/guardianconnector-views
+  guardianconnector-views:
+    image: communityfirst/guardianconnector-views:latest
+    restart: unless-stopped
+    ports:
+      - 8092:8080
+    environment:
+      DATABASE: warehouse
+      DB_HOST: database
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_PORT: 8083
+      DB_SSL: false
+      SQLITE: NO
+      PORT: 8092
+      NUXT_ENV_AUTH_STRATEGY: none
+      VUE_APP_API_KEY: 3700dc88-b8d7-4237-bd89-3b865a3915e6
+      
