@@ -49,12 +49,24 @@ data:
     - SYNC_INSTALLERS_NAME: INSTALLERS-edt
     - SYNC_TILES_ID: kfgre-slfl7
     - SYNC_TILES_NAME: Map-Tiles
+    # Multiple services
+    - MAPBOX_ACCESS_TOKEN: 
     # Terrastories
     - HOST_HOSTNAME: edt.local
     - OFFLINE_MAP_STYLE: http://edt.local:8085/styles/terrastories-map/style.json
-    - MAPBOX_ACCESS_TOKEN: "pk.eyJ1IjoibHVhbmRybyIsImEiOiJjanY2djRpdnkwOWdqM3lwZzVuaGIxa3VsIn0.jamcK2t2I1j3TXkUQFIsjQ"
     - USE_LOCAL_MAP_SERVER: "true"
     - RAILS_ENV: "offline"
+    # map-packer
+    - AZURE_STORAGE_CONNECTION_ACCOUNT_NAME: 
+    - AZURE_STORAGE_CONNECTION_STORAGE_KEY:
+    - MAPBOX_STYLE:
+    - MAPBOX_STYLE_NAME:
+    - MAP_ZOOM:
+    - MAP_LATITUDE:
+    - MAP_LONGITUDE:
+    - VUE_APP_PLANET_API_KEY:
+    # guardianconnector-views
+    - NUXT_ENV_VIEWS_CONFIG:
   defaultDeviceType: "raspberrypi4-64"
   supportedDeviceTypes:
     - "raspberrypi3-64"

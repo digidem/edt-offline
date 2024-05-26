@@ -15,6 +15,7 @@ volumes:
   terrastories-media:
   terrastories-import:
   pataka:
+  offline_maps:
 services:
   # https://github.com/digidem/starter-interface
   balena-interface:
@@ -80,6 +81,7 @@ services:
       - mbtiles:/srv/mbtiles
       - terrastories-import:/srv/terrastories/import
       - terrastories-media:/srv/terrastories/media
+      - offline_maps:/srv/offline_maps/
     ports:
       - 8081:80
     command: -- c
@@ -100,7 +102,7 @@ services:
       - 21027:21027/udp
     restart: unless-stopped
   # https://hub.docker.com/_/postgres
-  terrastories-db:
+  database:
     image: postgres:11
     ports:
       - 5432:5432
@@ -117,9 +119,9 @@ services:
     ports:
       - 8083:3000
     depends_on:
-      - terrastories-db
+      - database
     environment:
-      DATABASE_URL: postgres://postgres:postgres@terrastories-db:5432/terrastories
+      DATABASE_URL: postgres://postgres:postgres@database:5432/terrastories
       CHOKIDAR_USEPOLLING: 'true'
       SECRET_KEY_BASE: "a845b372237fe58988e8fb7698b9a7b61f8cc7581dc685387ff1cb8ec5f250d57b733379d53f5c3e7b816d0bf0fdf5f7b02558c64b932903e5ec3fbe10c4b205"
     volumes:
@@ -154,6 +156,7 @@ services:
       - fdroid:/usr/local/apache2/htdocs/repo
       - mapeo:/usr/local/apache2/htdocs/mapeo
       - mbtiles:/usr/local/apache2/htdocs/mbtiles
+      - offline_maps:/usr/local/apache2/htdocs/offline_maps/
     restart: unless-stopped
   # https://hub.docker.com/r/communityfirst/pataka-cli
   pataka:
@@ -164,3 +167,53 @@ services:
       - pataka:/root/.local/share/ahau-pataka
     environment:
       PATAKA_WEB_PORT: 8089
+  # https://hub.docker.com/r/communityfirst/mapgl-tile-renderer
+  # mapgl-tile-renderer:
+  #   image: communityfirst/mapgl-tile-renderer:latest
+  #   restart: unless-stopped
+  #   ports:
+  #     - 8090:8080
+  #   volumes:
+  #     - offline_maps:/app/outputs/
+  #   environment:
+  #    DB_TABLE: offline_maps
+  # https://hub.docker.com/r/communityfirst/map-packer
+  map-packer:
+    image: communityfirst/map-packer:latest
+    restart: unless-stopped
+    ports:
+      - 8091:8080
+    environment:
+      ASQ_QUEUE_NAME: mappacker-requests
+      DATABASE: warehouse
+      DB_HOST: database
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_PORT: 8083
+      DB_SSL: false
+      DB_TABLE: offline_maps
+      MAP_ZOOM: 13
+      MAP_LATITUDE: 2.23476
+      MAP_LONGITUDE: -55.96160
+      NUXT_ENV_AUTH_STRATEGY: none
+      OFFLINE_MAPS_URI: edt.local:8087/offline_maps/
+      PORT: 8091
+      VUE_APP_API_KEY: 3700dc88-b8d7-4237-bd89-3b865a3915e6      
+  # https://hub.docker.com/r/communityfirst/guardianconnector-views
+  guardianconnector-views:
+    image: communityfirst/guardianconnector-views:latest
+    restart: unless-stopped
+    ports:
+      - 8092:8080
+    environment:
+      DATABASE: warehouse
+      DB_HOST: database
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_PORT: 8083
+      DB_SSL: false
+      SQLITE: NO
+      PORT: 8092
+      NUXT_ENV_AUTH_STRATEGY: none
+      VUE_APP_API_KEY: 3700dc88-b8d7-4237-bd89-3b865a3915e6
+      
