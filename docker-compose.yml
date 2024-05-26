@@ -168,15 +168,15 @@ services:
     environment:
       PATAKA_WEB_PORT: 8089
   # https://hub.docker.com/r/communityfirst/mapgl-tile-renderer
-  mapgl-tile-renderer:
-    image: communityfirst/mapgl-tile-renderer:latest
-    restart: unless-stopped
-    ports:
-      - 8090:8080
-    volumes:
-      - offline_maps:/app/outputs/
-    environment:
-      DB_TABLE: offline_maps
+  # mapgl-tile-renderer:
+  #   image: communityfirst/mapgl-tile-renderer:latest
+  #   restart: unless-stopped
+  #   ports:
+  #     - 8090:8080
+  #   volumes:
+  #     - offline_maps:/app/outputs/
+  #   environment:
+  #    DB_TABLE: offline_maps
   # https://hub.docker.com/r/communityfirst/map-packer
   map-packer:
     image: communityfirst/map-packer:latest
