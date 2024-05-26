@@ -15,6 +15,7 @@ volumes:
   terrastories-media:
   terrastories-import:
   pataka:
+  offline_maps:
 services:
   # https://github.com/digidem/starter-interface
   balena-interface:
