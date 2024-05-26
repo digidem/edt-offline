@@ -47,20 +47,25 @@ runs:
         ref: ${{ github.ref }}
         head_ref: ${{ github.head_ref }}
 
-    - name: Balena Deploy Draft
-      uses: balena-io-experimental/community-cli-action@1.0.0
-      if: ${{(inputs.balena_release_type == 'draft') && (success())}}
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
-        balena_token: ${{inputs.balena_token}}}
-        balena_cli_commands: >
-          push ${{inputs.balena_fleet}} --draft --release-tag commit ${{inputs.commit}} --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{ inputs.release_tag || steps.get-ref.outputs.tag }}
-        balena_cli_version: 18.2.2
+        node-version: '20'
+
+    - name: Install Balena CLI
+      shell: bash
+      run: |
+        npm install balena-cli --global --production --unsafe-perm
+        balena login --token ${{inputs.balena_token}}
+
+    - name: Balena Deploy Draft
+      shell: bash
+      if: ${{(inputs.balena_release_type == 'draft') && (success())}}
+      run: |
+        balena push ${{inputs.balena_fleet}} --draft --release-tag commit ${{inputs.commit}} --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{ inputs.release_tag || steps.get-ref.outputs.tag }}
 
     - name: Balena Deploy Release
-      uses: balena-io-experimental/community-cli-action@1.0.0
+      shell: bash
       if: ${{(inputs.balena_release_type == 'release') && (success())}}
-      with:
-        balena_token: ${{inputs.balena_token}}
-        balena_cli_commands: >
-          push ${{inputs.balena_fleet}} --release-tag release v${{steps.yaml-data.outputs.data}}
-        balena_cli_version: 18.2.2
+      run: |
+        balena push ${{inputs.balena_fleet}} --release-tag release v${{steps.yaml-data.outputs.data}}
