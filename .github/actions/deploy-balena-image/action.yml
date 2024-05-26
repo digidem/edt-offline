@@ -48,15 +48,19 @@ runs:
         head_ref: ${{ github.head_ref }}
 
     - name: Balena Deploy Draft
-      uses: Theia-Scientific/balena-cli@v1
+      uses: balena-io-experimental/community-cli-action@1.0.0
       if: ${{(inputs.balena_release_type == 'draft') && (success())}}
       with:
-        balena_api_token: ${{inputs.balena_token}}
-        balena_command: push ${{inputs.balena_fleet}} --draft --release-tag commit ${{inputs.commit}} --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{ inputs.release_tag || steps.get-ref.outputs.tag }}
+        balena_token: ${{inputs.balena_token}}}
+        balena_cli_commands: >
+          push ${{inputs.balena_fleet}} --draft --release-tag commit ${{inputs.commit}} --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{ inputs.release_tag || steps.get-ref.outputs.tag }}
+        balena_cli_version: 18.2.2
 
     - name: Balena Deploy Release
-      uses: Theia-Scientific/balena-cli@v1
+      uses: balena-io-experimental/community-cli-action@1.0.0
       if: ${{(inputs.balena_release_type == 'release') && (success())}}
       with:
-        balena_api_token: ${{inputs.balena_token}}
-        balena_command: push ${{inputs.balena_fleet}} --release-tag release v${{steps.yaml-data.outputs.data}}
+        balena_token: ${{inputs.balena_token}}
+        balena_cli_commands: >
+          push ${{inputs.balena_fleet}} --release-tag release v${{steps.yaml-data.outputs.data}}
+        balena_cli_version: 18.2.2
