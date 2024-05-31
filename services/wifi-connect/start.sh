@@ -26,15 +26,11 @@ cat <<'END_HTML' >/usr/src/app/ui/index.html
 <html lang="en-US">
     <head>
         <meta charset="UTF-8">
-        <!-- <meta http-equiv="refresh" content="0; url=http://192.168.42.1:8080"> -->
-        <script type="text/javascript">
-            window.location.href = "http://192.168.42.1:8080"
-        </script>
-        <title>Page Redirection</title>
+        <title>Earth Defenders Toolkit Captive Portal</title>
+        <meta http-equiv="refresh" content="0; url=http://edt.local">
     </head>
     <body>
-        <!-- Note: don't tell people to `click` the link, just tell them that it is a link. -->
-        If you are not redirected automatically, follow this <a href='http://192.168.42.1:8080'>link to example</a>.
+        <p>If you are not redirected automatically, follow this <a href="http://edt.local">link to Earth Defenders Toolkit</a>.</p>
     </body>
 </html>
 END_HTML
