@@ -1,0 +1,7 @@
+name: sample-dockerfile
+services:
+- name: web
+  git:
+    repo_clone_url: https://github.com/digitalocean/sample-dockerfile.git
+    branch: main
+  dockerfile_path: Dockerfile
