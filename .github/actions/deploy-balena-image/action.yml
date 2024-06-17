@@ -50,7 +50,6 @@ runs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-<<<<<<< HEAD
         node-version: '20'
 
     - name: Install Balena CLI
@@ -64,21 +63,9 @@ runs:
       if: ${{(inputs.balena_release_type == 'draft') && (success())}}
       run: |
         balena push ${{inputs.balena_fleet}} --draft --release-tag commit ${{inputs.commit}} --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{ inputs.release_tag || steps.get-ref.outputs.tag }}
-=======
-        balena_token: ${{inputs.balena_token}}
-        balena_commands: push ${{inputs.balena_fleet}} --draft --release-tag commit ${{inputs.commit}} --release-tag v${{steps.yaml-data.outputs.data}}-draft ${{ inputs.release_tag || steps.get-ref.outputs.tag }}
-        balena_cli_version: 16.1.0
->>>>>>> 00e01e5 (fix(github-actions): rename balena_api_token input to balena_token)
 
     - name: Balena Deploy Release
       shell: bash
       if: ${{(inputs.balena_release_type == 'release') && (success())}}
-<<<<<<< HEAD
       run: |
         balena push ${{inputs.balena_fleet}} --release-tag release v${{steps.yaml-data.outputs.data}}
-=======
-      with:
-        balena_token: ${{inputs.balena_token}}
-        balena_commands: push ${{inputs.balena_fleet}} --release-tag release v${{steps.yaml-data.outputs.data}}
-        balena_cli_version: 16.1.0
->>>>>>> 00e01e5 (fix(github-actions): rename balena_api_token input to balena_token)
