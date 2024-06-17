@@ -1,0 +1,20 @@
+demo:
+  exclude:
+    labels:
+    services:
+      - python-wifi-connect
+      - balena-interface
+    volumes:
+      - wifi_db
+  include:
+    services:
+      - portal: 80
+    environment:
+      - BALENA_INTERFACE_API=http://
+local:
+  exclude:
+    labels:
+    services:
+      - balena-interface
+    volumes:
+      - interface_db
