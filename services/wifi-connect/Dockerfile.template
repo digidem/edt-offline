@@ -31,6 +31,6 @@ RUN \
     curl -Ls "$BASE_URL/$URL_PARTIAL/wifi-connect-$BINARY_ARCH_NAME.tar.gz" \
     | tar -xvz -C  /usr/src/app/
 
-COPY scripts/start.sh .
+COPY start.sh .
 
 CMD ["bash", "start.sh"]
