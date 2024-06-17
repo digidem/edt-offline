@@ -23,7 +23,7 @@ services:
     environment:
       NETWORK_MODE: bridge
     ports:
-      - "80:80"
+      - "8090:80"
       - "8079:8079"
     volumes:
       - interface_db:/app/db # Stores UI database files
