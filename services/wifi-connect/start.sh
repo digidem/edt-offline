@@ -20,8 +20,9 @@ sleep 30
 # 4. Is there an active WiFi connection?
 # iwgetid -r
 SSID="${SSID:=Earth_Defenders_Toolkit}"
+mkdir -p /usr/src/app/frontend
 # TODO: change url to $HOSTNAME.local variable
-cat <<'END_HTML' >/usr/src/app/ui/index.html
+cat <<'END_HTML' >/usr/src/app/frontend/index.html
 <!DOCTYPE HTML>
 <html lang="en-US">
     <head>
@@ -46,7 +47,7 @@ if [ $? -eq 0 ]; then
     printf 'Skipping WiFi Connect\n'
 else
     printf 'Starting Earth Defenders Toolkit Hotspot and Captive-Portal\n'
-    ./wifi-connect --portal-ssid "$SSID"
+    ./wifi-connect --portal-ssid "$SSID" --ui-directory "/usr/src/app/frontend"
 fi
 
 # Start your application here.
