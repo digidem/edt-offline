@@ -23,7 +23,7 @@ services:
     environment:
       NETWORK_MODE: bridge
     ports:
-      - "80:80"
+      - "8090:80"
       - "8079:8079"
     volumes:
       - interface_db:/app/db # Stores UI database files
@@ -39,20 +39,17 @@ services:
       io.balena.features.supervisor-api: 1
       io.balena.features.balena-api: 1
   # https://github.com/balena-labs-research/python-wifi-connect
+  # https://github.com/balena-os/wifi-connect
   wifi:
-    image: ghcr.io/balena-labs-research/python-wifi-connect:latest
-    environment:
-      PWC_HOST: bridge
-      DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
-    network_mode: "host"
     restart: always
-    volumes:
-      - wifi_db:/app/db # Optional if not setting the hotspot ssid and password via the API
+    build: services/wifi-connect
+    network_mode: "host"
     labels:
-      io.balena.features.dbus: "1"
+        io.balena.features.dbus: '1'
     cap_add:
-      - NET_ADMIN
-    privileged: true # This can be removed if you do not need the LED connectivity indicator.
+        - NET_ADMIN
+    environment:
+        DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
   # https://hub.docker.com/r/communityfirst/edt-offline-edt-portal
   portal:
     image: communityfirst/edt-offline-portal:latest
