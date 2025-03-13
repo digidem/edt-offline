@@ -90,7 +90,7 @@ runs:
         tar -czf ${{ inputs.balena_device }}-${{ inputs.tag || env.OS_VERSION }}.tar.gz ./${{ inputs.balena_device }}.img
 
     - name: Upload file
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: ${{ inputs.upload }}
       with:
         name: artifacts
