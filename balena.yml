@@ -59,6 +59,7 @@ data:
   supportedDeviceTypes:
     - "raspberrypi3-64"
     - "raspberrypi4-64"
+    - "raspberrypi5"
     - "rockpi-4b-rk3399"
     - "rockpro64"
     - "generic-aarch64"

@@ -29,7 +29,7 @@ jobs:
   balena-build-images:
     strategy:
       matrix:
-        board: [pi3, pi4, rockpi4, rockpro64, generic_aarch64, nuc, generic_amd64]
+        board: [pi3, pi4, pi5, rockpi4, rockpro64, generic_aarch64, nuc, generic_amd64]
         include:
           - board: pi3
             fleet_var: _aarch64
@@ -37,6 +37,9 @@ jobs:
           - board: pi4
             fleet_var: _aarch64
             image: raspberrypi4-64
+          - board: pi5
+            fleet_var: _aarch64
+            image: raspberrypi5
           - board: rockpi4
             fleet_var: _aarch64
             image: rockpi-4b-rk3399
